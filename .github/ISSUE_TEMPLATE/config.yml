@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature Request
+    url: https://github.com/maxbarsukov/MyFilmList/issues
+    about: Please suggest your ideas to make MyFilmList better in issues.
+  - name: Questions and Discussions
+    url: https://github.com/maxbarsukov/MyFilmList/discussions
+    about: Visit our GitHub Discussions page to ask and answer questions, discuss features, or reach out for help.
