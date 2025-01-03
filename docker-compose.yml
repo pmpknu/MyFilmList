@@ -12,7 +12,7 @@ services:
     networks:
       - app-network
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - database_storage:/var/lib/postgresql/data
 
   minio:
     env_file: .env
@@ -33,7 +33,7 @@ services:
 
 volumes:
   minio_storage: { }
-  database_data:
+  database_storage:
     driver: local
 
 networks:
