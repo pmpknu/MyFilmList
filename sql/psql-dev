@@ -1,0 +1,1 @@
+PGPASSWORD=mflpassword psql -h localhost -p 5432 -U mfluser -d mfl
