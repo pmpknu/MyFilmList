@@ -27,16 +27,20 @@
 
 ### Ход работы
 
-| Этап | Артефакт |
-| ---- | -------- |
-| `1` | **Отчёт:** [part1/report.pdf](./docs/part1/report.pdf) |
-| `2` | ... |
-| `3` | ... |
-| `4` | ... |
+| Этап | Артефакт                                                |
+|------|---------------------------------------------------------|
+| `1`  | **Отчёт:** [part1/report.pdf](./docs/part1/report.pdf)  |
+| `2`  | **Отчёт:** [part2/report.pdf](./docs/part2/report.pdf)  |
+| `3`  | ...                                                     |
+| `4`  | ...                                                     |
 
 ## Лицензия <a name="license"></a>
 
 Проект доступен с открытым исходным кодом на условиях [Лицензии MIT](https://opensource.org/licenses/MIT). \
-*Авторские права 2024 Max Barsukov*
+*Авторские права 2025 Max Barsukov*
 
 **Поставьте звезду :star:, если вы нашли этот проект полезным.**
+
+---
+
+*<p align="center">This project is published under [MIT](LICENSE).<br>A [maxbarsukov](https://github.com/maxbarsukov) & [pmpknu](https://github.com/pmpknu) project.<br>- :tada: -</p>*
