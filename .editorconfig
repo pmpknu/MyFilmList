@@ -11,8 +11,8 @@ indent_style = space
 indent_size = 2
 end_of_line = lf
 
-[*.{md, markdown, eex}]
+[*.{md,markdown}]
 trim_trailing_whitespace = false
 
-[LICENSE]
+[{LICENSE,version}]
 insert_final_newline = false
