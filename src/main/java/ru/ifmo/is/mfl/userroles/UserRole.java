@@ -1,0 +1,36 @@
+package ru.ifmo.is.mfl.userroles;
+
+import lombok.*;
+import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnTransformer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import ru.ifmo.is.mfl.common.entity.BaseEntity;
+import ru.ifmo.is.mfl.users.User;
+
+@Entity
+@Getter
+@Setter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "user_roles")
+public class UserRole implements BaseEntity {
+  @Id
+  @JsonIgnore
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_roles_id_seq")
+  @SequenceGenerator(name = "user_roles_id_seq", sequenceName = "user_roles_id_seq", allocationSize = 1)
+  @Column(name = "id", nullable = false, unique = true)
+  private int id;
+
+  @Enumerated(EnumType.STRING)
+  @ColumnTransformer(write = "?::roles")
+  @Column(name = "role", nullable = false)
+  private Role role;
+
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
+}
