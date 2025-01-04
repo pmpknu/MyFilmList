@@ -16,7 +16,7 @@ import ru.ifmo.is.mfl.common.search.SearchDto;
 
 @AllArgsConstructor
 public abstract class CrudController<
-  T extends CrudEntity,
+  T extends Creatable,
   TDto extends CrudDto,
   TCreateDto,
   TUpdateDto,
@@ -55,7 +55,7 @@ public abstract class CrudController<
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+  @PreAuthorize("hasRole('USER')")
   @Operation(summary = "Создать объект", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<TDto> create(@Valid @RequestBody TCreateDto request) {
     var obj = service.create(request);
@@ -63,7 +63,7 @@ public abstract class CrudController<
   }
 
   @PatchMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+  @PreAuthorize("hasRole('USER')")
   @Operation(summary = "Обновить объект по ID", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<TDto> update(@PathVariable int id, @Valid @RequestBody TUpdateDto request) {
     var obj = service.update(request, id);
@@ -71,7 +71,7 @@ public abstract class CrudController<
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+  @PreAuthorize("hasRole('USER')")
   @Operation(summary = "Удалить объект по ID", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<Void> delete(@PathVariable int id) {
     if (service.delete(id)) {

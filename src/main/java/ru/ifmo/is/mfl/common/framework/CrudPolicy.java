@@ -38,6 +38,8 @@ public abstract class CrudPolicy<T extends CrudEntity> extends Policy<T> {
   }
 
   private boolean canManage(User user, T object) {
-    return user.isAdmin() || user.equals(object.getUser());
+    return user.equals(getCreator(object)) || user.isAdmin() || user.isModerator();
   }
+
+  public abstract User getCreator(T object);
 }

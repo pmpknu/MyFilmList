@@ -17,7 +17,7 @@ import ru.ifmo.is.mfl.users.UserService;
 
 @AllArgsConstructor
 public abstract class CrudService<
-  T extends CrudEntity,
+  T extends Creatable,
   TRepository extends CrudRepository<T>,
   TMapper extends CrudMapper<T, TDto, TCreateDto, TUpdateDto>,
   TPolicy extends CrudPolicy<T>,
