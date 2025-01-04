@@ -1,6 +1,12 @@
 package ru.ifmo.is.mfl.users;
 
 import lombok.RequiredArgsConstructor;
+import magick.ImageInfo;
+import magick.MagickException;
+import magick.MagickImage;
+import org.apache.tika.mime.MimeType;
+import org.apache.tika.mime.MimeTypeException;
+import org.apache.tika.mime.MimeTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -13,17 +19,23 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.ifmo.is.mfl.common.caching.RequestCache;
+import ru.ifmo.is.mfl.common.errors.BadFileExtensionError;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
 import ru.ifmo.is.mfl.common.errors.UserWithThisUsernameAlreadyExists;
 import ru.ifmo.is.mfl.common.search.SearchDto;
 import ru.ifmo.is.mfl.common.search.SearchMapper;
+import ru.ifmo.is.mfl.common.utils.images.ImageProcessor;
+import ru.ifmo.is.mfl.storage.StorageService;
 import ru.ifmo.is.mfl.userroles.Role;
 import ru.ifmo.is.mfl.userroles.UserRole;
 import ru.ifmo.is.mfl.userroles.UserRoleRepository;
 import ru.ifmo.is.mfl.users.dto.UserDto;
 import ru.ifmo.is.mfl.users.dto.UserUpdateDto;
 
+import java.io.IOException;
 import java.util.HashSet;
+import java.io.ByteArrayInputStream;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +48,9 @@ public class UserService {
   private final SearchMapper<User> searchMapper;
   private final UserRepository repository;
   private final UserRoleRepository roleRepository;
+
+  private final StorageService storageService;
+  private final ImageProcessor imageProcessor;
 
   /**
    * Сохранение пользователя
@@ -166,6 +181,41 @@ public class UserService {
       repository.delete(o);
       return true;
     }).orElse(false);
+  }
+
+  @Transactional
+  public UserDto upload(String filename, byte[] bytes, long fileSize, String contentType)
+    throws Exception {
+
+    if (!imageProcessor.checkImage(bytes) || !imageProcessor.checkContentType(contentType)) {
+      throw new IOException("Bad image");
+    }
+
+    // Crop image
+    var image = imageProcessor.createMagickImageFromBytes(filename, bytes);
+    var bais = imageProcessor.cropToSquare(image, contentType);
+
+    // Upload new image
+    var newImageName = UUID.randomUUID() + imageProcessor.getImageExtension(contentType);
+    try {
+      storageService.create(newImageName, contentType, bais, (long) bais.available());
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to upload new image: " + e.getMessage(), e);
+    }
+
+    // Delete old image if exists
+    var currentUser = getCurrentUser();
+    if (currentUser.getPhoto() != null) {
+      try {
+        var oldFileName = currentUser.getPhoto();
+        storageService.delete(oldFileName);
+      } catch (Exception e) {
+        logger.error("Failed to delete old image for user {}: {}", currentUser.getId(), e.getMessage());
+      }
+    }
+
+    currentUser.setPhoto(newImageName);
+    return mapper.map(save(currentUser));
   }
 
   @RequestCache

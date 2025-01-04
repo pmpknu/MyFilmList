@@ -1,10 +1,12 @@
 package ru.ifmo.is.mfl.users;
 
 import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ru.ifmo.is.mfl.common.framework.CrudMapper;
 import ru.ifmo.is.mfl.common.mapper.JsonNullableMapper;
 import ru.ifmo.is.mfl.common.mapper.ReferenceMapper;
+import ru.ifmo.is.mfl.storage.StorageService;
 import ru.ifmo.is.mfl.users.dto.*;
 
 import java.util.stream.Collectors;
@@ -17,8 +19,16 @@ import java.util.stream.Collectors;
   imports = Collectors.class
 )
 public abstract class UserMapper implements CrudMapper<User, UserDto, UserUpdateDto, UserUpdateDto> {
+
+  @Autowired
+  public StorageService storageService;
+
   public abstract User map(UserUpdateDto dto);
 
+  @Mapping(
+    target = "photo",
+    expression = "java(storageService.getFileUrl(model.getPhoto()))"
+  )
   @Mapping(
     target = "roles",
     expression = "java(model.getRoles().stream().map(UserRole::getRole).collect(Collectors.toSet()))"
