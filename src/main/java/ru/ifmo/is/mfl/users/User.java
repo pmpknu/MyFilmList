@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import ru.ifmo.is.mfl.common.entity.BaseEntity;
+import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.userroles.Role;
 import ru.ifmo.is.mfl.userroles.UserRole;
 
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class User implements UserDetails, BaseEntity {
+public class User extends CrudEntity implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
   @SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq", allocationSize = 1)
@@ -55,7 +56,8 @@ public class User implements UserDetails, BaseEntity {
   private String photo;
 
   @JsonManagedReference
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+  @BatchSize(size = 50)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
   private Set<UserRole> roles;
 
   @JsonIgnore

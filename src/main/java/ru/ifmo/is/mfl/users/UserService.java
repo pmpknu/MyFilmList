@@ -3,17 +3,25 @@ package ru.ifmo.is.mfl.users;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.ifmo.is.mfl.common.caching.RequestCache;
+import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
 import ru.ifmo.is.mfl.common.errors.UserWithThisUsernameAlreadyExists;
+import ru.ifmo.is.mfl.common.search.SearchDto;
+import ru.ifmo.is.mfl.common.search.SearchMapper;
 import ru.ifmo.is.mfl.userroles.Role;
 import ru.ifmo.is.mfl.userroles.UserRole;
 import ru.ifmo.is.mfl.userroles.UserRoleRepository;
+import ru.ifmo.is.mfl.users.dto.UserDto;
+import ru.ifmo.is.mfl.users.dto.UserUpdateDto;
 
 import java.util.HashSet;
 
@@ -22,6 +30,10 @@ import java.util.HashSet;
 public class UserService {
 
   private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+  private final UserMapper mapper;
+  private final UserPolicy policy;
+  private final SearchMapper<User> searchMapper;
   private final UserRepository repository;
   private final UserRoleRepository roleRepository;
 
@@ -109,5 +121,59 @@ public class UserService {
   public String getCurrentUsername() {
     // Получение имени пользователя из контекста Spring Security
     return SecurityContextHolder.getContext().getAuthentication().getName();
+  }
+
+  public Page<UserDto> getAll(Pageable pageable) {
+    policy.showAll(currentUser());
+
+    var objs = repository.findAll(pageable);
+    return objs.map(mapper::map);
+  }
+
+  public Page<UserDto> findBySearchCriteria(SearchDto searchData, Pageable pageable) {
+    policy.search(currentUser());
+
+    var objs = repository.findAll(searchMapper.map(searchData), pageable);
+    return objs.map(mapper::map);
+  }
+
+  public UserDto getById(int id) {
+    var obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
+    policy.show(currentUser(), obj);
+
+    return mapper.map(obj);
+  }
+
+  @Transactional
+  public UserDto update(UserUpdateDto objData, int id) {
+    var obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
+    policy.update(currentUser(), obj);
+
+    // TODO: Check updating email or password
+    // TODO: Error if both email and password changed
+
+    mapper.update(objData, obj);
+    repository.save(obj);
+
+    return mapper.map(obj);
+  }
+
+  @Transactional(isolation = Isolation.REPEATABLE_READ)
+  public boolean delete(int id) {
+    var obj = repository.findById(id);
+    return obj.map(o -> {
+      policy.delete(currentUser(), o);
+      repository.delete(o);
+      return true;
+    }).orElse(false);
+  }
+
+  @RequestCache
+  private User currentUser() {
+    try {
+      return getCurrentUser();
+    } catch (UsernameNotFoundException _ex) {
+      return null;
+    }
   }
 }
