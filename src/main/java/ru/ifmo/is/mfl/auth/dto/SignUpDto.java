@@ -1,6 +1,7 @@
 package ru.ifmo.is.mfl.auth.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -16,6 +17,10 @@ public class SignUpDto {
   @Schema(description = "E-mail пользователя", example = "JohnyBoy@gmail.com")
   @Size(min = 3, max = 127, message = "E-mail пользователя должно содержать от 3 до 127 символов")
   @NotBlank(message = "Имя пользователя не может быть пустыми")
+  @Email(
+    message = "Email is not valid",
+    regexp = "[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?"
+  )
   private String email;
 
   @Schema(description = "Пароль", example = "my_1secret1_password")

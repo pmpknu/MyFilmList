@@ -1,5 +1,6 @@
 package ru.ifmo.is.mfl.users;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -40,6 +41,10 @@ public class User extends CrudEntity implements UserDetails {
   private String username;
 
   @NotBlank
+  @Email(
+    message = "Email is not valid",
+    regexp = "[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?"
+  )
   @Length(min = 6, max = 127)
   @Column(name="email", nullable=false, unique=true)
   private String email;
