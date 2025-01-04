@@ -14,6 +14,12 @@ services:
     volumes:
       - database_storage:/var/lib/postgresql/data
 
+  mailcatcher:
+    image: yappabe/mailcatcher
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+
   minio:
     env_file: .env
     image: minio/minio:RELEASE.2024-11-07T00-52-20Z
