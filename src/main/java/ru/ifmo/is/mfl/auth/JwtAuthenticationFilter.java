@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     var userId = jwtService.extractId(jwt); // Извлекаем ID пользователя
     var roles = jwtService.extractRoles(jwt); // Извлекаем роли
 
-    if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+    if (roles != null && StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
       // Создаем объект UserDetails без запроса к БД
       var userRoles = roles.stream().map(role -> new UserRole(0, Role.valueOf(role), null)).collect(Collectors.toSet());
       UserDetails userDetails = new User(userId, username, null, null,  null, null, userRoles);
