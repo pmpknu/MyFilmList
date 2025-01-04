@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -12,10 +13,17 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import ru.ifmo.is.mfl.common.errors.FileIsEmptyError;
+import ru.ifmo.is.mfl.common.errors.BadFileExtensionError;
 import ru.ifmo.is.mfl.common.search.SearchDto;
 import ru.ifmo.is.mfl.users.dto.UserDto;
 import ru.ifmo.is.mfl.users.dto.UserUpdateDto;
+
+import javax.naming.LimitExceededException;
+import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,6 +51,26 @@ public class UserController {
     return ResponseEntity.ok()
       .header("X-Total-Count", String.valueOf(objs.getTotalElements()))
       .body(objs);
+  }
+
+  @PostMapping(path = "/photo", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+  @PreAuthorize("hasRole('USER')")
+  @Operation(summary = "Загрузить аватар пользователя", security = @SecurityRequirement(name = "bearerAuth"))
+  public ResponseEntity<UserDto> upload(@RequestParam("file") MultipartFile file) throws Exception {
+    if (file.isEmpty()) {
+      throw new FileIsEmptyError("File not found");
+    }
+
+    if (file.getSize() / (1024 * 1024) > 10) {
+      throw new LimitExceededException("Image size must be less than 10MB");
+    }
+
+    var byteArray = new ByteArrayOutputStream();
+    IOUtils.copy(file.getInputStream(), byteArray);
+    var bytes = byteArray.toByteArray();
+
+    var userDto = service.upload(file.getOriginalFilename(), bytes, file.getSize(), file.getContentType());
+    return ResponseEntity.ok(userDto);
   }
 
   @GetMapping("/{id}")

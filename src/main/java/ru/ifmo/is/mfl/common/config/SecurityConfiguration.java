@@ -69,6 +69,7 @@ public class SecurityConfiguration {
           .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
 
           // Доступ к данным пользователей
+          .requestMatchers(HttpMethod.POST, "/api/users/photo").authenticated()
           .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
           .requestMatchers(HttpMethod.POST, "/api/users/search").permitAll()
           .requestMatchers(HttpMethod.PATCH, "/api/users/**").authenticated()
