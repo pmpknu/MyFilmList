@@ -28,7 +28,7 @@ public class RefreshTokenService {
   }
 
   public RefreshToken createRefreshToken(int userId) {
-    var user = userRepository.findById((long) userId).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + userId));
+    var user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + userId));
     var refreshToken = RefreshToken.builder()
       .user(user)
       .expiryDate(Instant.now().plusMillis(Long.parseLong(jwtRefreshExpirationTime)))
@@ -49,7 +49,7 @@ public class RefreshTokenService {
 
   @Transactional
   public void deleteByUserId(int userId) {
-    var user = userRepository.findById((long) userId).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + userId));
+    var user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + userId));
 
     repository.deleteByUser(user);
   }
