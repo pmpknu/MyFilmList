@@ -15,12 +15,14 @@ import ru.ifmo.is.mfl.refreshtokens.RefreshToken;
 import ru.ifmo.is.mfl.refreshtokens.RefreshTokenService;
 import ru.ifmo.is.mfl.refreshtokens.dto.RefreshDto;
 import ru.ifmo.is.mfl.users.User;
+import ru.ifmo.is.mfl.users.UserMapper;
 import ru.ifmo.is.mfl.users.UserService;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
   private final UserService userService;
+  private final UserMapper mapper;
   private final JwtService jwtService;
   private final RefreshTokenService refreshService;
   private final PasswordEncoder passwordEncoder;
@@ -44,7 +46,7 @@ public class AuthenticationService {
 
     var jwt = jwtService.generateToken(user);
     var refreshToken = refreshService.createRefreshToken(user.getId());
-    return new AuthenticationDto(jwt, refreshToken.getToken(), user);
+    return new AuthenticationDto(jwt, refreshToken.getToken(), mapper.map(user));
   }
 
   /**
@@ -68,7 +70,7 @@ public class AuthenticationService {
 
     var jwt = jwtService.generateToken(userDetails);
     var refreshToken = refreshService.createRefreshToken(user.getId());
-    return new AuthenticationDto(jwt, refreshToken.getToken(), user);
+    return new AuthenticationDto(jwt, refreshToken.getToken(), mapper.map(user));
   }
 
   /**
@@ -85,7 +87,7 @@ public class AuthenticationService {
       .map(user -> {
         var accessToken = jwtService.generateToken(user);
         var newRefreshToken = refreshService.createRefreshToken(user.getId());
-        return new AuthenticationDto(accessToken, newRefreshToken.getToken(), user);
+        return new AuthenticationDto(accessToken, newRefreshToken.getToken(), mapper.map(user));
       })
       .orElseThrow(() -> new TokenRefreshException("No such refresh token"));
   }

@@ -2,7 +2,7 @@ package ru.ifmo.is.mfl.auth.dto;
 
 import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ru.ifmo.is.mfl.users.User;
+import ru.ifmo.is.mfl.users.dto.UserDto;
 
 @Data
 @Builder
@@ -18,5 +18,5 @@ public class AuthenticationDto {
   @Schema(description = "Токен обновления", example = "e2a8a9c2-3a3f-...")
   private String refreshToken;
 
-  private User user;
+  private UserDto user;
 }
