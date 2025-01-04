@@ -15,6 +15,10 @@ java {
   }
 }
 
+tasks.withType(JavaExec).configureEach {
+  environment('LD_LIBRARY_PATH', "${rootDir}/${System.getenv('VENDOR_PATH')}")
+}
+
 configurations {
   compileOnly {
     extendsFrom annotationProcessor
@@ -53,6 +57,12 @@ dependencies {
 
   // MinIO
   implementation 'io.minio:minio:8.5.14'
+
+  // ImageMagick
+  implementation files("${System.getenv('VENDOR_PATH')}/jmagick.jar")
+
+  // MIME Types
+  implementation 'org.apache.tika:tika-core:3.0.0'
 
   // JJWT
   implementation 'io.jsonwebtoken:jjwt-api:0.12.6'

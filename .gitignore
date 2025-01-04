@@ -89,5 +89,6 @@ Desktop.ini
 ivy-cache
 argfile*
 activemq-data/
+!vendor/*.jar
 classes/
 .wakatime-project
