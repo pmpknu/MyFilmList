@@ -16,6 +16,7 @@ import ru.ifmo.is.mfl.auth.dto.SignInDto;
 import ru.ifmo.is.mfl.auth.dto.SignUpDto;
 import ru.ifmo.is.mfl.refreshtokens.dto.RefreshDto;
 import ru.ifmo.is.mfl.common.context.ApplicationLockBean;
+import ru.ifmo.is.mfl.verificationtokens.dto.VerificationDto;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -47,6 +48,12 @@ public class AuthenticationController {
   @PostMapping("/refresh")
   public ResponseEntity<AuthenticationDto> refresh(@RequestBody @Valid RefreshDto request) {
     return ResponseEntity.ok(authenticationService.refresh(request));
+  }
+
+  @Operation(summary = "Подтверждение электронной почты")
+  @PostMapping("/confirm")
+  public ResponseEntity<AuthenticationDto> confirm(@RequestBody @Valid VerificationDto request) {
+    return ResponseEntity.ok(authenticationService.confirm(request));
   }
 
   @Operation(summary = "Выйти из аккаунта", security = @SecurityRequirement(name = "bearerAuth"))

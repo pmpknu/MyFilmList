@@ -10,13 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.ifmo.is.mfl.auth.dto.AuthenticationDto;
 import ru.ifmo.is.mfl.auth.dto.SignInDto;
 import ru.ifmo.is.mfl.auth.dto.SignUpDto;
-import ru.ifmo.is.mfl.common.errors.TokenRefreshException;
+import ru.ifmo.is.mfl.common.errors.TokenExpiredException;
 import ru.ifmo.is.mfl.refreshtokens.RefreshToken;
 import ru.ifmo.is.mfl.refreshtokens.RefreshTokenService;
 import ru.ifmo.is.mfl.refreshtokens.dto.RefreshDto;
 import ru.ifmo.is.mfl.users.User;
 import ru.ifmo.is.mfl.users.UserMapper;
 import ru.ifmo.is.mfl.users.UserService;
+import ru.ifmo.is.mfl.verificationtokens.VerificationToken;
+import ru.ifmo.is.mfl.verificationtokens.VerificationTokenService;
+import ru.ifmo.is.mfl.verificationtokens.dto.VerificationDto;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class AuthenticationService {
   private final UserMapper mapper;
   private final JwtService jwtService;
   private final RefreshTokenService refreshService;
+  private final VerificationTokenService verificationService;
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
 
@@ -42,8 +46,7 @@ public class AuthenticationService {
       .password(passwordEncoder.encode(request.getPassword()))
       .build();
 
-    userService.create(user);
-
+    user = userService.create(user);
     var jwt = jwtService.generateToken(user);
     var refreshToken = refreshService.createRefreshToken(user.getId());
     return new AuthenticationDto(jwt, refreshToken.getToken(), mapper.map(user));
@@ -89,7 +92,29 @@ public class AuthenticationService {
         var newRefreshToken = refreshService.createRefreshToken(user.getId());
         return new AuthenticationDto(accessToken, newRefreshToken.getToken(), mapper.map(user));
       })
-      .orElseThrow(() -> new TokenRefreshException("No such refresh token"));
+      .orElseThrow(() -> new TokenExpiredException("No such refresh token"));
+  }
+
+  /**
+   * Обновление токенов доступа пользователя
+   *
+   * @param request verification token
+   * @return токен
+   */
+  @Transactional
+  public AuthenticationDto confirm(VerificationDto request) {
+    return verificationService.findByToken(request.getVerificationToken())
+      .map(verificationService::verifyExpiration)
+      .map(VerificationToken::getUser)
+      .map(u -> {
+        var user = userService.confirm(u);
+        verificationService.deleteByUser(user);
+
+        var accessToken = jwtService.generateToken(user);
+        var newRefreshToken = refreshService.createRefreshToken(user.getId());
+        return new AuthenticationDto(accessToken, newRefreshToken.getToken(), mapper.map(user));
+      })
+      .orElseThrow(() -> new TokenExpiredException("No such refresh token"));
   }
 
   /**
