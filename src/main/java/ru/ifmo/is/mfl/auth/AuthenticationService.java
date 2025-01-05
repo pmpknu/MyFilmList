@@ -21,6 +21,8 @@ import ru.ifmo.is.mfl.verificationtokens.VerificationToken;
 import ru.ifmo.is.mfl.verificationtokens.VerificationTokenService;
 import ru.ifmo.is.mfl.verificationtokens.dto.VerificationDto;
 
+import java.util.HashSet;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -43,6 +45,7 @@ public class AuthenticationService {
     var user = User.builder()
       .username(request.getUsername())
       .email(request.getEmail())
+      .roles(new HashSet<>())
       .password(passwordEncoder.encode(request.getPassword()))
       .build();
 
@@ -96,7 +99,7 @@ public class AuthenticationService {
   }
 
   /**
-   * Обновление токенов доступа пользователя
+   * Подтверждение профиля пользователя
    *
    * @param request verification token
    * @return токен
@@ -114,7 +117,7 @@ public class AuthenticationService {
         var newRefreshToken = refreshService.createRefreshToken(user.getId());
         return new AuthenticationDto(accessToken, newRefreshToken.getToken(), mapper.map(user));
       })
-      .orElseThrow(() -> new TokenExpiredException("No such refresh token"));
+      .orElseThrow(() -> new TokenExpiredException("No such verification token"));
   }
 
   /**

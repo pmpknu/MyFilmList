@@ -17,6 +17,7 @@ import ru.ifmo.is.mfl.userroles.Role;
 import ru.ifmo.is.mfl.userroles.UserRole;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,7 +64,7 @@ public class User extends CrudEntity implements UserDetails {
   @JsonManagedReference
   @BatchSize(size = 50)
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
-  private Set<UserRole> roles;
+  private Set<UserRole> roles = new HashSet<>();
 
   @JsonIgnore
   @Override
