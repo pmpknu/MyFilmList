@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import ru.ifmo.is.mfl.verificationtokens.VerificationToken;
@@ -25,6 +26,7 @@ public class UserMailer {
   private final MessageSource messages;
   private final JavaMailSender mailSender;
 
+  @Async
   public void sendConfirmationLink(User user, Locale locale, VerificationToken verificationToken) {
     var recipientAddress = user.getEmail();
     var confirmationUrl = confirmationLinkTemplate + verificationToken.getToken();
