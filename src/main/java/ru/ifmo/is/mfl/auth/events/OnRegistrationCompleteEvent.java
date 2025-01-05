@@ -1,0 +1,22 @@
+package ru.ifmo.is.mfl.auth.events;
+
+import lombok.*;
+import org.springframework.context.ApplicationEvent;
+import ru.ifmo.is.mfl.users.User;
+
+import java.util.Locale;
+
+@Getter
+@Setter
+@Builder
+@ToString
+public class OnRegistrationCompleteEvent extends ApplicationEvent {
+  private final User user;
+  private final Locale locale;
+
+  public OnRegistrationCompleteEvent(User user, Locale locale) {
+    super(user);
+    this.user = user;
+    this.locale = locale;
+  }
+}

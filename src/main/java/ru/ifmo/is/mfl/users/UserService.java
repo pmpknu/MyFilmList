@@ -1,14 +1,10 @@
 package ru.ifmo.is.mfl.users;
 
 import lombok.RequiredArgsConstructor;
-import magick.ImageInfo;
-import magick.MagickException;
-import magick.MagickImage;
-import org.apache.tika.mime.MimeType;
-import org.apache.tika.mime.MimeTypeException;
-import org.apache.tika.mime.MimeTypes;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,8 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.ifmo.is.mfl.auth.events.OnRegistrationCompleteEvent;
 import ru.ifmo.is.mfl.common.caching.RequestCache;
-import ru.ifmo.is.mfl.common.errors.BadFileExtensionError;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
 import ru.ifmo.is.mfl.common.errors.UserWithThisUsernameAlreadyExists;
 import ru.ifmo.is.mfl.common.search.SearchDto;
@@ -34,7 +30,6 @@ import ru.ifmo.is.mfl.users.dto.UserUpdateDto;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
 @Service
@@ -51,6 +46,9 @@ public class UserService {
 
   private final StorageService storageService;
   private final ImageProcessor imageProcessor;
+
+  private final HttpServletRequest httpRequest;
+  private final ApplicationEventPublisher eventPublisher;
 
   /**
    * Сохранение пользователя
@@ -78,19 +76,32 @@ public class UserService {
     }
 
     user = save(user);
-
-    var roles = new HashSet<UserRole>();
-    roles.add(UserRole.builder().role(Role.ROLE_USER).user(user).build());
-
     if (repository.count() == 1) {
+      var roles = new HashSet<UserRole>();
       logger.info("Creating first user with MODERATOR and ADMIN roles");
+      roles.add(UserRole.builder().role(Role.ROLE_USER).user(user).build());
       roles.add(UserRole.builder().role(Role.ROLE_MODERATOR).user(user).build());
       roles.add(UserRole.builder().role(Role.ROLE_ADMIN).user(user).build());
+      return addRoles(user, roles);
     }
-    user.setRoles(roles);
 
-    roleRepository.saveAll(roles);
-    return save(user);
+    eventPublisher.publishEvent(
+      new OnRegistrationCompleteEvent(user, httpRequest.getLocale())
+    );
+
+    return user;
+  }
+
+  /**
+   * Подтверждение аккаунта пользователя
+   *
+   * @return подтвержденный пользователь
+   */
+  @Transactional
+  public User confirm(User user) {
+    var roles = new HashSet<UserRole>();
+    roles.add(UserRole.builder().role(Role.ROLE_USER).user(user).build());
+    return addRoles(user, roles);
   }
 
   /**
@@ -216,6 +227,15 @@ public class UserService {
 
     currentUser.setPhoto(newImageName);
     return mapper.map(save(currentUser));
+  }
+
+  @Transactional
+  public User addRoles(User user, HashSet<UserRole> newRoles) {
+    var roles = user.getRoles();
+    roles.addAll(newRoles);
+    user.setRoles(roles);
+    roleRepository.saveAll(roles);
+    return save(user);
   }
 
   @RequestCache
