@@ -62,6 +62,8 @@ public class SecurityConfiguration {
           .requestMatchers("/ws/**").permitAll()
           .requestMatchers("/ws").permitAll()
 
+          // Выйти из аккаунта может только зарегистрированный пользователь
+          .requestMatchers("/api/auth/sign-out").authenticated()
           // Доступ к методам /api/auth/** открыт для всех
           .requestMatchers("/api/auth/**").permitAll()
 
