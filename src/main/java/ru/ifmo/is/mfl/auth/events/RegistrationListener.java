@@ -24,6 +24,6 @@ public class RegistrationListener implements
   private void confirmRegistration(OnRegistrationCompleteEvent event) {
     var user = event.getUser();
     var token = tokenService.createVerificationToken(user);
-    userMailer.sendConfirmationLink(user, event.getLocale(), token);
+    userMailer.sendConfirmationLink(user, event.getLocale(), token, true);
   }
 }
