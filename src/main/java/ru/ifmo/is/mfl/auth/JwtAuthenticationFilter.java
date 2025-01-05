@@ -16,12 +16,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import ru.ifmo.is.mfl.userroles.Role;
+import ru.ifmo.is.mfl.userroles.UserRoleRepository;
 import ru.ifmo.is.mfl.users.User;
-import ru.ifmo.is.mfl.userroles.UserRole;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   public static final String HEADER_NAME = "Authorization";
 
   private final JwtService jwtService;
+  private final UserRoleRepository roleRepository;
 
   @Override
   protected void doFilterInternal(
@@ -49,12 +48,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     var jwt = authHeader.substring(BEARER_PREFIX.length());
     var username = jwtService.extractUsername(jwt);
     var userId = jwtService.extractId(jwt); // Извлекаем ID пользователя
-    var roles = jwtService.extractRoles(jwt); // Извлекаем роли
+    var roles = roleRepository.findByUserId(userId);
 
     if (roles != null && StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-      // Создаем объект UserDetails без запроса к БД
-      var userRoles = roles.stream().map(role -> new UserRole(0, Role.valueOf(role), null)).collect(Collectors.toSet());
-      UserDetails userDetails = new User(userId, username, null, null,  null, null, userRoles);
+      UserDetails userDetails = new User(userId, username, null, null,  null, null, roles);
 
       // Если токен валиден, то аутентифицируем пользователя
       if (jwtService.isTokenValid(jwt, userDetails)) {

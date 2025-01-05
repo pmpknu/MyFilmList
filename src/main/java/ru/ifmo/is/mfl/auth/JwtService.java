@@ -11,13 +11,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 
 import ru.ifmo.is.mfl.common.caching.RequestCache;
-import ru.ifmo.is.mfl.userroles.Role;
 import ru.ifmo.is.mfl.users.User;
-import ru.ifmo.is.mfl.userroles.UserRole;
 
 @Service
 public class JwtService {
@@ -26,9 +23,6 @@ public class JwtService {
 
   @Value("${app.jwt.token.access.expiration}")
   private String jwtAccessExpirationTime;
-
-  @Value("${app.jwt.token.refresh.expiration}")
-  private String jwtRefreshExpirationTime;
 
   /**
    * Извлечение имени пользователя из токена
@@ -44,11 +38,6 @@ public class JwtService {
     return extractClaim(token, claims -> (Integer) claims.get("id"));
   }
 
-  public ArrayList<String> extractRoles(String token) {
-    final Claims claims = extractAllClaims(token);
-    return claims.get("roles", ArrayList.class);
-  }
-
   /**
    * Генерация токена
    *
@@ -59,13 +48,6 @@ public class JwtService {
     Map<String, Object> claims = new HashMap<>();
     if (userDetails instanceof User customUserDetails) {
       claims.put("id", customUserDetails.getId());
-      claims.put("roles", customUserDetails
-        .getRoles()
-        .stream()
-        .map(UserRole::getRole)
-        .map(Enum::name)
-        .collect(Collectors.toList())
-      );
     }
     return generateToken(claims, userDetails);
   }
