@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.ifmo.is.mfl.common.entity.BaseEntity;
 import ru.ifmo.is.mfl.users.User;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @Setter
@@ -33,4 +35,17 @@ public class UserRole implements BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
+
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) return true;
+    if (object == null || getClass() != object.getClass()) return false;
+    UserRole userRole = (UserRole) object;
+    return role == userRole.role && Objects.equals(user, userRole.user);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(role, user);
+  }
 }
