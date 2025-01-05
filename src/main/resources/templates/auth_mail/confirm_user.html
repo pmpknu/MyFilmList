@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{message.mail.confirm_user.title}"></title>
+</head>
+<body>
+<div class="es-wrapper-color" style="background-color:#F4F4F4">
+  <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;background-position:center top">
+    <tr style="border-collapse:collapse">
+      <td valign="top" style="padding:0;Margin:0">
+        <th:block th:replace="~{fragments/mail/logo :: logo(logoPath='https://mfl.maxbarsukov.ru/logo-mail.png')}"></th:block>
+        <th:block th:replace="~{fragments/mail/hello :: hello(helloMessage=#{message.mail.confirm_user.helloText})}"></th:block>
+        <table class="es-content" cellspacing="0" cellpadding="0" align="center" style="border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%">
+          <tr style="border-collapse:collapse">
+            <td align="center" style="padding:0;Margin:0">
+              <table class="es-content-body" style="border-collapse:collapse;border-spacing:0px;background-color:transparent;width:600px" cellspacing="0" cellpadding="0" align="center">
+                <tr style="border-collapse:collapse">
+                  <td align="left" style="padding:0;Margin:0">
+                    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0px">
+                      <tr style="border-collapse:collapse">
+                        <td valign="top" align="center" style="padding:0;Margin:0;width:600px">
+                          <table style="border-collapse:separate;border-spacing:0px;border-radius:4px;background-color:#FFFFFF" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" role="presentation">
+                            <tr style="border-collapse:collapse">
+                              <td class="es-m-txt-l" bgcolor="#ffffff" align="left" style="Margin:0;padding-top:20px;padding-bottom:20px;padding-left:30px;padding-right:30px">
+                                <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;font-size:18px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666">
+                                  <th:block th:text="#{message.mail.confirm_user.hello}"></th:block>, <b style="color:#000000" th:text="${user.username}"></b>!
+                                  </br></br>
+                                  <th:block th:text="#{message.mail.confirm_user.description}"></th:block>
+                                </p>
+                              </td>
+                            </tr>
+                            <th:block th:replace="~{fragments/mail/button :: button(text=#{message.mail.confirm_user.button}, link=${confirmationLink})}"></th:block>
+                            <th:block th:replace="~{fragments/mail/any_questions :: any_questions}"></th:block>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <th:block th:replace="~{fragments/mail/table_break :: table_break}"></th:block>
+        <th:block th:replace="~{fragments/mail/need_help :: need_help}"></th:block>
+        <th:block th:replace="~{fragments/mail/ignore_if_mistake :: ignore_if_mistake(reasonMessage=#{message.mail.confirm_user.ignore})}"></th:block>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
