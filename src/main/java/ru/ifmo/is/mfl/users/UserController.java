@@ -89,7 +89,7 @@ public class UserController {
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("isAuthenticated()")
   @Operation(summary = "Удалить пользователя по ID", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<Void> delete(@PathVariable int id) {
     if (service.delete(id)) {
