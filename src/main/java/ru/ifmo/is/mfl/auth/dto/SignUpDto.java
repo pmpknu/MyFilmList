@@ -16,7 +16,7 @@ public class SignUpDto {
 
   @Schema(description = "E-mail пользователя", example = "JohnyBoy@gmail.com")
   @Size(min = 3, max = 127, message = "E-mail пользователя должно содержать от 3 до 127 символов")
-  @NotBlank(message = "Имя пользователя не может быть пустыми")
+  @NotBlank(message = "E-mail пользователя не может быть пустыми")
   @Email(
     message = "Email is not valid",
     regexp = "[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?"
