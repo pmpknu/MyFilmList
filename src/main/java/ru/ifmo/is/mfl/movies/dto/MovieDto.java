@@ -1,0 +1,27 @@
+package ru.ifmo.is.mfl.movies.dto;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import ru.ifmo.is.mfl.common.framework.dto.CrudDto;
+
+import java.util.Date;
+import java.util.Set;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class MovieDto extends CrudDto {
+  private int id;
+  private String title;
+  private String description;
+  private String poster;
+  private Date releaseDate;
+  private int duration;
+  private String categories;
+  private String tags;
+  private String productionCountry;
+  private String genres;
+  private String actors;
+  private String director;
+  private int seasons;
+  private int series;
+}
