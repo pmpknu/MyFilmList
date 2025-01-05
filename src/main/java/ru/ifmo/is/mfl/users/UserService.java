@@ -2,6 +2,7 @@ package ru.ifmo.is.mfl.users;
 
 import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpServletRequest;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,7 +31,9 @@ import ru.ifmo.is.mfl.users.dto.UserUpdateDto;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -178,8 +181,26 @@ public class UserService {
     var obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
     policy.update(currentUser(), obj);
 
-    // TODO: Check updating email or password
-    // TODO: Error if both email and password changed
+    if (objData.getPassword() != null && objData.getPassword().isPresent()
+      && objData.getEmail() != null && objData.getEmail().isPresent()) {
+      throw new RuntimeException("You cannot update both email and password");
+    }
+
+    if (objData.getEmail() != null && objData.getEmail().isPresent()) {
+      var email = objData.getEmail().get();
+      if (email.equals(obj.getEmail())) {
+        objData.setEmail(JsonNullable.undefined());
+      } else if (Objects.requireNonNull(currentUser()).getId() == obj.getId()) {
+        logger.info("User {} changing his own email: sending confirmation mail", obj.getId());
+        obj = deleteRole(obj, Role.ROLE_USER);
+        sendConfirmation(obj, false);
+      }
+    }
+
+    if (objData.getPassword() != null && objData.getPassword().isPresent()) {
+      objData.setPassword(JsonNullable.undefined());
+      // TODO: Check updating password
+    }
 
     mapper.update(objData, obj);
     repository.save(obj);
@@ -238,6 +259,18 @@ public class UserService {
     roles.addAll(newRoles);
     user.setRoles(roles);
     roleRepository.saveAll(roles);
+    return save(user);
+  }
+
+  @Transactional
+  public User deleteRole(User user, Role role) {
+    var userRole = UserRole.builder().user(user).role(role).build();
+    var roles = user.getRoles();
+
+    if (roles.remove(userRole)) {
+      roleRepository.delete(userRole);
+    }
+
     return save(user);
   }
 
