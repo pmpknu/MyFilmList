@@ -63,7 +63,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
 
-  @ExceptionHandler({ TokenRefreshException.class })
+  @ExceptionHandler({ TokenExpiredException.class })
   public ResponseEntity<Object> handleTokenRefreshException(Exception ex) {
     logger.info(ex.getClass().getName());
     final ApiError apiError = new ApiError(

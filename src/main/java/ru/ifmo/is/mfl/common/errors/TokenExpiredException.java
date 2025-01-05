@@ -1,11 +1,11 @@
 package ru.ifmo.is.mfl.common.errors;
 
-public class TokenRefreshException extends RuntimeException {
-  public TokenRefreshException() {
+public class TokenExpiredException extends RuntimeException {
+  public TokenExpiredException() {
     super();
   }
 
-  public TokenRefreshException(String message) {
+  public TokenExpiredException(String message) {
     super(message);
   }
 }

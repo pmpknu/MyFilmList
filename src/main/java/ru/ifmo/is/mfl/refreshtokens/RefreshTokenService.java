@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
-import ru.ifmo.is.mfl.common.errors.TokenRefreshException;
+import ru.ifmo.is.mfl.common.errors.TokenExpiredException;
 import ru.ifmo.is.mfl.users.UserRepository;
 
 import java.time.Instant;
@@ -41,7 +41,7 @@ public class RefreshTokenService {
   public RefreshToken verifyExpiration(RefreshToken token) {
     if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
       repository.delete(token);
-      throw new TokenRefreshException("Refresh token was expired. Please make a new signin request");
+      throw new TokenExpiredException("Refresh token was expired. Please make a new signin request");
     }
 
     return token;
