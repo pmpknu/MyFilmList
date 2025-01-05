@@ -64,6 +64,7 @@ public class SecurityConfiguration {
 
           // Выйти из аккаунта может только зарегистрированный пользователь
           .requestMatchers("/api/auth/sign-out").authenticated()
+          .requestMatchers("/api/auth/resend-confirmation").authenticated()
           // Доступ к методам /api/auth/** открыт для всех
           .requestMatchers("/api/auth/**").permitAll()
 

@@ -172,6 +172,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
 
+  // 429
+  @ExceptionHandler({ TooManyRequests.class })
+  public ResponseEntity<Object> handleTooManyRequests(Exception ex) {
+    logger.info(ex.getClass().getName());
+    final ApiError apiError = new ApiError(
+      HttpStatus.TOO_MANY_REQUESTS,
+      ex.getLocalizedMessage(),
+      "Too many requests. Try later"
+    );
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
+
   // 500
   @ExceptionHandler({ Exception.class })
   public ResponseEntity<Object> handleAll(final Exception ex, final WebRequest request) {

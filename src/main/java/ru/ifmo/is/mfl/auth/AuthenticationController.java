@@ -56,6 +56,14 @@ public class AuthenticationController {
     return ResponseEntity.ok(authenticationService.confirm(request));
   }
 
+  @Operation(summary = "Повторно отправить письмо с подтверждением", security = @SecurityRequirement(name = "bearerAuth"))
+  @PostMapping("/resend-confirmation")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<AuthenticationDto> resendConfirmation() {
+    authenticationService.resendConfirmation();
+    return ResponseEntity.noContent().build();
+  }
+
   @Operation(summary = "Выйти из аккаунта", security = @SecurityRequirement(name = "bearerAuth"))
   @PostMapping("/sign-out")
   @PreAuthorize("hasRole('USER')")

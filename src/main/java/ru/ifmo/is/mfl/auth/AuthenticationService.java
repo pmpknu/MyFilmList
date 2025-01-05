@@ -11,6 +11,8 @@ import ru.ifmo.is.mfl.auth.dto.AuthenticationDto;
 import ru.ifmo.is.mfl.auth.dto.SignInDto;
 import ru.ifmo.is.mfl.auth.dto.SignUpDto;
 import ru.ifmo.is.mfl.common.errors.TokenExpiredException;
+import ru.ifmo.is.mfl.common.errors.TooManyRequests;
+import ru.ifmo.is.mfl.common.errors.UserAlreadyConfirmedException;
 import ru.ifmo.is.mfl.refreshtokens.RefreshToken;
 import ru.ifmo.is.mfl.refreshtokens.RefreshTokenService;
 import ru.ifmo.is.mfl.refreshtokens.dto.RefreshDto;
@@ -21,6 +23,8 @@ import ru.ifmo.is.mfl.verificationtokens.VerificationToken;
 import ru.ifmo.is.mfl.verificationtokens.VerificationTokenService;
 import ru.ifmo.is.mfl.verificationtokens.dto.VerificationDto;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashSet;
 
 @Service
@@ -118,6 +122,32 @@ public class AuthenticationService {
         return new AuthenticationDto(accessToken, newRefreshToken.getToken(), mapper.map(user));
       })
       .orElseThrow(() -> new TokenExpiredException("No such verification token"));
+  }
+
+  /**
+   * Повторная отправка письма для подтверждения профиля пользователя
+   */
+  @Transactional
+  public void resendConfirmation() {
+    var user = userService.getCurrentUser();
+
+    if (user.isUser()) {
+      throw new UserAlreadyConfirmedException("You are already a user. You have nothing to verify");
+    }
+
+    var lastVerificationToken = verificationService.findLastVerificationToken(user);
+    if (lastVerificationToken.isEmpty()) {
+      throw new UserAlreadyConfirmedException("There are no unconfirmed mails. You have nothing to verify");
+    }
+
+    var secondsFromSent = Duration.between(lastVerificationToken.get().getSentAt(), Instant.now()).toSeconds();
+    if (secondsFromSent < 60) {
+      throw new TooManyRequests(
+        "The time between two confirmation mail sendings must be at least 1 minute. Please, try after " + (60 - secondsFromSent) + " seconds"
+      );
+    }
+
+    userService.sendConfirmation(user, true);
   }
 
   /**

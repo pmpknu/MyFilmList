@@ -85,10 +85,7 @@ public class UserService {
       return addRoles(user, roles);
     }
 
-    eventPublisher.publishEvent(
-      new OnRegistrationCompleteEvent(user, httpRequest.getLocale())
-    );
-
+    sendConfirmation(user, true);
     return user;
   }
 
@@ -102,6 +99,12 @@ public class UserService {
     var roles = new HashSet<UserRole>();
     roles.add(UserRole.builder().role(Role.ROLE_USER).user(user).build());
     return addRoles(user, roles);
+  }
+
+  public void sendConfirmation(User user, boolean newUser) {
+    eventPublisher.publishEvent(
+      new OnRegistrationCompleteEvent(user, newUser, httpRequest.getLocale())
+    );
   }
 
   /**

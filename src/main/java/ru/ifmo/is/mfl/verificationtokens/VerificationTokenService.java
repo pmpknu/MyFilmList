@@ -29,10 +29,15 @@ public class VerificationTokenService {
     return repository.findByToken(token);
   }
 
+  public Optional<VerificationToken> findLastVerificationToken(User user) {
+    return repository.findTopByUserOrderBySentAtDesc(user);
+  }
+
   public VerificationToken createVerificationToken(User user) {
     var token = tokenGenerator.generateSecureToken(Integer.parseInt(verificationTokenLength));
     var verificationToken = VerificationToken.builder()
       .user(user)
+      .sentAt(Instant.now())
       .expiryDate(Instant.now().plusMillis(Long.parseLong(verificationTokenTtl)))
       .token(token)
       .build();

@@ -83,6 +83,11 @@ public class User extends CrudEntity implements UserDetails {
   }
 
   @JsonIgnore
+  public boolean isUser() {
+    return this.roles.stream().map(UserRole::getRole).toList().contains(Role.ROLE_USER);
+  }
+
+  @JsonIgnore
   @Override
   public boolean isAccountNonExpired() {
     return true;
