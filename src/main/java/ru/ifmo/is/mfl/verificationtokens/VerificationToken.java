@@ -30,6 +30,9 @@ public class VerificationToken implements BaseEntity {
   @Column(name = "expiry_date", nullable = false)
   private Instant expiryDate;
 
+  @Column(name = "sent_at", nullable = false)
+  private Instant sentAt;
+
   @JsonIgnore
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", nullable = false)
