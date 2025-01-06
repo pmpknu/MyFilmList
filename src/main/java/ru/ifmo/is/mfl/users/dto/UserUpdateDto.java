@@ -1,7 +1,10 @@
 package ru.ifmo.is.mfl.users.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.openapitools.jackson.nullable.JsonNullable;
 
@@ -11,7 +14,16 @@ public class UserUpdateDto {
   private JsonNullable<String> username;
 
   @NotNull
-  private JsonNullable<String> password;
+  @Schema(description = "Текущий пароль", example = "current_password")
+  @Size(min = 6, max = 127, message = "Длина пароля должна быть от 6 до 127")
+  @NotBlank(message = "Пароль не может быть пустыми")
+  private JsonNullable<String> currentPassword;
+
+  @NotNull
+  @Schema(description = "Новый пароль", example = "new_password")
+  @Size(min = 6, max = 127, message = "Длина пароля должна быть от 6 до 127")
+  @NotBlank(message = "Пароль не может быть пустыми")
+  private JsonNullable<String> newPassword;
 
   @NotNull
   @Email(

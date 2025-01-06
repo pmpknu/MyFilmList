@@ -8,7 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.ifmo.is.mfl.auth.events.OnPasswordResetRequestEvent;
 import ru.ifmo.is.mfl.auth.events.OnRegistrationCompleteEvent;
 import ru.ifmo.is.mfl.common.caching.RequestCache;
+import ru.ifmo.is.mfl.common.config.PasswordEncoderProvider;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
 import ru.ifmo.is.mfl.common.errors.UserWithThisUsernameAlreadyExists;
 import ru.ifmo.is.mfl.common.search.SearchDto;
@@ -47,6 +53,7 @@ public class UserService {
   private final SearchMapper<User> searchMapper;
   private final UserRepository repository;
   private final UserRoleRepository roleRepository;
+  private final PasswordEncoderProvider passwordEncoderProvider;
 
   private final StorageService storageService;
   private final ImageProcessor imageProcessor;
@@ -192,14 +199,13 @@ public class UserService {
     var obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
     policy.update(currentUser(), obj);
 
-    if (objData.getPassword() != null && objData.getPassword().isPresent()
+    if (objData.getNewPassword() != null && objData.getNewPassword().isPresent()
       && objData.getEmail() != null && objData.getEmail().isPresent()) {
       throw new RuntimeException("You cannot update both email and password");
     }
 
     if (objData.getEmail() != null && objData.getEmail().isPresent()) {
-      var email = objData.getEmail().get();
-      if (email.equals(obj.getEmail())) {
+      if (objData.getEmail().get().equals(obj.getEmail())) {
         objData.setEmail(JsonNullable.undefined());
       } else if (Objects.requireNonNull(currentUser()).getId() == obj.getId()) {
         logger.info("User {} changing his own email: sending confirmation mail", obj.getId());
@@ -208,9 +214,20 @@ public class UserService {
       }
     }
 
-    if (objData.getPassword() != null && objData.getPassword().isPresent()) {
-      objData.setPassword(JsonNullable.undefined());
-      // TODO: Check updating password
+    if (objData.getNewPassword() != null && objData.getNewPassword().isPresent()) {
+      if (objData.getCurrentPassword() == null || !objData.getCurrentPassword().isPresent()) {
+        throw new AuthenticationCredentialsNotFoundException("Please, enter your current password to set new one");
+      }
+
+      var passwordEncoder = passwordEncoderProvider.encoder();
+      if (!passwordEncoder.matches(objData.getCurrentPassword().get(), obj.getPassword())) {
+        throw new BadCredentialsException("Current password does not match");
+      }
+
+      if (!passwordEncoder.matches(objData.getNewPassword().get(), obj.getPassword())) {
+        var newPasswordHashed = passwordEncoder.encode(objData.getNewPassword().get());
+        obj.setPassword(newPasswordHashed);
+      }
     }
 
     mapper.update(objData, obj);
