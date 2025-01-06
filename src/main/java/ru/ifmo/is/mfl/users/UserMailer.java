@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import ru.ifmo.is.mfl.passwordreset.PasswordResetToken;
 import ru.ifmo.is.mfl.verificationtokens.VerificationToken;
 
 import java.util.Date;
@@ -23,12 +24,29 @@ public class UserMailer {
   @Value("${app.mail.links.confirm_user}")
   private final String confirmationLinkTemplate;
 
+  @Value("${app.mail.links.password_reset}")
+  private final String passwordResetLinkTemplate;
+
   @Value("${spring.mail.username}")
   private final String sender;
 
   private final MessageSource messages;
   private final JavaMailSender mailSender;
   private final SpringTemplateEngine templateEngine;
+
+  @Async
+  public void sendPasswordResetInstructions(User user, Locale locale, PasswordResetToken passwordResetToken) {
+    var title = messages.getMessage("message.mail.password_reset.title", null, locale);
+    var passwordResetLink = passwordResetLinkTemplate + passwordResetToken.getToken();
+
+    var model = new Context(locale);
+    model.setVariable("user", user);
+    model.setVariable("passwordResetLink", passwordResetLink);
+
+    var htmlContent = templateEngine.process("auth_mail/password_reset", model);
+    var textContent = templateEngine.process("auth_mail/password_reset.txt", model);
+    sendMail(user, title, htmlContent, textContent);
+  }
 
   @Async
   public void sendConfirmationLink(User user, Locale locale, VerificationToken verificationToken, boolean newUser) {
@@ -42,6 +60,10 @@ public class UserMailer {
 
     var htmlContent = templateEngine.process("auth_mail/" + action, model);
     var textContent = templateEngine.process("auth_mail/" + action + ".txt", model);
+    sendMail(user, title, htmlContent, textContent);
+  }
+
+  private void sendMail(User user, String title, String htmlContent, String textContent) {
     MimeMessagePreparator preparator = mimeMessage -> {
       MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
       message.setFrom(sender);
