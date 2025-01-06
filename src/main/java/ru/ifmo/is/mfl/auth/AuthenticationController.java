@@ -65,6 +65,12 @@ public class AuthenticationController {
     return ResponseEntity.noContent().build();
   }
 
+  @Operation(summary = "Сброс пароля")
+  @PostMapping("/reset-password")
+  public ResponseEntity<AuthenticationDto> resetPassword(@RequestBody @Valid ResetPasswordDto request) {
+    return ResponseEntity.ok(authenticationService.resetPassword(request));
+  }
+
   @Operation(summary = "Повторно отправить письмо с подтверждением", security = @SecurityRequirement(name = "bearerAuth"))
   @PostMapping("/resend-confirmation")
   @PreAuthorize("isAuthenticated()")

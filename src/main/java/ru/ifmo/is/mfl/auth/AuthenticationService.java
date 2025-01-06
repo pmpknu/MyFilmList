@@ -14,7 +14,10 @@ import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
 import ru.ifmo.is.mfl.common.errors.TokenExpiredException;
 import ru.ifmo.is.mfl.common.errors.TooManyRequests;
 import ru.ifmo.is.mfl.common.errors.UserAlreadyConfirmedException;
+import ru.ifmo.is.mfl.passwordreset.PasswordResetToken;
+import ru.ifmo.is.mfl.passwordreset.PasswordResetTokenService;
 import ru.ifmo.is.mfl.passwordreset.dto.RequestPasswordResetDto;
+import ru.ifmo.is.mfl.passwordreset.dto.ResetPasswordDto;
 import ru.ifmo.is.mfl.refreshtokens.RefreshToken;
 import ru.ifmo.is.mfl.refreshtokens.RefreshTokenService;
 import ru.ifmo.is.mfl.refreshtokens.dto.RefreshDto;
@@ -35,10 +38,12 @@ public class AuthenticationService {
   private final UserService userService;
   private final UserMapper mapper;
   private final JwtService jwtService;
-  private final RefreshTokenService refreshService;
-  private final VerificationTokenService verificationService;
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
+
+  private final RefreshTokenService refreshService;
+  private final VerificationTokenService verificationService;
+  private final PasswordResetTokenService passwordResetService;
 
   /**
    * Регистрация пользователя
@@ -120,10 +125,31 @@ public class AuthenticationService {
         verificationService.deleteByUser(user);
 
         var accessToken = jwtService.generateToken(user);
-        var newRefreshToken = refreshService.createRefreshToken(user.getId());
-        return new AuthenticationDto(accessToken, newRefreshToken.getToken(), mapper.map(user));
+        var refreshToken = refreshService.createRefreshToken(user.getId());
+        return new AuthenticationDto(accessToken, refreshToken.getToken(), mapper.map(user));
       })
       .orElseThrow(() -> new TokenExpiredException("No such verification token"));
+  }
+
+  /**
+   * Изменение пароля пользователя
+   *
+   * @param request password reset token
+   * @return токен
+   */
+  @Transactional
+  public AuthenticationDto resetPassword(ResetPasswordDto request) {
+    return passwordResetService.findByToken(request.getPasswordResetToken())
+      .map(passwordResetService::verifyExpiration)
+      .map(PasswordResetToken::getUser)
+      .map(u -> {
+        u.setPassword(passwordEncoder.encode(request.getPassword()));
+        var user = userService.save(u);
+        var accessToken = jwtService.generateToken(user);
+        var refreshToken = refreshService.createRefreshToken(user.getId());
+        return new AuthenticationDto(accessToken, refreshToken.getToken(), mapper.map(user));
+      })
+      .orElseThrow(() -> new TokenExpiredException("No such password reset token"));
   }
 
   /**
