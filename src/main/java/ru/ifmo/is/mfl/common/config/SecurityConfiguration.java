@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -32,6 +30,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfiguration {
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final PasswordEncoderProvider passwordEncoderProvider;
   private final UserService userService;
 
   private static final List<String> crudResources = Arrays.asList(
@@ -100,15 +99,10 @@ public class SecurityConfiguration {
   }
 
   @Bean
-  public PasswordEncoder encoder() {
-    return new BCryptPasswordEncoder();
-  }
-
-  @Bean
   public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
     authProvider.setUserDetailsService(userService.userDetailsService());
-    authProvider.setPasswordEncoder(encoder());
+    authProvider.setPasswordEncoder(passwordEncoderProvider.encoder());
     return authProvider;
   }
 
