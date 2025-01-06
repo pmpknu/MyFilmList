@@ -72,7 +72,7 @@ public class AuthenticationController {
   }
 
   @Operation(summary = "Повторно отправить письмо с подтверждением", security = @SecurityRequirement(name = "bearerAuth"))
-  @PostMapping("/resend-confirmation")
+  @GetMapping("/resend-confirmation")
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<AuthenticationDto> resendConfirmation() {
     authenticationService.resendConfirmation();
@@ -80,7 +80,7 @@ public class AuthenticationController {
   }
 
   @Operation(summary = "Выйти из аккаунта", security = @SecurityRequirement(name = "bearerAuth"))
-  @PostMapping("/sign-out")
+  @DeleteMapping("/sign-out")
   @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Void> signOut(@RequestParam(defaultValue = "false") boolean onAllDevices) {
     authenticationService.signOut(onAllDevices);
