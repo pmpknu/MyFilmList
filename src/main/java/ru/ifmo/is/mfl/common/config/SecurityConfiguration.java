@@ -75,7 +75,10 @@ public class SecurityConfiguration {
           .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
           .requestMatchers(HttpMethod.POST, "/api/users/search").permitAll()
           .requestMatchers(HttpMethod.PATCH, "/api/users/**").authenticated()
-          .requestMatchers(HttpMethod.DELETE, "/api/users/**").authenticated();
+          .requestMatchers(HttpMethod.DELETE, "/api/users/**").authenticated()
+
+          .requestMatchers(HttpMethod.POST, "/api/users/*/user-roles").hasAnyRole("ADMIN", "MODERATOR")
+          .requestMatchers(HttpMethod.DELETE, "/api/users/*/user-roles").hasAnyRole("ADMIN", "MODERATOR");
 
         crudResources.forEach(resource ->
           request

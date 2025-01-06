@@ -29,7 +29,6 @@ import ru.ifmo.is.mfl.common.utils.images.ImageProcessor;
 import ru.ifmo.is.mfl.storage.StorageService;
 import ru.ifmo.is.mfl.userroles.Role;
 import ru.ifmo.is.mfl.userroles.UserRole;
-import ru.ifmo.is.mfl.userroles.UserRoleRepository;
 import ru.ifmo.is.mfl.userroles.UserRoleService;
 import ru.ifmo.is.mfl.users.dto.UserDto;
 import ru.ifmo.is.mfl.users.dto.UserUpdateDto;
@@ -50,7 +49,6 @@ public class UserService {
   private final UserPolicy policy;
   private final SearchMapper<User> searchMapper;
   private final UserRepository repository;
-  private final UserRoleRepository roleRepository;
   private final PasswordEncoderProvider passwordEncoderProvider;
   private final UserRoleService userRoleService;
 
@@ -72,6 +70,10 @@ public class UserService {
 
   public Optional<User> findByEmail(String email) {
     return repository.findByEmail(email);
+  }
+
+  public Optional<User> findById(int id) {
+    return repository.findById(id);
   }
 
   /**
