@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.ifmo.is.mfl.auth.events.OnPasswordResetRequestEvent;
 import ru.ifmo.is.mfl.auth.events.OnRegistrationCompleteEvent;
 import ru.ifmo.is.mfl.common.caching.RequestCache;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
@@ -32,8 +33,8 @@ import ru.ifmo.is.mfl.users.dto.UserUpdateDto;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +62,10 @@ public class UserService {
   @Transactional
   public User save(User user) {
     return repository.save(user);
+  }
+
+  public Optional<User> findByEmail(String email) {
+    return repository.findByEmail(email);
   }
 
   /**
@@ -107,6 +112,12 @@ public class UserService {
   public void sendConfirmation(User user, boolean newUser) {
     eventPublisher.publishEvent(
       new OnRegistrationCompleteEvent(user, newUser, httpRequest.getLocale())
+    );
+  }
+
+  public void sendPasswordReset(User user) {
+    eventPublisher.publishEvent(
+      new OnPasswordResetRequestEvent(user, httpRequest.getLocale())
     );
   }
 

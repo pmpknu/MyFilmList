@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.ifmo.is.mfl.auth.dto.AuthenticationDto;
 import ru.ifmo.is.mfl.auth.dto.SignInDto;
 import ru.ifmo.is.mfl.auth.dto.SignUpDto;
+import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
 import ru.ifmo.is.mfl.common.errors.TokenExpiredException;
 import ru.ifmo.is.mfl.common.errors.TooManyRequests;
 import ru.ifmo.is.mfl.common.errors.UserAlreadyConfirmedException;
+import ru.ifmo.is.mfl.passwordreset.dto.RequestPasswordResetDto;
 import ru.ifmo.is.mfl.refreshtokens.RefreshToken;
 import ru.ifmo.is.mfl.refreshtokens.RefreshTokenService;
 import ru.ifmo.is.mfl.refreshtokens.dto.RefreshDto;
@@ -148,6 +150,19 @@ public class AuthenticationService {
     }
 
     userService.sendConfirmation(user, true);
+  }
+
+  /**
+   * Запрос на сброс пароля
+   *
+   * @param request данные пользователя (email)
+   */
+  @Transactional
+  public void requestPasswordReset(RequestPasswordResetDto request) {
+    var user = userService.findByEmail(request.getEmail())
+      .orElseThrow(() -> new ResourceNotFoundException("User with email " + request.getEmail() +" not found"));
+
+    userService.sendPasswordReset(user);
   }
 
   /**

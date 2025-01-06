@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.ifmo.is.mfl.auth.dto.AuthenticationDto;
 import ru.ifmo.is.mfl.auth.dto.SignInDto;
 import ru.ifmo.is.mfl.auth.dto.SignUpDto;
+import ru.ifmo.is.mfl.passwordreset.dto.RequestPasswordResetDto;
+import ru.ifmo.is.mfl.passwordreset.dto.ResetPasswordDto;
 import ru.ifmo.is.mfl.refreshtokens.dto.RefreshDto;
 import ru.ifmo.is.mfl.common.context.ApplicationLockBean;
 import ru.ifmo.is.mfl.verificationtokens.dto.VerificationDto;
@@ -54,6 +56,13 @@ public class AuthenticationController {
   @PostMapping("/confirm")
   public ResponseEntity<AuthenticationDto> confirm(@RequestBody @Valid VerificationDto request) {
     return ResponseEntity.ok(authenticationService.confirm(request));
+  }
+
+  @Operation(summary = "Запрос на сброс пароля")
+  @PostMapping("/request-password-reset")
+  public ResponseEntity<Void> requestPasswordReset(@RequestBody @Valid RequestPasswordResetDto request) {
+    authenticationService.requestPasswordReset(request);
+    return ResponseEntity.noContent().build();
   }
 
   @Operation(summary = "Повторно отправить письмо с подтверждением", security = @SecurityRequirement(name = "bearerAuth"))
