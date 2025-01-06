@@ -30,6 +30,7 @@ import ru.ifmo.is.mfl.storage.StorageService;
 import ru.ifmo.is.mfl.userroles.Role;
 import ru.ifmo.is.mfl.userroles.UserRole;
 import ru.ifmo.is.mfl.userroles.UserRoleRepository;
+import ru.ifmo.is.mfl.userroles.UserRoleService;
 import ru.ifmo.is.mfl.users.dto.UserDto;
 import ru.ifmo.is.mfl.users.dto.UserUpdateDto;
 
@@ -51,6 +52,7 @@ public class UserService {
   private final UserRepository repository;
   private final UserRoleRepository roleRepository;
   private final PasswordEncoderProvider passwordEncoderProvider;
+  private final UserRoleService userRoleService;
 
   private final StorageService storageService;
   private final ImageProcessor imageProcessor;
@@ -94,7 +96,7 @@ public class UserService {
       roles.add(UserRole.builder().role(Role.ROLE_USER).user(user).build());
       roles.add(UserRole.builder().role(Role.ROLE_MODERATOR).user(user).build());
       roles.add(UserRole.builder().role(Role.ROLE_ADMIN).user(user).build());
-      return addRoles(user, roles);
+      return save(userRoleService.addRoles(user, roles));
     }
 
     sendConfirmation(user, true);
@@ -110,7 +112,7 @@ public class UserService {
   public User confirm(User user) {
     var roles = new HashSet<UserRole>();
     roles.add(UserRole.builder().role(Role.ROLE_USER).user(user).build());
-    return addRoles(user, roles);
+    return save(userRoleService.addRoles(user, roles));
   }
 
   public void sendConfirmation(User user, boolean newUser) {
@@ -206,7 +208,7 @@ public class UserService {
         objData.setEmail(JsonNullable.undefined());
       } else if (Objects.requireNonNull(currentUser()).getId() == obj.getId()) {
         logger.info("User {} changing his own email: sending confirmation mail", obj.getId());
-        obj = deleteRole(obj, Role.ROLE_USER);
+        obj = save(userRoleService.deleteRole(obj, Role.ROLE_USER));
         sendConfirmation(obj, false);
       }
     }
@@ -276,27 +278,6 @@ public class UserService {
 
     currentUser.setPhoto(newImageName);
     return mapper.map(save(currentUser));
-  }
-
-  @Transactional
-  public User addRoles(User user, HashSet<UserRole> newRoles) {
-    var roles = user.getRoles();
-    roles.addAll(newRoles);
-    user.setRoles(roles);
-    roleRepository.saveAll(roles);
-    return save(user);
-  }
-
-  @Transactional
-  public User deleteRole(User user, Role role) {
-    var userRole = UserRole.builder().user(user).role(role).build();
-    var roles = user.getRoles();
-
-    if (roles.remove(userRole)) {
-      roleRepository.delete(userRole);
-    }
-
-    return save(user);
   }
 
   @RequestCache
