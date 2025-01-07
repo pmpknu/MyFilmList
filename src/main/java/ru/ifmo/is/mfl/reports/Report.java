@@ -25,7 +25,7 @@ public class Report extends CrudEntity {
   private int id;
 
   @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
