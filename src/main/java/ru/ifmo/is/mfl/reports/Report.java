@@ -30,11 +30,11 @@ public class Report extends CrudEntity {
   private User user;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "review_id", nullable = false)
+  @JoinColumn(name = "review_id")
   private Review review;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "comment_id", nullable = false)
+  @JoinColumn(name = "comment_id")
   private Comment comment;
 
   @NotNull
