@@ -2,12 +2,12 @@ package ru.ifmo.is.mfl.reports;
 
 import java.sql.Timestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import ru.ifmo.is.mfl.comments.Comment;
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
+import ru.ifmo.is.mfl.reviews.Review;
 import ru.ifmo.is.mfl.users.User;
 
 @Entity
@@ -25,16 +25,17 @@ public class Report extends CrudEntity {
   @Column(name="id", nullable=false, unique=true)
   private int id;
 
-  @JsonIgnore
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  @Column(name = "review_id")
-  private Integer reviewId;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "review_id", nullable = false)
+  private Review review;
 
-  @Column(name = "comment_id")
-  private Integer commentId;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "comment_id", nullable = false)
+  private Comment comment;
 
   @NotNull
   @Column(name = "text", nullable = false)
