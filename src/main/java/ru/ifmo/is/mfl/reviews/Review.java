@@ -37,7 +37,7 @@ public class Review extends CrudEntity {
 
   @NotNull
   @Column(name = "visible", nullable = false)
-  private Boolean visible;
+  private boolean visible;
 
   @NotNull
   @Column(name = "text", nullable = false)

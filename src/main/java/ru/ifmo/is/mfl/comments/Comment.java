@@ -37,7 +37,7 @@ public class Comment extends CrudEntity {
     private Review review;
 
     @Column(name = "visible", nullable = false)
-    private Boolean visible;
+    private boolean visible;
 
     @Column(name = "text", nullable = false)
     private String text;
