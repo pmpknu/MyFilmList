@@ -4,11 +4,13 @@ import java.sql.Timestamp;
 
 import org.hibernate.annotations.BatchSize;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.*;
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
+import ru.ifmo.is.mfl.users.User;
 import ru.ifmo.is.mfl.comments.Comment;
 import java.util.Set;
 import java.util.HashSet;
@@ -50,4 +52,9 @@ public class Report extends CrudEntity {
   @BatchSize(size = 50)
   @OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Set<Comment> comments = new HashSet<>();
+
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 }
