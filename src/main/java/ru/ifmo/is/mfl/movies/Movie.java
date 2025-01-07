@@ -2,7 +2,7 @@ package ru.ifmo.is.mfl.movies;
 
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -39,7 +39,7 @@ public class Movie extends CrudEntity {
   private String poster;
 
   @Column(name = "release_date")
-  private Timestamp releaseDate;
+  private LocalDate releaseDate;
 
   @Column(name = "duration")
   private Integer duration;
