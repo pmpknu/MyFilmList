@@ -2,18 +2,12 @@ package ru.ifmo.is.mfl.reports;
 
 import java.sql.Timestamp;
 
-import org.hibernate.annotations.BatchSize;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.*;
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.users.User;
-import ru.ifmo.is.mfl.comments.Comment;
-import java.util.Set;
-import java.util.HashSet;
 
 @Entity
 @Getter
@@ -30,8 +24,10 @@ public class Report extends CrudEntity {
   @Column(name="id", nullable=false, unique=true)
   private int id;
 
-  @Column(name = "user_id")
-  private Integer userId;
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
   @Column(name = "review_id")
   private Integer reviewId;
@@ -47,14 +43,4 @@ public class Report extends CrudEntity {
 
   @Column(name = "date", nullable = false)
   private Timestamp date;
-
-  @JsonManagedReference
-  @BatchSize(size = 50)
-  @OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private Set<Comment> comments = new HashSet<>();
-
-  @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
-  private User user;
 }
