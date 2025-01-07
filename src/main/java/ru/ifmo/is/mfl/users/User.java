@@ -65,6 +65,7 @@ public class User extends CrudEntity implements UserDetails {
   @BatchSize(size = 50)
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
   private Set<UserRole> roles = new HashSet<>();
+
   @JsonIgnore
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
