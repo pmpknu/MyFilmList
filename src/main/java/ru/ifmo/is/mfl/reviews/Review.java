@@ -9,6 +9,7 @@ import org.hibernate.annotations.BatchSize;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.movies.Movie;
@@ -35,16 +36,20 @@ public class Review extends CrudEntity {
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
+  @NotNull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "movie_id", referencedColumnName = "id", nullable = false)
   private Movie movie;
 
+  @NotNull
   @Column(name = "visible", nullable = false)
   private Boolean visible;
 
+  @NotNull
   @Column(name = "text", nullable = false)
   private String text;
 
+  @NotNull
   @Column(name = "date", nullable = false)
   private Timestamp date;
 }
