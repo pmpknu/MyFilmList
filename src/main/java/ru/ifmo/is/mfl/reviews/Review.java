@@ -47,14 +47,4 @@ public class Review extends CrudEntity {
 
   @Column(name = "date", nullable = false)
   private Timestamp date;
-
-  @JsonManagedReference
-  @BatchSize(size = 50)
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "review", orphanRemoval = true)
-  private Set<Rating> ratings = new HashSet<>();
-
-  @JsonManagedReference
-  @BatchSize(size = 50)
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "review", orphanRemoval = true)
-  private Set<Comment> comments = new HashSet<>();
 }
