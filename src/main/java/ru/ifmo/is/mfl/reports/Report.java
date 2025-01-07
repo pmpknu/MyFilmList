@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.users.User;
@@ -35,12 +36,14 @@ public class Report extends CrudEntity {
   @Column(name = "comment_id")
   private Integer commentId;
 
+  @NotNull
   @Column(name = "text", nullable = false)
   private String text;
 
   @Column(name = "issue", length = 127)
   private String issue;
 
+  @NotNull
   @Column(name = "date", nullable = false)
   private Timestamp date;
 }
