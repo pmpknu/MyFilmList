@@ -13,5 +13,4 @@ public class WatchesUpdateDto{
     private JsonNullable<Integer> userId;
     @NotNull
     private JsonNullable<Integer> movieId;
-    private JsonNullable<Instant> watchDate;
 }
