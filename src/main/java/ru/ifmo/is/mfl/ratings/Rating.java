@@ -4,7 +4,6 @@ import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.movies.Movie;
 import ru.ifmo.is.mfl.users.User;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -36,6 +35,7 @@ public class Rating extends CrudEntity {
   @JoinColumn(name = "movie_id", nullable = false)
   private Movie movie;
 
+  @NotNull
   @Column(name = "value")
   @Min(1)
   @Max(10)
