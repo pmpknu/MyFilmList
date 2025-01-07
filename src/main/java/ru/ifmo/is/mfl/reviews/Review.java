@@ -1,13 +1,15 @@
 package ru.ifmo.is.mfl.reviews;
 
-import java.time.Instant;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.movies.Movie;
 import ru.ifmo.is.mfl.users.User;
+
+import java.time.Instant;
 
 @Entity
 @Getter
