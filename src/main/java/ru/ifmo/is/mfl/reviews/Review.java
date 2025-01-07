@@ -27,7 +27,7 @@ public class Review extends CrudEntity {
   private int id;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
   private User user;
 
   @NotNull
