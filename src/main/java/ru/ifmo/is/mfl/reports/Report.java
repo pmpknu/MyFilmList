@@ -1,6 +1,6 @@
 package ru.ifmo.is.mfl.reports;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -46,5 +46,5 @@ public class Report extends CrudEntity {
 
   @NotNull
   @Column(name = "date", nullable = false)
-  private Timestamp date;
+  private Instant date;
 }

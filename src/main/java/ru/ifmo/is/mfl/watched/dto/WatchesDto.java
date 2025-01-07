@@ -1,6 +1,6 @@
 package ru.ifmo.is.mfl.watched.dto;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,5 +12,5 @@ public class WatchesDto extends CrudDto {
   private int id;
   private int userId;
   private int movieId;
-  private Timestamp watchDate;
+  private Instant watchDate;
 }

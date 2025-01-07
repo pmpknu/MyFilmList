@@ -1,6 +1,6 @@
 package ru.ifmo.is.mfl.comments;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -43,7 +43,7 @@ public class Comment extends CrudEntity {
     private String text;
 
     @Column(name = "date", nullable = false)
-    private Timestamp date;
+    private Instant date;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

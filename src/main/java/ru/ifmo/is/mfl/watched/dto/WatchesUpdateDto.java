@@ -1,6 +1,6 @@
 package ru.ifmo.is.mfl.watched.dto;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 import org.openapitools.jackson.nullable.JsonNullable;
 
@@ -13,5 +13,5 @@ public class WatchesUpdateDto{
     private JsonNullable<Integer> userId;
     @NotNull
     private JsonNullable<Integer> movieId;
-    private JsonNullable<Timestamp> watchDate;
+    private JsonNullable<Instant> watchDate;
 }

@@ -1,12 +1,6 @@
 package ru.ifmo.is.mfl.reviews;
 
-import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.hibernate.annotations.BatchSize;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.time.Instant;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -14,8 +8,6 @@ import lombok.*;
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.movies.Movie;
 import ru.ifmo.is.mfl.users.User;
-import ru.ifmo.is.mfl.ratings.Rating;
-import ru.ifmo.is.mfl.comments.Comment;
 
 @Entity
 @Getter
@@ -51,5 +43,5 @@ public class Review extends CrudEntity {
 
   @NotNull
   @Column(name = "date", nullable = false)
-  private Timestamp date;
+  private Instant date;
 }

@@ -4,7 +4,7 @@ import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.movies.Movie;
 import ru.ifmo.is.mfl.users.User;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,6 +36,6 @@ public class Watches extends CrudEntity {
 
   @NonNull
   @Column(name = "watch_date", nullable = false)
-  private Timestamp watchDate;
+  private Instant watchDate;
 }
 
