@@ -1,13 +1,13 @@
 package ru.ifmo.is.mfl.watched;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.movies.Movie;
 import ru.ifmo.is.mfl.users.User;
 
 import java.time.Instant;
-
-import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
 @Getter
