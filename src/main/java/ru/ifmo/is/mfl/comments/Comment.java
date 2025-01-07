@@ -28,11 +28,11 @@ public class Comment extends CrudEntity {
     @Column(name="id", nullable=false, unique=true)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "review_id", referencedColumnName = "id", nullable = false)
     private Review review;
 
