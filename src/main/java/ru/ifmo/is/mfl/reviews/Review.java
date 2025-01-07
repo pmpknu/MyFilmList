@@ -32,12 +32,12 @@ public class Review extends CrudEntity {
   @Column(name="id", nullable=false, unique=true)
   private int id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
   @NotNull
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "movie_id", referencedColumnName = "id", nullable = false)
   private Movie movie;
 
