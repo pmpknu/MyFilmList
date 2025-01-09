@@ -39,6 +39,30 @@ public class ImageProcessor {
     }
   }
 
+  public ByteArrayInputStream save(MagickImage image, String contentType)
+    throws MagickException, IOException, MimeTypeException {
+
+    var tempFile = File.createTempFile(UUID.randomUUID().toString(), getImageExtension(contentType));
+    tempFile.deleteOnExit();
+
+    try {
+      image.setFileName(tempFile.getAbsolutePath());
+      boolean result = image.writeImage(new ImageInfo());
+      if (!result) {
+        throw new IOException("Cant write image to temp file");
+      }
+      image.destroyImages();
+
+      var bais = new ByteArrayInputStream(FileUtils.readFileToByteArray(tempFile));
+      tempFile.delete();
+
+      return bais;
+    } catch (Exception e) {
+      tempFile.delete();
+      throw new MagickException("Failed to process image: " + e.getMessage());
+    }
+  }
+
   public ByteArrayInputStream cropToSquare(MagickImage image, String contentType)
     throws MagickException, IOException, MimeTypeException {
 
