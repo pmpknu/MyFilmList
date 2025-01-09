@@ -112,12 +112,12 @@ public class SecurityConfiguration {
           .requestMatchers(HttpMethod.POST, "/api/movies/*/reviews").hasRole("USER") // Add review to movie // TODO
 
           // Movies
-          .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll() // TODO
-          .requestMatchers(HttpMethod.POST, "/api/movies/*/poster").hasRole("ADMIN") // TODO
-          .requestMatchers(HttpMethod.POST, "/api/movies/search").permitAll() // TODO
-          .requestMatchers(HttpMethod.POST, "/api/movies/**").hasRole("ADMIN") // TODO
-          .requestMatchers(HttpMethod.PATCH, "/api/movies/**").hasRole("ADMIN") // TODO
-          .requestMatchers(HttpMethod.DELETE, "/api/movies/**").hasRole("ADMIN") // TODO
+          .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll()
+          .requestMatchers(HttpMethod.POST, "/api/movies/*/poster").hasRole("ADMIN")
+          .requestMatchers(HttpMethod.POST, "/api/movies/search").permitAll()
+          .requestMatchers(HttpMethod.POST, "/api/movies/**").hasRole("ADMIN")
+          .requestMatchers(HttpMethod.PATCH, "/api/movies/**").hasRole("ADMIN")
+          .requestMatchers(HttpMethod.DELETE, "/api/movies/**").hasRole("ADMIN")
 
           // Watchlists
           .requestMatchers(HttpMethod.POST, "/api/watchlists/*/movies/**").hasRole("USER") // Add movie to watchlist // TODO
