@@ -20,6 +20,10 @@ public abstract class RatingMapper implements CrudMapper<Rating, RatingDto, Rati
 
   public abstract RatingDto map(Rating model);
 
+  public abstract RatingWithoutMovieDto mapNoMovies(Rating model);
+
+  public abstract RatingWithoutUserDto mapNoUsers(Rating model);
+
   public abstract Rating map(RatingDto model);
 
   public abstract void update(RatingUpdateDto dto, @MappingTarget Rating model);

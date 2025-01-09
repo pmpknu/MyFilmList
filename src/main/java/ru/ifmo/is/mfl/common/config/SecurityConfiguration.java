@@ -97,11 +97,11 @@ public class SecurityConfiguration {
           .requestMatchers(HttpMethod.DELETE, "/api/comments/**").hasRole("USER") // Delete comment by ID // TODO
 
           // Ratings
-          .requestMatchers(HttpMethod.GET, "/api/users/*/ratings").permitAll() // Get all user's rated movies // TODO
-          .requestMatchers(HttpMethod.GET, "/api/movies/*/ratings").hasRole("USER") // Current user's rating // TODO
-          .requestMatchers(HttpMethod.POST, "/api/movies/*/ratings").hasRole("USER") // Add movie's rating by current user // TODO
-          .requestMatchers(HttpMethod.PATCH, "/api/movies/*/ratings").hasRole("USER") // Change movie's rating by current user // TODO
-          .requestMatchers(HttpMethod.DELETE, "/api/movies/*/ratings").hasRole("USER") // Delete movie's rating by current user // TODO
+          .requestMatchers(HttpMethod.GET, "/api/users/*/ratings").permitAll() // Get all user's ratings
+          .requestMatchers(HttpMethod.GET, "/api/movies/*/ratings").permitAll() // Get all movie's ratings
+          .requestMatchers(HttpMethod.POST, "/api/movies/*/ratings").hasRole("USER") // Add movie's rating by current user
+          .requestMatchers(HttpMethod.PATCH, "/api/movies/*/ratings").hasRole("USER") // Change movie's rating by current user
+          .requestMatchers(HttpMethod.DELETE, "/api/movies/*/ratings").hasRole("USER") // Delete movie's rating by current user
 
           // Reviews
           .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll() // Get all reviews // TODO
@@ -121,7 +121,7 @@ public class SecurityConfiguration {
           .requestMatchers(HttpMethod.DELETE, "/api/movies/**").hasRole("ADMIN")
 
           // Watchlists
-          .requestMatchers(HttpMethod.GET, "/api/watchlists/*/movies/**").permitAll() // Get movies from watchlist // TODO
+          .requestMatchers(HttpMethod.GET, "/api/watchlists/*/movies/**").permitAll() // Get movies from watchlist // TODO + views & ratings
           .requestMatchers(HttpMethod.POST, "/api/watchlists/*/movies/**").hasRole("USER") // Add movie to watchlist // TODO
           .requestMatchers(HttpMethod.DELETE, "/api/watchlists/*/movies/**").hasRole("USER") // Delete movie from watchlist // TODO
 
