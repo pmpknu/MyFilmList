@@ -1,14 +1,12 @@
 package ru.ifmo.is.mfl.ratings;
 
+import lombok.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.movies.Movie;
 import ru.ifmo.is.mfl.users.User;
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
 
 @Entity
 @Getter
@@ -36,7 +34,7 @@ public class Rating extends CrudEntity {
   private Movie movie;
 
   @NotNull
-  @Column(name = "value")
+  @Column(name = "value", nullable = false)
   @Min(1)
   @Max(10)
   private int value;

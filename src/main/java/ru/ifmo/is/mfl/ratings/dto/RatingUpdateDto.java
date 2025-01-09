@@ -10,5 +10,5 @@ public class RatingUpdateDto {
   @NotNull
   @Min(1)
   @Max(10)
-  private Integer value;
+  private int value;
 }

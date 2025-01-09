@@ -1,8 +1,7 @@
 package ru.ifmo.is.mfl.ratings.dto;
 
+import lombok.*;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import ru.ifmo.is.mfl.common.framework.dto.CrudDto;
 
 @Data
