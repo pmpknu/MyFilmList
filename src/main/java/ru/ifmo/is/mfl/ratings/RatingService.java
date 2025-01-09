@@ -11,6 +11,7 @@ import ru.ifmo.is.mfl.common.errors.ResourceAlreadyExists;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
 import ru.ifmo.is.mfl.common.framework.ApplicationService;
 import ru.ifmo.is.mfl.movies.Movie;
+import ru.ifmo.is.mfl.movieviews.MovieViewService;
 import ru.ifmo.is.mfl.ratings.dto.*;
 import ru.ifmo.is.mfl.users.User;
 
@@ -21,6 +22,8 @@ public class RatingService extends ApplicationService {
   private final RatingMapper mapper;
   private final RatingPolicy policy;
   private final RatingRepository repository;
+
+  private final MovieViewService movieViewService;
 
   public Page<RatingWithoutUserDto> getUserRatings(User user, Pageable pageable) {
     policy.showAll(currentUser());
@@ -49,6 +52,8 @@ public class RatingService extends ApplicationService {
       .movie(movie)
       .value(dto.getValue())
       .build();
+
+    movieViewService.watchMovie(movie);
 
     return mapper.map(repository.save(rating));
   }

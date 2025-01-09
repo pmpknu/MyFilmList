@@ -54,6 +54,21 @@ public class MovieViewService extends ApplicationService {
     return mapper.map(repository.save(view));
   }
 
+  @Transactional
+  public void watchMovie(Movie movie) {
+    if (repository.findByMovieAndUser(movie, currentUser()).isPresent()) {
+      return;
+    }
+
+    var view = MovieView.builder()
+      .user(currentUser())
+      .movie(movie)
+      .watchDate(Instant.now())
+      .build();
+
+    repository.save(view);
+  }
+
   @Transactional(isolation = Isolation.REPEATABLE_READ)
   public boolean markUnwatched(Movie movie) {
     var view = repository.findByMovieAndUser(movie, currentUser());
