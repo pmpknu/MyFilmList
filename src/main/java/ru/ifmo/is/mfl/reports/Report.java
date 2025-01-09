@@ -40,6 +40,10 @@ public class Report extends CrudEntity {
   private Comment comment;
 
   @NotNull
+  @Column(name = "resolved", nullable = false)
+  private boolean resolved;
+
+  @NotNull
   @Length(min= 1, max = 127)
   @Column(name = "issue", nullable = false)
   private String issue;

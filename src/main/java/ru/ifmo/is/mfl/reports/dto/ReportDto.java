@@ -15,6 +15,7 @@ public class ReportDto extends CrudDto {
   private User user;
   private Integer reviewId;
   private Integer commentId;
+  private boolean resolved;
   private String issue;
   private String text;
   private Instant date;
