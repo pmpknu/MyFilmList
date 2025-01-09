@@ -70,6 +70,9 @@ public class SecurityConfiguration {
           // Доступ к Swagger UI (для документации)
           .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
 
+          // Feed
+          .requestMatchers(HttpMethod.GET, "/api/feed/**").authenticated() // Every registered user can view news feed
+
           // Reports
           .requestMatchers(HttpMethod.POST, "/api/reviews/*/reports").hasRole("USER") // User can report review
           .requestMatchers(HttpMethod.POST, "/api/comments/*/reports").hasRole("USER") // User can report comment
