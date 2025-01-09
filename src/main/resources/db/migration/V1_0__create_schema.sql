@@ -51,7 +51,7 @@ CREATE TABLE movie_views (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   movie_id INT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
-  watch_date TIMESTAMP CHECK (watch_date IS NULL OR watch_date > CURRENT_DATE),
+  watch_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (user_id, movie_id)
 );
 
