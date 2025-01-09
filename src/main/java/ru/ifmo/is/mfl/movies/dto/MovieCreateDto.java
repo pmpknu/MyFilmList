@@ -13,9 +13,6 @@ public class MovieCreateDto {
 
   private String description;
 
-  @Size(max = 255)
-  private String poster;
-
   private LocalDate releaseDate;
 
   private Integer duration;

@@ -14,9 +14,6 @@ public class MovieUpdateDto {
 
   private JsonNullable<String> description;
 
-  @Size(max = 255)
-  private JsonNullable<String> poster;
-
   private JsonNullable<LocalDate> releaseDate;
 
   private JsonNullable<Integer> duration;
