@@ -50,14 +50,14 @@ CREATE TABLE watches (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   movie_id INT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
-  watch_date DATE CHECK (watch_date IS NULL OR watch_date > CURRENT_DATE)
+  watch_date TIMESTAMP CHECK (watch_date IS NULL OR watch_date > CURRENT_DATE)
 );
 
 CREATE TABLE ratings (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL REFERENCES users(id) ON DELETE SET NULL,
   movie_id INT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
-  value INT CHECK (value >= 1 AND value <= 10)
+  value INT NOT NULL CHECK (value >= 1 AND value <= 10)
 );
 
 CREATE TABLE reviews (

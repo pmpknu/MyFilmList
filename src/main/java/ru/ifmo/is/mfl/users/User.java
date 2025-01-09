@@ -69,22 +69,30 @@ public class User extends CrudEntity implements UserDetails {
   @JsonIgnore
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRole().name())).collect(Collectors.toSet());
+    return roles.stream()
+      .map(role -> new SimpleGrantedAuthority(role.getRole().name()))
+      .collect(Collectors.toSet());
   }
 
   @JsonIgnore
   public boolean isAdmin() {
-    return this.roles.stream().map(UserRole::getRole).toList().contains(Role.ROLE_ADMIN);
+    return this.roles.stream()
+      .map(UserRole::getRole).toList()
+      .contains(Role.ROLE_ADMIN);
   }
 
   @JsonIgnore
   public boolean isModerator() {
-    return this.roles.stream().map(UserRole::getRole).toList().contains(Role.ROLE_MODERATOR);
+    return this.roles.stream()
+      .map(UserRole::getRole).toList()
+      .contains(Role.ROLE_MODERATOR);
   }
 
   @JsonIgnore
   public boolean isUser() {
-    return this.roles.stream().map(UserRole::getRole).toList().contains(Role.ROLE_USER);
+    return this.roles.stream()
+      .map(UserRole::getRole).toList()
+      .contains(Role.ROLE_USER);
   }
 
   @JsonIgnore
