@@ -9,5 +9,6 @@ public class ReviewUpdateDto {
   @NotNull
   private JsonNullable<String> text;
 
+  @NotNull
   private JsonNullable<Boolean> visible;
 }

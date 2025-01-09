@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import ru.ifmo.is.mfl.common.framework.dto.CrudDto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -13,7 +13,7 @@ public class MovieDto extends CrudDto {
   private String title;
   private String description;
   private String poster;
-  private Date releaseDate;
+  private LocalDate releaseDate;
   private Integer duration;
   private String categories;
   private String tags;

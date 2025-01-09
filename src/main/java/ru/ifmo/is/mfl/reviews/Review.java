@@ -1,9 +1,8 @@
 package ru.ifmo.is.mfl.reviews;
 
-
+import lombok.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
 
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.movies.Movie;
@@ -27,7 +26,7 @@ public class Review extends CrudEntity {
   private int id;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
   @NotNull
