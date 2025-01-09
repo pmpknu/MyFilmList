@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
 import ru.ifmo.is.mfl.movies.MovieService;
-import ru.ifmo.is.mfl.movieviews.dto.MovieViewDto;
+import ru.ifmo.is.mfl.movieviews.dto.*;
 import ru.ifmo.is.mfl.users.UserService;
 
 @RestController
@@ -30,7 +30,7 @@ public class MovieViewController {
 
   @GetMapping("/users/{userId}/views")
   @Operation(summary = "Получить все просмотры пользователя")
-  public ResponseEntity<Page<MovieViewDto>> userViews(@PathVariable int userId, @PageableDefault(size = 20) Pageable pageable) {
+  public ResponseEntity<Page<MovieViewWithoutUserDto>> userViews(@PathVariable int userId, @PageableDefault(size = 20) Pageable pageable) {
     var user = userService.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
 
     var views = service.getUserViews(user, pageable);
@@ -41,7 +41,7 @@ public class MovieViewController {
 
   @GetMapping("/movies/{movieId}/views")
   @Operation(summary = "Получить все просмотры фильма")
-  public ResponseEntity<Page<MovieViewDto>> movieViews(@PathVariable int movieId, @PageableDefault(size = 20) Pageable pageable) {
+  public ResponseEntity<Page<MovieViewWithoutMovieDto>> movieViews(@PathVariable int movieId, @PageableDefault(size = 20) Pageable pageable) {
     var movie = movieService.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie not found: " + movieId));
 
     var views = service.getMovieViews(movie, pageable);

@@ -5,7 +5,7 @@ import org.mapstruct.*;
 import ru.ifmo.is.mfl.common.mapper.JsonNullableMapper;
 import ru.ifmo.is.mfl.common.mapper.ReferenceMapper;
 import ru.ifmo.is.mfl.movies.MovieMapper;
-import ru.ifmo.is.mfl.movieviews.dto.MovieViewDto;
+import ru.ifmo.is.mfl.movieviews.dto.*;
 import ru.ifmo.is.mfl.users.UserMapper;
 
 @Mapper(
@@ -15,5 +15,10 @@ import ru.ifmo.is.mfl.users.UserMapper;
   unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class MovieViewMapper {
+
   public abstract MovieViewDto map(MovieView model);
+
+  public abstract MovieViewWithoutMovieDto mapNoMovies(MovieView model);
+
+  public abstract MovieViewWithoutUserDto mapNoUsers(MovieView model);
 }

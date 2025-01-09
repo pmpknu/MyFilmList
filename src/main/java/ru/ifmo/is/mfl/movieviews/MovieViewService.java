@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.ifmo.is.mfl.common.errors.ResourceAlreadyExists;
 import ru.ifmo.is.mfl.common.framework.ApplicationService;
 import ru.ifmo.is.mfl.movies.Movie;
-import ru.ifmo.is.mfl.movieviews.dto.MovieViewDto;
+import ru.ifmo.is.mfl.movieviews.dto.*;
 import ru.ifmo.is.mfl.users.User;
 
 import java.time.Instant;
@@ -23,18 +23,18 @@ public class MovieViewService extends ApplicationService {
   private final MovieViewPolicy policy;
   private final MovieViewRepository repository;
 
-  public Page<MovieViewDto> getUserViews(User user, Pageable pageable) {
+  public Page<MovieViewWithoutUserDto> getUserViews(User user, Pageable pageable) {
     policy.showAll(currentUser());
 
     var movies = repository.findAllByUser(user, pageable);
-    return movies.map(mapper::map);
+    return movies.map(mapper::mapNoUsers);
   }
 
-  public Page<MovieViewDto> getMovieViews(Movie movie, Pageable pageable) {
+  public Page<MovieViewWithoutMovieDto> getMovieViews(Movie movie, Pageable pageable) {
     policy.showAll(currentUser());
 
     var movies = repository.findAllByMovie(movie, pageable);
-    return movies.map(mapper::map);
+    return movies.map(mapper::mapNoMovies);
   }
 
   @Transactional
