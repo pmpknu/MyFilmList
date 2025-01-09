@@ -4,7 +4,7 @@ import lombok.Data;
 import jakarta.validation.constraints.*;
 
 @Data
-public class RatingUpdateDto {
+public class RatingCreateDto {
   @NotNull
   @Min(1)
   @Max(10)
