@@ -34,7 +34,7 @@ public class SecurityConfiguration {
   private final UserService userService;
 
   private static final List<String> crudResources = Arrays.asList(
-    "movies"
+    "watchlists"
   );
 
   @Bean
@@ -70,25 +70,76 @@ public class SecurityConfiguration {
           // Доступ к Swagger UI (для документации)
           .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
 
-          // Доступ к данным пользователей
+          // Reports
+          .requestMatchers(HttpMethod.POST, "/api/reviews/*/reports").hasRole("USER") // User can report review
+          .requestMatchers(HttpMethod.POST, "/api/comments/*/reports").hasRole("USER") // User can report comment
+          .requestMatchers(HttpMethod.GET, "/api/reports/**").hasAnyRole("ADMIN", "MODERATOR") // Admin can view all report
+          .requestMatchers(HttpMethod.GET, "/api/reports/pending").hasAnyRole("ADMIN", "MODERATOR") // Admin can view pending report
+          .requestMatchers(HttpMethod.PATCH, "/api/reports/**").hasAnyRole("ADMIN", "MODERATOR") // Admin can update reports
+
+          // Movie views
+          .requestMatchers(HttpMethod.GET, "/api/users/*/views").permitAll() // Get all user's viewed movies
+          .requestMatchers(HttpMethod.GET, "/api/movies/*/views").permitAll() // Get all movie's viewers
+          .requestMatchers(HttpMethod.POST, "/api/movies/*/views").hasRole("USER") // Mark movie as viewed
+          .requestMatchers(HttpMethod.DELETE, "/api/movies/*/views").hasRole("USER") // Unmark viewed movie
+
+          // Comments
+          .requestMatchers(HttpMethod.GET, "/api/movies/*/comments").permitAll() // Get all movie comments
+          .requestMatchers(HttpMethod.GET, "/api/reviews/*/comments").permitAll() // Get all review comments
+          .requestMatchers(HttpMethod.GET, "/api/watchlists/*/comments").permitAll() // Get all watchlist comments
+          .requestMatchers(HttpMethod.POST, "/api/movies/*/comments").hasRole("USER") // Add comment to movie
+          .requestMatchers(HttpMethod.POST, "/api/reviews/*/comments").hasRole("USER") // Add comment to review
+          .requestMatchers(HttpMethod.POST, "/api/watchlists/*/comments").hasRole("USER") // Add comment to watchlist
+          .requestMatchers(HttpMethod.PATCH, "/api/comments/**").hasRole("USER") // Change comment by ID
+          .requestMatchers(HttpMethod.DELETE, "/api/comments/**").hasRole("USER") // Delete comment by ID
+
+          // Ratings
+          .requestMatchers(HttpMethod.GET, "/api/movies/*/ratings").hasRole("USER") // Current user's rating
+          .requestMatchers(HttpMethod.POST, "/api/movies/*/ratings").hasRole("USER") // Add movie's rating by current user
+          .requestMatchers(HttpMethod.PATCH, "/api/movies/*/ratings").hasRole("USER") // Change movie's rating by current user
+          .requestMatchers(HttpMethod.DELETE, "/api/movies/*/ratings").hasRole("USER") // Delete movie's rating by current user
+
+          // Reviews
+          .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll() // Get all reviews
+          .requestMatchers(HttpMethod.POST, "/api/reviews/search").permitAll() // Search review
+          .requestMatchers(HttpMethod.PATCH, "/api/reviews/**").hasRole("USER") // Change review by ID
+          .requestMatchers(HttpMethod.DELETE, "/api/reviews/**").hasRole("USER") // Delete review by ID
+          .requestMatchers(HttpMethod.GET, "/api/movies/*/reviews").permitAll() // Get all movie's reviews
+          .requestMatchers(HttpMethod.GET, "/api/users/*/reviews").permitAll() // Get all user's reviews
+          .requestMatchers(HttpMethod.POST, "/api/movies/*/reviews").hasRole("USER") // Add review to movie
+
+          // Movies
+          .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll()
+          .requestMatchers(HttpMethod.POST, "/api/movies/search").permitAll()
+          .requestMatchers(HttpMethod.POST, "/api/movies/**").hasRole("ADMIN")
+          .requestMatchers(HttpMethod.PATCH, "/api/movies/**").hasRole("ADMIN")
+          .requestMatchers(HttpMethod.POST, "/api/movies/*/poster").hasRole("ADMIN")
+          .requestMatchers(HttpMethod.DELETE, "/api/movies/**").hasRole("ADMIN")
+
+          // Watchlists
+          .requestMatchers(HttpMethod.POST, "/api/watchlists/*/movies/**").hasRole("USER") // Add movie to watchlist
+          .requestMatchers(HttpMethod.DELETE, "/api/watchlists/*/movies/**").hasRole("USER") // Delete movie from watchlist
+
+          // Users
           .requestMatchers(HttpMethod.POST, "/api/users/photo").authenticated()
           .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
           .requestMatchers(HttpMethod.POST, "/api/users/search").permitAll()
           .requestMatchers(HttpMethod.PATCH, "/api/users/**").authenticated()
           .requestMatchers(HttpMethod.DELETE, "/api/users/**").authenticated()
 
-          .requestMatchers(HttpMethod.POST, "/api/users/*/user-roles").hasAnyRole("ADMIN", "MODERATOR")
-          .requestMatchers(HttpMethod.DELETE, "/api/users/*/user-roles").hasAnyRole("ADMIN", "MODERATOR");
+          // User roles
+          .requestMatchers(HttpMethod.POST, "/api/users/*/roles").hasAnyRole("ADMIN", "MODERATOR")
+          .requestMatchers(HttpMethod.DELETE, "/api/users/*/roles").hasAnyRole("ADMIN", "MODERATOR");
 
         crudResources.forEach(resource ->
           request
             // Доступ к данным ресурса
             .requestMatchers(HttpMethod.GET, "/api/" + resource + "/**").permitAll() // все пользователи могут читать данные
             .requestMatchers(HttpMethod.POST, "/api/" + resource + "/search").permitAll() // все пользователи могут искать данные
-            .requestMatchers(HttpMethod.POST, "/api/" + resource + "/**").authenticated() // только авторизованные могут создавать данные
-            .requestMatchers(HttpMethod.PUT, "/api/" + resource + "/**").authenticated() // обновление доступно только авторам или администраторам
-            .requestMatchers(HttpMethod.PATCH, "/api/" + resource + "/**").authenticated() // обновление доступно только авторам или администраторам
-            .requestMatchers(HttpMethod.DELETE, "/api/" + resource + "/**").authenticated() // удаление доступно только авторам или администраторам
+            .requestMatchers(HttpMethod.POST, "/api/" + resource + "/**").hasRole("USER") // только авторизованные могут создавать данные
+            .requestMatchers(HttpMethod.PUT, "/api/" + resource + "/**").hasRole("USER") // обновление доступно только авторам или администраторам
+            .requestMatchers(HttpMethod.PATCH, "/api/" + resource + "/**").hasRole("USER") // обновление доступно только авторам или администраторам
+            .requestMatchers(HttpMethod.DELETE, "/api/" + resource + "/**").hasRole("USER") // удаление доступно только авторам или администраторам
         );
 
         request
