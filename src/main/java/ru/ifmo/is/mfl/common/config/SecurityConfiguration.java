@@ -81,10 +81,10 @@ public class SecurityConfiguration {
           .requestMatchers(HttpMethod.PATCH, "/api/reports/**").hasAnyRole("ADMIN", "MODERATOR") // Admin can update reports // TODO
 
           // Movie views
-          .requestMatchers(HttpMethod.GET, "/api/users/*/views").permitAll() // Get all user's viewed movies // TODO
-          .requestMatchers(HttpMethod.GET, "/api/movies/*/views").permitAll() // Get all movie's viewers // TODO
-          .requestMatchers(HttpMethod.POST, "/api/movies/*/views").hasRole("USER") // Current user can mark movie as viewed // TODO
-          .requestMatchers(HttpMethod.DELETE, "/api/movies/*/views").hasRole("USER") // Current user can unmark viewed movie // TODO
+          .requestMatchers(HttpMethod.GET, "/api/users/*/views").permitAll() // Get all user's views
+          .requestMatchers(HttpMethod.GET, "/api/movies/*/views").permitAll() // Get all movie's views
+          .requestMatchers(HttpMethod.POST, "/api/movies/*/views").hasRole("USER") // Current user can mark movie as watched
+          .requestMatchers(HttpMethod.DELETE, "/api/movies/*/views").hasRole("USER") // Current user can unmark watched movie
 
           // Comments
           .requestMatchers(HttpMethod.GET, "/api/movies/*/comments").permitAll() // Get all movie comments // TODO
@@ -97,6 +97,7 @@ public class SecurityConfiguration {
           .requestMatchers(HttpMethod.DELETE, "/api/comments/**").hasRole("USER") // Delete comment by ID // TODO
 
           // Ratings
+          .requestMatchers(HttpMethod.GET, "/api/users/*/ratings").permitAll() // Get all user's rated movies // TODO
           .requestMatchers(HttpMethod.GET, "/api/movies/*/ratings").hasRole("USER") // Current user's rating // TODO
           .requestMatchers(HttpMethod.POST, "/api/movies/*/ratings").hasRole("USER") // Add movie's rating by current user // TODO
           .requestMatchers(HttpMethod.PATCH, "/api/movies/*/ratings").hasRole("USER") // Change movie's rating by current user // TODO
@@ -112,9 +113,9 @@ public class SecurityConfiguration {
           .requestMatchers(HttpMethod.POST, "/api/movies/*/reviews").hasRole("USER") // Add review to movie // TODO
 
           // Movies
-          .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll()
+          .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll() // TODO + views & ratings
           .requestMatchers(HttpMethod.POST, "/api/movies/*/poster").hasRole("ADMIN")
-          .requestMatchers(HttpMethod.POST, "/api/movies/search").permitAll()
+          .requestMatchers(HttpMethod.POST, "/api/movies/search").permitAll() // TODO + views & ratings
           .requestMatchers(HttpMethod.POST, "/api/movies/**").hasRole("ADMIN")
           .requestMatchers(HttpMethod.PATCH, "/api/movies/**").hasRole("ADMIN")
           .requestMatchers(HttpMethod.DELETE, "/api/movies/**").hasRole("ADMIN")

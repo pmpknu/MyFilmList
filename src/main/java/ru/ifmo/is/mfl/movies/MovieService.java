@@ -18,6 +18,7 @@ import ru.ifmo.is.mfl.movies.dto.*;
 import ru.ifmo.is.mfl.storage.StorageService;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,6 +35,10 @@ public class MovieService extends ApplicationService {
 
   private final StorageService storageService;
   private final ImageProcessor imageProcessor;
+
+  public Optional<Movie> findById(int id) {
+    return repository.findById(id);
+  }
 
   public Page<MovieDto> getAll(Pageable pageable) {
     policy.showAll(currentUser());

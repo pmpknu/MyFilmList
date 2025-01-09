@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import ru.ifmo.is.mfl.common.framework.dto.CrudDto;
-import ru.ifmo.is.mfl.movies.Movie;
-import ru.ifmo.is.mfl.users.User;
+import ru.ifmo.is.mfl.movies.dto.MovieDto;
+import ru.ifmo.is.mfl.users.dto.UserDto;
 
 import java.time.Instant;
 
@@ -13,7 +13,7 @@ import java.time.Instant;
 @EqualsAndHashCode(callSuper = true)
 public class MovieViewDto extends CrudDto {
   private int id;
-  private User user;
-  private Movie movie;
+  private UserDto user;
+  private MovieDto movie;
   private Instant watchDate;
 }
