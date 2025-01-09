@@ -121,6 +121,7 @@ public class SecurityConfiguration {
           .requestMatchers(HttpMethod.DELETE, "/api/movies/**").hasRole("ADMIN")
 
           // Watchlists
+          .requestMatchers(HttpMethod.GET, "/api/watchlists/*/movies/**").permitAll() // Get movies from watchlist // TODO
           .requestMatchers(HttpMethod.POST, "/api/watchlists/*/movies/**").hasRole("USER") // Add movie to watchlist // TODO
           .requestMatchers(HttpMethod.DELETE, "/api/watchlists/*/movies/**").hasRole("USER") // Delete movie from watchlist // TODO
 
