@@ -1,4 +1,4 @@
-package ru.ifmo.is.mfl.watched;
+package ru.ifmo.is.mfl.movieviews;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,11 +16,11 @@ import java.time.Instant;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "watches")
-public class Watches extends CrudEntity {
+@Table(name = "movie_views")
+public class MovieView extends CrudEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "watches_id_seq")
-  @SequenceGenerator(name = "watches_id_seq", sequenceName = "watches_id_seq", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "movie_views_id_seq")
+  @SequenceGenerator(name = "movie_views_id_seq", sequenceName = "movie_views_id_seq", allocationSize = 1)
   @Column(name="id", nullable=false, unique=true)
   private int id;
 
@@ -38,4 +38,3 @@ public class Watches extends CrudEntity {
   @Column(name = "watch_date", nullable = false)
   private Instant watchDate;
 }
-

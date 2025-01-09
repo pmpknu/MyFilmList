@@ -1,14 +1,15 @@
-package ru.ifmo.is.mfl.watched.dto;
-
-import java.time.Instant;
+package ru.ifmo.is.mfl.movieviews.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import ru.ifmo.is.mfl.common.framework.dto.CrudDto;
+
+import java.time.Instant;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class WatchesDto extends CrudDto {
+public class MovieViewDto extends CrudDto {
   private int id;
   private int userId;
   private int movieId;
