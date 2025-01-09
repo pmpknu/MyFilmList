@@ -242,6 +242,13 @@ public class UserService {
     var obj = repository.findById(id);
     return obj.map(o -> {
       policy.delete(currentUser(), o);
+      if (o.getPhoto() != null) {
+        try {
+          storageService.delete(o.getPhoto());
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      }
       repository.delete(o);
       return true;
     }).orElse(false);
