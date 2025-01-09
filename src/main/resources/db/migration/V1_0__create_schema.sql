@@ -41,9 +41,9 @@ CREATE TABLE movies (
 );
 
 CREATE TABLE movie_watch_lists (
-  MovieID INT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
-  WatchListID INT NOT NULL REFERENCES watch_lists(id) ON DELETE CASCADE,
-  PRIMARY KEY (MovieID, WatchListID)
+  movie_id INT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
+  watchlist_id INT NOT NULL REFERENCES watch_lists(id) ON DELETE CASCADE,
+  PRIMARY KEY (movie_id, watchlist_id)
 );
 
 CREATE TABLE watches (
@@ -73,10 +73,13 @@ CREATE TABLE reviews (
 CREATE TABLE comments (
   id SERIAL PRIMARY KEY,
   user_id INT REFERENCES users(id) ON DELETE SET NULL,
-  review_id INT NOT NULL REFERENCES reviews(id) ON DELETE CASCADE,
+  review_id     INT REFERENCES reviews(id) ON DELETE CASCADE,
+  movie_id      INT REFERENCES movies(id) ON DELETE CASCADE,
+  watchlist_id  INT REFERENCES watch_lists(id) ON DELETE CASCADE,
   visible BOOLEAN NOT NULL DEFAULT TRUE,
   text TEXT NOT NULL,
-  date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT chk_comment_subject_nn CHECK (review_id IS NOT NULL OR movie_id IS NOT NULL OR watchlist_id IS NOT NULL)
 );
 
 CREATE TABLE reports (
