@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 public class CommentDto extends CrudDto {
   private int id;
   private User user;
-  private int reviewId;
-  private int watchListId;
-  private int movieId;
+  private Integer reviewId;
+  private Integer watchListId;
+  private Integer movieId;
   private boolean visible;
   private String text;
   private LocalDateTime date;
