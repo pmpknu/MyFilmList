@@ -5,34 +5,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import ru.ifmo.is.mfl.common.caching.RequestCache;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
+import ru.ifmo.is.mfl.common.framework.ApplicationService;
 import ru.ifmo.is.mfl.common.search.SearchDto;
 import ru.ifmo.is.mfl.common.search.SearchMapper;
 import ru.ifmo.is.mfl.common.utils.images.ImageProcessor;
 import ru.ifmo.is.mfl.movies.dto.*;
 import ru.ifmo.is.mfl.storage.StorageService;
-import ru.ifmo.is.mfl.users.User;
-import ru.ifmo.is.mfl.users.UserService;
 
 import java.io.IOException;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class MovieService {
+public class MovieService extends ApplicationService {
+
   private static final Logger logger = LoggerFactory.getLogger(MovieService.class);
 
   private final MovieMapper mapper;
   private final MoviePolicy policy;
   private final MovieRepository repository;
 
-  private final UserService userService;
   private final SearchMapper<Movie> searchMapper;
 
   private final StorageService storageService;
@@ -127,14 +124,5 @@ public class MovieService {
 
     movie.setPoster(newImageName);
     return mapper.map(repository.save(movie));
-  }
-
-  @RequestCache
-  private User currentUser() {
-    try {
-      return userService.getCurrentUser();
-    } catch (UsernameNotFoundException _ex) {
-      return null;
-    }
   }
 }

@@ -8,25 +8,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import ru.ifmo.is.mfl.common.caching.RequestCache;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
+import ru.ifmo.is.mfl.common.framework.ApplicationService;
 import ru.ifmo.is.mfl.userroles.dto.UserRoleCreateDto;
-import ru.ifmo.is.mfl.users.User;
 import ru.ifmo.is.mfl.users.UserMapper;
-import ru.ifmo.is.mfl.users.UserService;
 import ru.ifmo.is.mfl.users.dto.UserDto;
 
 @RestController
 @RequestMapping("/api/users/{id}/roles")
 @RequiredArgsConstructor
 @Tag(name = "User Roles")
-public class UserRoleController {
+public class UserRoleController extends ApplicationService {
 
   private final UserRoleService service;
-  private final UserService userService;
 
   private final UserMapper userMapper;
 
@@ -47,14 +43,5 @@ public class UserRoleController {
     var user = userService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
     user = service.remove(user, currentUser(), request);
     return ResponseEntity.ok(userMapper.map(userService.save(user)));
-  }
-
-  @RequestCache
-  private User currentUser() {
-    try {
-      return userService.getCurrentUser();
-    } catch (UsernameNotFoundException _ex) {
-      return null;
-    }
   }
 }
