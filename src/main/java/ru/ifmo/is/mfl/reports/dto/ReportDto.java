@@ -2,17 +2,19 @@ package ru.ifmo.is.mfl.reports.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import ru.ifmo.is.mfl.common.framework.dto.CrudDto;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ReportDto extends CrudDto {
   private int id;
-  private int userId;
-  private int reviewId;
-  private int commentId;
+  private Integer userId;
+  private Integer reviewId;
+  private Integer commentId;
   private String issue;
-  private Date date;
+  private String text;
+  private Instant date;
 }

@@ -1,14 +1,16 @@
 package ru.ifmo.is.mfl.reports;
 
-import java.time.Instant;
-
+import lombok.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+
+import org.hibernate.validator.constraints.Length;
 import ru.ifmo.is.mfl.comments.Comment;
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.reviews.Review;
 import ru.ifmo.is.mfl.users.User;
+
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -26,7 +28,7 @@ public class Report extends CrudEntity {
   private int id;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "user_id", nullable = true)
+  @JoinColumn(name = "user_id")
   private User user;
 
   @ManyToOne(fetch = FetchType.EAGER)
@@ -38,11 +40,12 @@ public class Report extends CrudEntity {
   private Comment comment;
 
   @NotNull
-  @Column(name = "text", nullable = false)
-  private String text;
-
-  @Column(name = "issue", length = 127)
+  @Length(min= 1, max = 127)
+  @Column(name = "issue", nullable = false)
   private String issue;
+
+  @Column(name = "text")
+  private String text;
 
   @NotNull
   @Column(name = "date", nullable = false)

@@ -88,11 +88,12 @@ CREATE TABLE comments (
 CREATE TABLE reports (
   id SERIAL PRIMARY KEY,
   user_id INT REFERENCES users(id) ON DELETE SET NULL,
-  review_id INT REFERENCES reviews(id) ON DELETE RESTRICT,
-  comment_id INT REFERENCES comments(id) ON DELETE RESTRICT,
-  text TEXT NOT NULL,
-  issue VARCHAR(127),
-  date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  review_id   INT REFERENCES reviews(id) ON DELETE RESTRICT,
+  comment_id  INT REFERENCES comments(id) ON DELETE RESTRICT,
+  issue VARCHAR(127) NOT NULL,
+  text TEXT,
+  date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT chk_report_subject_nn CHECK (review_id IS NOT NULL OR comment_id IS NOT NULL)
 );
 
 CREATE TABLE password_changes (
