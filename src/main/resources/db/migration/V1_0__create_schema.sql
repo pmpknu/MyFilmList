@@ -58,7 +58,8 @@ CREATE TABLE ratings (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL REFERENCES users(id) ON DELETE SET NULL,
   movie_id INT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
-  value INT NOT NULL CHECK (value >= 1 AND value <= 10)
+  value INT NOT NULL CHECK (value >= 1 AND value <= 10),
+  UNIQUE (user_id, movie_id)
 );
 
 CREATE TABLE reviews (
