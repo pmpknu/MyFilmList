@@ -6,7 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
+import ru.ifmo.is.mfl.movies.Movie;
 import ru.ifmo.is.mfl.users.User;
+
+import java.util.Set;
 
 @Entity
 @Getter
@@ -41,4 +44,11 @@ public class WatchList extends CrudEntity {
   @NotNull
   @Column(name = "viewed_counter", nullable = false)
   private int viewedCounter;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+    name = "movie_watch_lists",
+    joinColumns = @JoinColumn(name = "watchlist_id", nullable = false),
+    inverseJoinColumns = @JoinColumn(name = "movie_id", nullable = false))
+  private Set<Movie> movies;
 }
