@@ -20,7 +20,7 @@ import ru.ifmo.is.mfl.users.UserService;
 import ru.ifmo.is.mfl.users.dto.UserDto;
 
 @RestController
-@RequestMapping("/api/users/{id}/user-roles")
+@RequestMapping("/api/users/{id}/roles")
 @RequiredArgsConstructor
 @Tag(name = "User Roles")
 public class UserRoleController {
