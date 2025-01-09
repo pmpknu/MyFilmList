@@ -19,6 +19,7 @@ CREATE TABLE watch_lists (
   user_id INT REFERENCES users(id) ON DELETE SET NULL,
   name VARCHAR(127) NOT NULL,
   visibility BOOLEAN NOT NULL DEFAULT TRUE,
+  viewed_counter INT NOT NULL DEFAULT 0,
   UNIQUE(name, user_id)
 );
 

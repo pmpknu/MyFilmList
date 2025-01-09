@@ -37,4 +37,8 @@ public class WatchList extends CrudEntity {
   @NotNull
   @Column(name = "visibility", nullable = false)
   private boolean visibility;
+
+  @NotNull
+  @Column(name = "viewed_counter", nullable = false)
+  private int viewedCounter;
 }
