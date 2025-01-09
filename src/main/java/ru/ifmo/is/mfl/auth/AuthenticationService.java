@@ -188,6 +188,16 @@ public class AuthenticationService {
     var user = userService.findByEmail(request.getEmail())
       .orElseThrow(() -> new ResourceNotFoundException("User with email " + request.getEmail() +" not found"));
 
+    var lastPasswordResetToken = passwordResetService.findLast(user);
+    if (lastPasswordResetToken.isPresent()) {
+      var secondsFromLastSent = Duration.between(lastPasswordResetToken.get().getDate(), Instant.now()).toSeconds();
+      if (secondsFromLastSent < 60) {
+        throw new TooManyRequests(
+          "The time between two password reset requests must be at least 1 minute. Please, try after " + (60 - secondsFromLastSent) + " seconds"
+        );
+      }
+    }
+
     userService.sendPasswordReset(user);
   }
 

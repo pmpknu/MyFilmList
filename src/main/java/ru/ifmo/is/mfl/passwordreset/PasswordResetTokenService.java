@@ -27,8 +27,8 @@ public class PasswordResetTokenService {
     return repository.findByToken(token);
   }
 
-  public Optional<PasswordResetToken> findByUser(User user) {
-    return repository.findByUser(user);
+  public Optional<PasswordResetToken> findLast(User user) {
+    return repository.findTopByUserOrderByDateDesc(user);
   }
 
   public PasswordResetToken createPasswordResetToken(User user) {
