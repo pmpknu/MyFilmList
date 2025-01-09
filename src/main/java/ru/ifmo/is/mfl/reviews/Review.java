@@ -2,7 +2,7 @@ package ru.ifmo.is.mfl.reviews;
 
 import lombok.*;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import ru.ifmo.is.mfl.common.framework.CrudEntity;
 import ru.ifmo.is.mfl.movies.Movie;
@@ -41,6 +41,12 @@ public class Review extends CrudEntity {
   @NotNull
   @Column(name = "text", nullable = false)
   private String text;
+
+  @NotNull
+  @Column(name = "rating", nullable = false)
+  @Min(1)
+  @Max(10)
+  private int rating;
 
   @NotNull
   @Column(name = "date", nullable = false)

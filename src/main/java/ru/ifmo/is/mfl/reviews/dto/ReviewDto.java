@@ -17,5 +17,6 @@ public class ReviewDto extends CrudDto {
   private User user;
   private Movie movie;
   private String text;
+  private int rating;
   private Instant date;
 }

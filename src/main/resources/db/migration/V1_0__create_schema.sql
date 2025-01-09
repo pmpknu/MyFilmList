@@ -69,6 +69,7 @@ CREATE TABLE reviews (
   movie_id INT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
   visible BOOLEAN NOT NULL DEFAULT TRUE,
   text TEXT NOT NULL,
+  rating INT NOT NULL CHECK (rating >= 1 AND rating <= 10),
   date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE(user_id, movie_id)
 );
