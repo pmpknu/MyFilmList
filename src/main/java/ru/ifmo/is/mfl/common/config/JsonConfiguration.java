@@ -13,6 +13,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import ru.ifmo.is.mfl.common.utils.datetime.ZonedDateTimeDeserializer;
 import ru.ifmo.is.mfl.common.utils.datetime.ZonedDateTimeSerializer;
 
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
@@ -40,6 +41,8 @@ public class JsonConfiguration {
     builder.serializers(new ZonedDateTimeSerializer());
 
     builder.modulesToInstall(new JsonNullableModule());
+
+    builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"));
 
     return builder;
   }
