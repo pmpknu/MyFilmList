@@ -1,14 +1,14 @@
 package ru.ifmo.is.mfl.movies;
 
-import ru.ifmo.is.mfl.common.framework.CrudEntity;
-
-import java.time.LocalDate;
-
+import lombok.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+
+import ru.ifmo.is.mfl.common.framework.CrudEntity;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter

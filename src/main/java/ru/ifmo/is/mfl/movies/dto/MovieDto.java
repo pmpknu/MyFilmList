@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import ru.ifmo.is.mfl.common.framework.dto.CrudDto;
 
 import java.util.Date;
-import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -15,13 +14,13 @@ public class MovieDto extends CrudDto {
   private String description;
   private String poster;
   private Date releaseDate;
-  private int duration;
+  private Integer duration;
   private String categories;
   private String tags;
   private String productionCountry;
   private String genres;
   private String actors;
   private String director;
-  private int seasons;
-  private int series;
+  private Integer seasons;
+  private Integer series;
 }
