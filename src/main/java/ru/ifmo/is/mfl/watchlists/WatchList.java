@@ -51,10 +51,14 @@ public class WatchList extends CrudEntity {
   private int viewedCounter;
 
   @JsonIgnore
-  @ManyToMany(fetch = FetchType.LAZY)
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   @JoinTable(
     name = "movie_watch_lists",
     joinColumns = @JoinColumn(name = "watchlist_id", nullable = false),
     inverseJoinColumns = @JoinColumn(name = "movie_id", nullable = false))
   private Set<Movie> movies;
+
+  public void incrementViewedCounter() {
+    viewedCounter++;
+  }
 }

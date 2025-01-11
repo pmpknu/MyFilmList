@@ -7,10 +7,11 @@ import ru.ifmo.is.mfl.common.framework.CrudMapper;
 import ru.ifmo.is.mfl.common.mapper.JsonNullableMapper;
 import ru.ifmo.is.mfl.common.mapper.ReferenceMapper;
 import ru.ifmo.is.mfl.storage.StorageService;
+import ru.ifmo.is.mfl.users.UserMapper;
 import ru.ifmo.is.mfl.watchlists.dto.*;
 
 @Mapper(
-  uses = { JsonNullableMapper.class, ReferenceMapper.class },
+  uses = { JsonNullableMapper.class, ReferenceMapper.class, UserMapper.class },
   nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
   componentModel = MappingConstants.ComponentModel.SPRING,
   unmappedTargetPolicy = ReportingPolicy.IGNORE
