@@ -11,6 +11,7 @@ public class WatchListDto extends CrudDto {
   private int id;
   private User user;
   private String name;
+  private String photo;
   private boolean visibility;
   private int viewedCounter;
 }
