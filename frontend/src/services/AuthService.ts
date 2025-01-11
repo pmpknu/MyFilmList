@@ -37,4 +37,58 @@ export default class AuthService {
       console.warn('Unable to save token, localStorage is not available');
     }
   }
+
+  /**
+   * Reset password
+   * @param {string} token Reset token
+   * @param {string} newPassword New password
+   * @returns {Promise<AxiosResponse<void>>}
+   */
+  static async resetPassword(token: string, newPassword: string): Promise<AxiosResponse<void>> {
+    return api.post<void>('/auth/reset-password', { token, newPassword });
+  }
+
+  /**
+   * Request password reset
+   * @param {string} email User's email
+   * @returns {Promise<AxiosResponse<void>>}
+   */
+  static async requestPasswordReset(email: string): Promise<AxiosResponse<void>> {
+    return api.post<void>('/auth/request-password-reset', { email });
+  }
+
+  /**
+   * Refresh access token
+   * @param {string} refreshToken Refresh token
+   * @returns {Promise<AxiosResponse<AuthenticationDto>>}
+   */
+  static async refreshToken(refreshToken: string): Promise<AxiosResponse<AuthenticationDto>> {
+    return api.post<AuthenticationDto>('/auth/refresh', { refreshToken });
+  }
+
+  /**
+   * Confirm email
+   * @param {string} token Confirmation token
+   * @returns {Promise<AxiosResponse<void>>}
+   */
+  static async confirmEmail(token: string): Promise<AxiosResponse<void>> {
+    return api.post<void>('/auth/confirm', { token });
+  }
+
+  /**
+   * Resend confirmation email
+   * @param {string} email User's email
+   * @returns {Promise<AxiosResponse<void>>}
+   */
+  static async resendConfirmation(email: string): Promise<AxiosResponse<void>> {
+    return api.get<void>('/auth/resend-confirmation', { params: { email } });
+  }
+
+  /**
+   * Sign out user
+   * @returns {Promise<AxiosResponse<void>>}
+   */
+  static async signOut(): Promise<AxiosResponse<void>> {
+    return api.delete<void>('/auth/sign-out');
+  }
 }

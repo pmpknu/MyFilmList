@@ -1,79 +1,156 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
+import React, { useState, useEffect } from 'react';
+import { Input, Button, Spacer, Card, Link, Divider } from '@nextui-org/react';
 import AuthService from '../services/AuthService';
-import { login } from '../store/slices/userSlice';
-import { SignInDto } from '../interfaces/auth/dto/SignInDto';
+import { EyeSlashFilledIcon, EyeFilledIcon } from '@/styles/Icons';
 
 const LoginPage: React.FC = () => {
-  const [credentials, setCredentials] = useState<SignInDto>({ username: '', password: '' });
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
 
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCredentials(prev => ({ ...prev, [name]: value }));
-  };
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+  useEffect(() => {
+    setUsernameError(
+      username.length > 0 && (username.length < 3 || username.length > 63)
+        ? 'Username must be between 3 and 63 characters'
+        : ''
+    );
+  }, [username]);
 
+  useEffect(() => {
+    setEmailError(
+      email.length > 0 && (email.length < 3 || email.length > 127)
+        ? 'Email must be between 3 and 127 characters'
+        : ''
+    );
+  }, [email]);
+
+  useEffect(() => {
+    setPasswordError(
+      password.length > 0 && (password.length < 6 || password.length > 127)
+        ? 'Password must be between 6 and 127 characters'
+        : ''
+    );
+  }, [password]);
+
+  const handleLogin = async () => {
     try {
-      const response = await AuthService.login(credentials);
-      const { id, username, email, roles } = response.data.user;
-
-      // Save the token locally
+      const response = await AuthService.login({ username, password });
       AuthService.saveToken(response.data.accessToken);
-
-      // Update the Redux store
-      dispatch(login({ id, username, email, roles }));
-
-      // Redirect to the home page or dashboard
-      router.push('/');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
+      setMessage('Login successful!');
+    } catch (error) {
+      setMessage('Login failed. Please check your credentials.');
     }
   };
 
+  const handleRegister = async () => {
+    try {
+      const response = await AuthService.register({ username, email, password });
+      AuthService.saveToken(response.data.accessToken);
+      setMessage('Registration successful!');
+    } catch (error) {
+      console.log(error);
+      setMessage('Registration failed. Please try again.');
+    }
+  };
+
+  const toggleRegister = () => {
+    setIsRegistering(!isRegistering);
+    setMessage('');
+  };
+
+  const isSubmitDisabled: boolean | undefined = isRegistering
+    ? !username || !email || !password || !!usernameError || !!emailError || !!passwordError
+    : !username || !password || !!usernameError || !!passwordError;
+
+  const submitButtonColor: 'default' | 'primary' = isSubmitDisabled ? 'default' : 'primary';
+
   return (
-    <div className="login-container">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={credentials.username}
-            onChange={handleInputChange}
-            required
+    <Card style={{ maxWidth: '400px', padding: '20px', marginTop: '50px', margin: 'auto' }}>
+      <h2>{isRegistering ? 'Register' : 'Login'}</h2>
+      <Spacer y={1} />
+      <Input
+        isClearable
+        className="max-w-xs"
+        label="Username"
+        placeholder="Enter your username"
+        value={username}
+        onClear={() => setUsername('')}
+        onChange={(e) => setUsername(e.target.value)}
+        isInvalid={usernameError !== ''}
+        errorMessage={usernameError}
+      />
+      <Spacer y={1} />
+      {isRegistering && (
+        <>
+          <Input
+            isClearable
+            className="max-w-xs"
+            label="Email"
+            placeholder="Enter your email"
+            value={email}
+            onClear={() => setEmail('')}
+            onChange={(e) => setEmail(e.target.value)}
+            isInvalid={emailError !== ''}
+            errorMessage={emailError}
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={credentials.password}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        {error && <p className="error-message">{error}</p>}
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-    </div>
+          <Spacer y={1} />
+        </>
+      )}
+      <Input
+        className="max-w-xs"
+        endContent={
+          <button
+            aria-label="toggle password visibility"
+            className="focus:outline-none"
+            type="button"
+            onClick={toggleVisibility}
+          >
+            {isVisible ? (
+              <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+            ) : (
+              <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+            )}
+          </button>
+        }
+        label="Password"
+        placeholder="Enter your password"
+        type={isVisible ? 'text' : 'password'}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        isInvalid={passwordError !== ''}
+        errorMessage={passwordError}
+      />
+      <Spacer y={1} />
+      <Button
+        onClick={isRegistering ? handleRegister : handleLogin}
+        disabled={isSubmitDisabled}
+        color={submitButtonColor}
+        type='submit'
+        >
+        {isRegistering ? 'Register' : 'Login'}
+      </Button>
+      <Spacer y={1} />
+      <Link onClick={toggleRegister}>
+        {isRegistering ? 'Already have an account? Login' : "Don't have an account? Register"}
+      </Link>
+      <Spacer y={1} />
+      {message && (
+        <>
+          <Divider />
+          <Spacer y={1} />
+          <p>{message}</p>
+        </>
+      )}
+    </Card>
   );
 };
 
