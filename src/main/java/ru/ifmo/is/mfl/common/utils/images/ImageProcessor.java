@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import ru.ifmo.is.mfl.common.errors.BadFileExtensionError;
-import ru.ifmo.is.mfl.common.ws.WebSocketHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -21,7 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 

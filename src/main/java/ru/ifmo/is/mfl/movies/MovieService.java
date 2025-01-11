@@ -15,6 +15,7 @@ import ru.ifmo.is.mfl.common.search.SearchDto;
 import ru.ifmo.is.mfl.common.search.SearchMapper;
 import ru.ifmo.is.mfl.common.utils.images.ImageProcessor;
 import ru.ifmo.is.mfl.movies.dto.*;
+import ru.ifmo.is.mfl.movies.query.MovieWithAdditionalInfoQuery;
 import ru.ifmo.is.mfl.storage.StorageService;
 
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class MovieService extends ApplicationService {
   private final MovieMapper mapper;
   private final MoviePolicy policy;
   private final MovieRepository repository;
+  private final MovieWithAdditionalInfoQuery query;
 
   private final SearchMapper<Movie> searchMapper;
 
@@ -40,18 +42,20 @@ public class MovieService extends ApplicationService {
     return repository.findById(id);
   }
 
-  public Page<MovieDto> getAll(Pageable pageable) {
+  public Page<MovieWithAdditionalInfoDto> getAll(Pageable pageable) {
     policy.showAll(currentUser());
 
-    var movies = repository.findAll(pageable);
-    return movies.map(mapper::map);
+    return currentUser() == null
+      ? repository.findAll(pageable).map(mapper::mapAdditionalInfo)
+      : query.getMoviesWithAdditionalInfo(null, pageable, currentUser()).map(mapper::map);
   }
 
-  public Page<MovieDto> findBySearchCriteria(SearchDto searchData, Pageable pageable) {
+  public Page<MovieWithAdditionalInfoDto> findBySearchCriteria(SearchDto searchData, Pageable pageable) {
     policy.search(currentUser());
 
-    var movies = repository.findAll(searchMapper.map(searchData), pageable);
-    return movies.map(mapper::map);
+    return currentUser() == null
+      ? repository.findAll(searchMapper.map(searchData), pageable).map(mapper::mapAdditionalInfo)
+      : query.getMoviesWithAdditionalInfo(searchMapper.map(searchData), pageable, currentUser()).map(mapper::map);
   }
 
   @Transactional
@@ -63,11 +67,15 @@ public class MovieService extends ApplicationService {
     return mapper.map(movie);
   }
 
-  public MovieDto getById(int id) {
+  public MovieWithAdditionalInfoDto getById(int id) {
     var movie = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
     policy.show(currentUser(), movie);
 
-    return mapper.map(movie);
+    if (currentUser() != null) {
+      return mapper.map(query.getMovieWithAdditionalInfo(movie, currentUser()));
+    }
+
+    return mapper.mapAdditionalInfo(movie);
   }
 
   @Transactional

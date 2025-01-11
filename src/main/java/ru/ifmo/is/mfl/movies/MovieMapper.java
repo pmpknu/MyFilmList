@@ -7,6 +7,7 @@ import ru.ifmo.is.mfl.common.framework.CrudMapper;
 import ru.ifmo.is.mfl.common.mapper.JsonNullableMapper;
 import ru.ifmo.is.mfl.common.mapper.ReferenceMapper;
 import ru.ifmo.is.mfl.movies.dto.*;
+import ru.ifmo.is.mfl.movies.query.MovieWithAdditionalInfo;
 import ru.ifmo.is.mfl.storage.StorageService;
 
 @Mapper(
@@ -22,11 +23,15 @@ public abstract class MovieMapper implements CrudMapper<Movie, MovieDto, MovieCr
 
   public abstract Movie map(MovieCreateDto dto);
 
-  @Mapping(
-    target = "poster",
-    expression = "java(storageService.getFileUrl(model.getPoster()))"
-  )
+  @Mapping(target = "poster", expression = "java(storageService.getFileUrl(model.getPoster()))")
   public abstract MovieDto map(Movie model);
+
+  @Mapping(target = "poster", expression = "java(storageService.getFileUrl(model.getPoster()))")
+  @Mapping(target = "currentUserViewed", source = "currentUserViewed", defaultValue = "false")
+  public abstract MovieWithAdditionalInfoDto map(MovieWithAdditionalInfo model);
+
+  @Mapping(target = "poster", expression = "java(storageService.getFileUrl(model.getPoster()))")
+  public abstract MovieWithAdditionalInfoDto mapAdditionalInfo(Movie model);
 
   public abstract Movie map(MovieDto model);
 

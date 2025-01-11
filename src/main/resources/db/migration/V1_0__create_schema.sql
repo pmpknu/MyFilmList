@@ -18,6 +18,7 @@ CREATE TABLE watch_lists (
   id SERIAL PRIMARY KEY,
   user_id INT REFERENCES users(id) ON DELETE SET NULL,
   name VARCHAR(127) NOT NULL,
+  photo VARCHAR(255),
   visibility BOOLEAN NOT NULL DEFAULT TRUE,
   viewed_counter INT NOT NULL DEFAULT 0,
   UNIQUE(name, user_id)
@@ -159,7 +160,7 @@ CREATE OR REPLACE FUNCTION update_movie_rating()
 BEGIN
   UPDATE movies
   SET rating = (
-    SELECT AVG(value)::NUMERIC(3, 2)
+    SELECT AVG(value)::NUMERIC(4, 2)
     FROM ratings
     WHERE movie_id = NEW.movie_id
   )

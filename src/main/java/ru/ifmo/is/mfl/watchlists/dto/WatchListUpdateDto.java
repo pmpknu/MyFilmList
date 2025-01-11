@@ -1,7 +1,7 @@
 package ru.ifmo.is.mfl.watchlists.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import jakarta.validation.constraints.NotNull;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 @Data

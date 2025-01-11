@@ -113,17 +113,21 @@ public class SecurityConfiguration {
           .requestMatchers(HttpMethod.POST, "/api/movies/*/reviews").hasRole("USER") // Add review to movie // TODO
 
           // Movies
-          .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll() // TODO + views & ratings
+          .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll()
           .requestMatchers(HttpMethod.POST, "/api/movies/*/poster").hasRole("ADMIN")
-          .requestMatchers(HttpMethod.POST, "/api/movies/search").permitAll() // TODO + views & ratings
+          .requestMatchers(HttpMethod.POST, "/api/movies/search").permitAll()
           .requestMatchers(HttpMethod.POST, "/api/movies/**").hasRole("ADMIN")
           .requestMatchers(HttpMethod.PATCH, "/api/movies/**").hasRole("ADMIN")
           .requestMatchers(HttpMethod.DELETE, "/api/movies/**").hasRole("ADMIN")
 
           // Watchlists
-          .requestMatchers(HttpMethod.GET, "/api/watchlists/*/movies/**").permitAll() // Get movies from watchlist // TODO + views & ratings
-          .requestMatchers(HttpMethod.POST, "/api/watchlists/*/movies/**").hasRole("USER") // Add movie to watchlist // TODO
-          .requestMatchers(HttpMethod.DELETE, "/api/watchlists/*/movies/**").hasRole("USER") // Delete movie from watchlist // TODO
+          .requestMatchers(HttpMethod.GET, "/api/users/*/watchlists").permitAll() // Get user's watchlists
+          .requestMatchers(HttpMethod.GET, "/api/movies/*/watchlists").permitAll() // Get movie's watchlists
+          .requestMatchers(HttpMethod.POST, "/api/watchlists/search").permitAll() // Upload photo to watchlist
+          .requestMatchers(HttpMethod.POST, "/api/watchlists/*/photo").hasRole("USER") // Upload photo to watchlist
+          .requestMatchers(HttpMethod.GET, "/api/watchlists/*/movies/**").permitAll() // Get movies from watchlist
+          .requestMatchers(HttpMethod.POST, "/api/watchlists/*/movies/**").hasRole("USER") // Add movie to watchlist
+          .requestMatchers(HttpMethod.DELETE, "/api/watchlists/*/movies/**").hasRole("USER") // Delete movie from watchlist
 
           // Users
           .requestMatchers(HttpMethod.POST, "/api/users/photo").authenticated()
