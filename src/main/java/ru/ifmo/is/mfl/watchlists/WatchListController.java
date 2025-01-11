@@ -55,7 +55,7 @@ public class WatchListController {
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('USER')")
   @Operation(summary = "Добавить фильм в коллекцию", security = @SecurityRequirement(name = "bearerAuth"))
-  public ResponseEntity<WatchListDto> addMovie(@PathVariable int id, @PathVariable int movieId) {
+  public ResponseEntity<WatchListDto> addMovie(@PathVariable int id, @PathVariable int movieId) throws Exception {
     var movie = movieService.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie not found: " + movieId));
     var watchList = service.addMovie(id, movie);
     return ResponseEntity.status(HttpStatus.CREATED).body(watchList);

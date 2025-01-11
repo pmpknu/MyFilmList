@@ -1,6 +1,7 @@
 package ru.ifmo.is.mfl.watchlists;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -70,12 +71,19 @@ public class WatchListService extends ApplicationService {
   }
 
   @Transactional
-  public WatchListDto addMovie(int id, Movie movie) {
+  public WatchListDto addMovie(int id, Movie movie) throws Exception {
     var watchList = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
     policy.update(currentUser(), watchList);
 
     if (watchList.getMovies().contains(movie)) {
       throw new ResourceAlreadyExists("You already added this movie to the watch list");
+    }
+
+    if (watchList.getPhoto() == null && movie.getPoster() != null) {
+      var poster = movie.getPoster();
+      var moviePosterImage = storageService.getFile(poster);
+      var contentType = new Tika().detect(moviePosterImage, poster);
+      upload(id, UUID.randomUUID() + poster, moviePosterImage, contentType);
     }
 
     watchList.getMovies().add(movie);
