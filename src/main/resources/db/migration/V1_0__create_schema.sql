@@ -159,7 +159,7 @@ CREATE OR REPLACE FUNCTION update_movie_rating()
 BEGIN
   UPDATE movies
   SET rating = (
-    SELECT AVG(value)::NUMERIC(3, 2)
+    SELECT AVG(value)::NUMERIC(4, 2)
     FROM ratings
     WHERE movie_id = NEW.movie_id
   )
