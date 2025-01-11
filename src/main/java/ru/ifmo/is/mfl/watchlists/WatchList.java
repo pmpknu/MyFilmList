@@ -1,5 +1,6 @@
 package ru.ifmo.is.mfl.watchlists;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -37,6 +38,10 @@ public class WatchList extends CrudEntity {
   @Column(name = "name", nullable = false)
   private String name;
 
+  @Size(max = 255)
+  @Column(name = "photo")
+  private String photo;
+
   @NotNull
   @Column(name = "visibility", nullable = false)
   private boolean visibility;
@@ -45,7 +50,8 @@ public class WatchList extends CrudEntity {
   @Column(name = "viewed_counter", nullable = false)
   private int viewedCounter;
 
-  @ManyToMany(fetch = FetchType.EAGER)
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
     name = "movie_watch_lists",
     joinColumns = @JoinColumn(name = "watchlist_id", nullable = false),
