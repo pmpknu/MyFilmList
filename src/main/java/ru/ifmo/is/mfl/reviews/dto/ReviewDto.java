@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 import ru.ifmo.is.mfl.common.framework.dto.CrudDto;
 import ru.ifmo.is.mfl.movies.Movie;
-import ru.ifmo.is.mfl.users.User;
+import ru.ifmo.is.mfl.users.dto.UserDto;
 
 import java.time.Instant;
 
@@ -14,7 +14,7 @@ import java.time.Instant;
 public class ReviewDto extends CrudDto {
   private int id;
   private boolean visible;
-  private User user;
+  private UserDto user;
   private Movie movie;
   private String text;
   private int rating;
