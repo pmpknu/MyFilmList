@@ -14,15 +14,17 @@ export default class AuthService {
    * @returns {Promise<AxiosResponse<AuthenticationDto>>} User's data and token
    */
   static async login(credentials: SignInDto): Promise<AxiosResponse<AuthenticationDto>> {
+    console.log('login credentials', credentials);
     return api.post<AuthenticationDto>('/auth/sign-in', credentials);
   }
 
   /**
    * Create user
-   * @param {Credentials} credentials Username & Password
+   * @param {Credentials} credentials Username & Email & Password
    * @returns {Promise<AxiosResponse<AuthenticationDto>>} User's data and token
    */
   static async register(credentials: SignUpDto): Promise<AxiosResponse<AuthenticationDto>> {
+    console.log('register credentials', credentials);
     return api.post<AuthenticationDto>('/auth/sign-up', credentials);
   }
 

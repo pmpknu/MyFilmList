@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Input, Button, Spacer, Card, Link, Divider } from '@nextui-org/react';
 import AuthService from '../services/AuthService';
 import { EyeSlashFilledIcon, EyeFilledIcon } from '@/styles/Icons';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import { login,register } from '../store/slices/userSlice';
+import { SignInDto } from '../interfaces/auth/dto/SignInDto';
+import { SignUpDto } from '../interfaces/auth/dto/SignUpDto';
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -16,6 +21,9 @@ const LoginPage: React.FC = () => {
   const [passwordError, setPasswordError] = useState('');
 
   const toggleVisibility = () => setIsVisible(!isVisible);
+
+  const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     setUsernameError(
@@ -43,9 +51,11 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await AuthService.login({ username, password });
+      const response = await AuthService.login({ username, password } as SignInDto);
       AuthService.saveToken(response.data.accessToken);
+      dispatch(login(response.data.user));
       setMessage('Login successful!');
+      router.push('/');
     } catch (error) {
       setMessage('Login failed. Please check your credentials.');
     }
@@ -53,8 +63,9 @@ const LoginPage: React.FC = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await AuthService.register({ username, email, password });
+      const response = await AuthService.register({ username, email, password } as SignUpDto);
       AuthService.saveToken(response.data.accessToken);
+      dispatch(register(response.data.user));
       setMessage('Registration successful!');
     } catch (error) {
       console.log(error);

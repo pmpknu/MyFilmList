@@ -28,6 +28,14 @@ const userSlice = createSlice({
       state.roles = roles;
       state.isAuthenticated = true;
     },
+    register(state, action: PayloadAction<{ id: number; username: string; email: string; roles: string[] }>) {
+      const { id, username, email, roles } = action.payload;
+      state.id = id;
+      state.username = username;
+      state.email = email;
+      state.roles = roles;
+      state.isAuthenticated = true;
+    },
     logout(state) {
       state.id = null;
       state.username = null;
@@ -43,5 +51,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { login, logout, updateProfile } = userSlice.actions;
+export const { login, register, logout, updateProfile } = userSlice.actions;
 export default userSlice.reducer;
