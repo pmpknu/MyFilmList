@@ -172,7 +172,10 @@ public class WatchListService extends ApplicationService {
 
     // Check is visible to user
     if (watchList.isVisibility() || policy.canUpdate(currentUser(), watchList)) {
-      watchList.incrementViewedCounter();
+      if (watchList.isVisibility()) {
+        // Update viewers count only on public watchlists
+        watchList.incrementViewedCounter();
+      }
       return mapper.map(repository.save(watchList));
     }
 
