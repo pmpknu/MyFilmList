@@ -267,7 +267,7 @@ public class UserService {
     var bais = imageProcessor.cropToSquare(image, contentType);
 
     // Upload new image
-    var newImageName = "users-photo" + UUID.randomUUID() + imageProcessor.getImageExtension(contentType);
+    var newImageName = "users-photo-" + UUID.randomUUID() + imageProcessor.getImageExtension(contentType);
     try {
       storageService.create(newImageName, contentType, bais, (long) bais.available());
     } catch (Exception e) {
