@@ -31,7 +31,7 @@ public class MovieController {
 
   @GetMapping
   @Operation(summary = "Получить все фильмы")
-  public ResponseEntity<Page<MovieDto>> index(@PageableDefault(size = 20) Pageable pageable) {
+  public ResponseEntity<Page<MovieWithAdditionalInfoDto>> index(@PageableDefault(size = 20) Pageable pageable) {
     var movies = service.getAll(pageable);
     return ResponseEntity.ok()
       .header("X-Total-Count", String.valueOf(movies.getTotalElements()))
@@ -40,7 +40,7 @@ public class MovieController {
 
   @PostMapping("/search")
   @Operation(summary = "Поиск и фильтрация фильмов")
-  public ResponseEntity<Page<MovieDto>> search(
+  public ResponseEntity<Page<MovieWithAdditionalInfoDto>> search(
     @PageableDefault(size = 20) Pageable pageable,
     @RequestBody(required = false) SearchDto request
   ) {
@@ -72,7 +72,7 @@ public class MovieController {
 
   @GetMapping("/{id}")
   @Operation(summary = "Получить фильм по ID")
-  public ResponseEntity<MovieDto> show(@PathVariable int id) {
+  public ResponseEntity<MovieWithAdditionalInfoDto> show(@PathVariable int id) {
     var movie = service.getById(id);
     return ResponseEntity.ok(movie);
   }
