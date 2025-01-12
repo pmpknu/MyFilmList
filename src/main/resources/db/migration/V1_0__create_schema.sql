@@ -72,6 +72,7 @@ CREATE TABLE reviews (
   text TEXT NOT NULL,
   rating INT NOT NULL CHECK (rating >= 1 AND rating <= 10),
   date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  viewed_counter INT NOT NULL DEFAULT 0,
   UNIQUE(user_id, movie_id)
 );
 

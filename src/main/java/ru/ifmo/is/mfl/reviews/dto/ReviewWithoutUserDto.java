@@ -5,15 +5,13 @@ import lombok.EqualsAndHashCode;
 
 import ru.ifmo.is.mfl.common.framework.dto.CrudDto;
 import ru.ifmo.is.mfl.movies.dto.MovieDto;
-import ru.ifmo.is.mfl.users.dto.UserDto;
 
 import java.time.Instant;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ReviewDto extends CrudDto {
+public class ReviewWithoutUserDto extends CrudDto {
   private int id;
-  private UserDto user;
   private MovieDto movie;
   private boolean visible;
   private String text;

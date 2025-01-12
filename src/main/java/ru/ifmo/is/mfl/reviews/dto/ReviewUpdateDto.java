@@ -7,6 +7,7 @@ import org.openapitools.jackson.nullable.JsonNullable;
 @Data
 public class ReviewUpdateDto {
   @NotNull
+  @NotBlank
   private JsonNullable<String> text;
 
   @NotNull
@@ -15,5 +16,5 @@ public class ReviewUpdateDto {
   @NotNull
   @Min(1)
   @Max(10)
-  private JsonNullable<Integer> value;
+  private JsonNullable<Integer> rating;
 }

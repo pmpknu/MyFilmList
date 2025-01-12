@@ -64,6 +64,8 @@ public class SecurityConfiguration {
           // Выйти из аккаунта может только зарегистрированный пользователь
           .requestMatchers("/api/auth/sign-out").authenticated()
           .requestMatchers("/api/auth/resend-confirmation").authenticated()
+          // Доступ к получению текущего пользователя открыт только аутентифицированным пользователям
+          .requestMatchers("/api/auth/me").authenticated()
           // Доступ к методам /api/auth/** открыт для всех
           .requestMatchers("/api/auth/**").permitAll()
 
@@ -104,13 +106,13 @@ public class SecurityConfiguration {
           .requestMatchers(HttpMethod.DELETE, "/api/movies/*/ratings").hasRole("USER") // Delete movie's rating by current user
 
           // Reviews
-          .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll() // Get all reviews // TODO
-          .requestMatchers(HttpMethod.POST, "/api/reviews/search").permitAll() // Search review // TODO
-          .requestMatchers(HttpMethod.PATCH, "/api/reviews/**").hasRole("USER") // Change review by ID // TODO
-          .requestMatchers(HttpMethod.DELETE, "/api/reviews/**").hasRole("USER") // Delete review by ID // TODO
-          .requestMatchers(HttpMethod.GET, "/api/movies/*/reviews").permitAll() // Get all movie's reviews // TODO
-          .requestMatchers(HttpMethod.GET, "/api/users/*/reviews").permitAll() // Get all user's reviews // TODO
-          .requestMatchers(HttpMethod.POST, "/api/movies/*/reviews").hasRole("USER") // Add review to movie // TODO
+          .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll() // Get all reviews
+          .requestMatchers(HttpMethod.POST, "/api/reviews/search").permitAll() // Search review
+          .requestMatchers(HttpMethod.PATCH, "/api/reviews/**").hasRole("USER") // Change review by ID
+          .requestMatchers(HttpMethod.DELETE, "/api/reviews/**").hasRole("USER") // Delete review by ID
+          .requestMatchers(HttpMethod.GET, "/api/movies/*/reviews").permitAll() // Get all movie's reviews
+          .requestMatchers(HttpMethod.GET, "/api/users/*/reviews").permitAll() // Get all user's reviews
+          .requestMatchers(HttpMethod.POST, "/api/movies/*/reviews").hasRole("USER") // Add review to movie
 
           // Movies
           .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll()

@@ -46,6 +46,23 @@ public class AuthenticationService {
   private final PasswordResetTokenService passwordResetService;
 
   /**
+   * Получение текущего пользователя
+   *
+   * @return токен и текущий пользователь
+   */
+  public AuthenticationDto me() {
+    var user = userService.getCurrentUser();
+
+    var refreshToken = refreshService
+      .findLast(user)
+      .map(RefreshToken::getToken)
+      .orElse(refreshService.createRefreshToken(user.getId()).getToken());
+
+    var jwt = jwtService.generateToken(user);
+    return new AuthenticationDto(jwt, refreshToken, mapper.map(user));
+  }
+
+  /**
    * Регистрация пользователя
    *
    * @param request данные пользователя
