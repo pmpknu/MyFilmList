@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import { login,register } from '../store/slices/userSlice';
 import { SignInDto } from '../interfaces/auth/dto/SignInDto';
 import { SignUpDto } from '../interfaces/auth/dto/SignUpDto';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -24,6 +26,7 @@ const LoginPage: React.FC = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
+  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     setUsernameError(
@@ -52,7 +55,7 @@ const LoginPage: React.FC = () => {
   const handleLogin = async () => {
     try {
       const response = await AuthService.login({ username, password } as SignInDto);
-      AuthService.saveToken(response.data.accessToken);
+      AuthService.saveToken(response.data.accessToken, response.data.refreshToken);
       dispatch(login(response.data.user));
       setMessage('Login successful!');
       router.push('/');
@@ -64,7 +67,7 @@ const LoginPage: React.FC = () => {
   const handleRegister = async () => {
     try {
       const response = await AuthService.register({ username, email, password } as SignUpDto);
-      AuthService.saveToken(response.data.accessToken);
+      AuthService.saveToken(response.data.accessToken, response.data.refreshToken);
       dispatch(register(response.data.user));
       setMessage('Registration successful!');
     } catch (error) {
