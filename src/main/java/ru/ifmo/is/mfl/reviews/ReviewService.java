@@ -117,7 +117,7 @@ public class ReviewService extends ApplicationService {
     var review = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
     policy.update(currentUser(), review);
 
-    if (dto.getVisible().isPresent() && !canManageContent()) {
+    if (dto.getVisible() != null && !canManageContent()) {
       throw new PolicyViolationError("You are not allowed to change visibility of review #" + review.getId());
     }
 
