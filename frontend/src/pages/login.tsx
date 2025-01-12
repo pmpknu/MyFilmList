@@ -4,7 +4,7 @@ import AuthService from '../services/AuthService';
 import { EyeSlashFilledIcon, EyeFilledIcon } from '@/styles/Icons';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { login,register } from '../store/slices/userSlice';
+import { login,register } from '../store/slices/authSlice';
 import { SignInDto } from '../interfaces/auth/dto/SignInDto';
 import { SignUpDto } from '../interfaces/auth/dto/SignUpDto';
 import { useSelector } from 'react-redux';
