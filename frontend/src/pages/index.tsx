@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import Link from 'next/link';
 
 const HomePage = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -10,7 +11,7 @@ const HomePage = () => {
       {user.isAuthenticated ? (
         <p>Logged in as: {user.username}</p>
       ) : (
-        <p>Please log in to continue</p>
+        <p>Please <Link href="/login">log in</Link> to continue</p>
       )}
     </div>
   );
