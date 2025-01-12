@@ -52,4 +52,12 @@ public class Review extends CrudEntity {
   @NotNull
   @Column(name = "date", nullable = false)
   private Instant date;
+
+  @NotNull
+  @Column(name = "viewed_counter", nullable = false)
+  private int viewedCounter;
+
+  public void incrementViewedCounter() {
+    viewedCounter++;
+  }
 }

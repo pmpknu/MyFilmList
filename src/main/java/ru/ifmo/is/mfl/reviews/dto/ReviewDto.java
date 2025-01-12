@@ -19,4 +19,5 @@ public class ReviewDto extends CrudDto {
   private String text;
   private int rating;
   private Instant date;
+  private int viewedCounter;
 }
