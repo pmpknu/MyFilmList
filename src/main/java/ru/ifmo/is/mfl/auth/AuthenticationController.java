@@ -28,6 +28,13 @@ public class AuthenticationController {
   private final ApplicationLockBean applicationLockBean;
   private final AuthenticationService authenticationService;
 
+  @Operation(summary = "Получение текущего пользователя", security = @SecurityRequirement(name = "bearerAuth"))
+  @GetMapping("/me")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<AuthenticationDto> me() {
+    return ResponseEntity.ok(authenticationService.me());
+  }
+
   @Operation(summary = "Регистрация пользователя")
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping("/sign-up")

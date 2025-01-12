@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
 import ru.ifmo.is.mfl.common.errors.TokenExpiredException;
+import ru.ifmo.is.mfl.users.User;
 import ru.ifmo.is.mfl.users.UserRepository;
 
 import java.time.Instant;
@@ -25,6 +26,10 @@ public class RefreshTokenService {
 
   public Optional<RefreshToken> findByToken(String token) {
     return repository.findByToken(token);
+  }
+
+  public Optional<RefreshToken> findLast(User user) {
+    return repository.findTopByUserOrderByExpiryDateDesc(user);
   }
 
   public RefreshToken createRefreshToken(int userId) {
