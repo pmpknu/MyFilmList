@@ -26,7 +26,15 @@ const LoginPage: React.FC = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const user = useSelector((state: RootState) => state.user);
+  const isUserAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+
+  // redirect to home if user is already logged in
+  useEffect(() => {
+    console.log('is user authenticated:', isUserAuthenticated);
+    if (isUserAuthenticated) {
+      router.push('/');
+    }
+  }, [router, isUserAuthenticated]);
 
   useEffect(() => {
     setUsernameError(
