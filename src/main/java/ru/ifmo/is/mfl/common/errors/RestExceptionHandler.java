@@ -146,6 +146,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
 
+  @ExceptionHandler({ ResourceNotFoundException.class })
+  public ResponseEntity<Object> handleResourceNotFoundException(Exception ex) {
+    logger.info(ex.getClass().getName());
+    final ApiError apiError = new ApiError(
+      HttpStatus.NOT_FOUND,
+      ex.getLocalizedMessage(),
+      "Resource not found"
+    );
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
+
   // 405
   @Override
   protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(final HttpRequestMethodNotSupportedException ex, final HttpHeaders headers, final HttpStatusCode status, final WebRequest request) {
@@ -156,6 +167,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     Objects.requireNonNull(ex.getSupportedHttpMethods()).forEach(t -> builder.append(t).append(" "));
 
     final ApiError apiError = new ApiError(HttpStatus.METHOD_NOT_ALLOWED, ex.getLocalizedMessage(), builder.toString());
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
+
+  // 409
+  @ExceptionHandler({ ResourceAlreadyExists.class })
+  public ResponseEntity<Object> handleResourceAlreadyExists(Exception ex) {
+    logger.info(ex.getClass().getName());
+    final ApiError apiError = new ApiError(
+      HttpStatus.CONFLICT,
+      ex.getLocalizedMessage(),
+      "Resource already exists"
+    );
     return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
 
