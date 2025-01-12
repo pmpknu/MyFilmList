@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Storage from '../../utils/Storage';
-import { TOKEN_KEY, API_URL } from '../../config/constants';
+import { TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY } from '../../config/constants';
 import store from '../../store';
 import { addRequest } from '../../store/slices/requestSlice';
 
@@ -38,13 +38,25 @@ instance.interceptors.response.use(
 
     // Access Token was expired
     // eslint-disable-next-line no-underscore-dangle
-    if (error.response.status === 401 && !originalConfig._isRetry) {
+    if (error.response.status === 403 && !originalConfig._isRetry) {
       // eslint-disable-next-line no-underscore-dangle
       originalConfig._isRetry = true;
 
       try {
+        const rtoken = Storage.get(REFRESH_TOKEN_KEY);
+        if (!rtoken) {
+          console.log('Missing refresh token');
+          return Promise.reject(error);
+        }
+
+        const response = await axios.post(`${API_URL}/auth/refresh`, { rtoken });
+        Storage.set(TOKEN_KEY, response.data.accessToken);
+        Storage.set(REFRESH_TOKEN_KEY, response.data.refreshToken);
+        originalConfig.headers.Authorization = `Bearer ${response.data.accessToken}`;
+
         return instance.request(originalConfig);
       } catch (_error) {
+        console.error('Token refresh failed', _error, 'token: ', Storage.get(TOKEN_KEY));
         return Promise.reject(_error);
       }
     }

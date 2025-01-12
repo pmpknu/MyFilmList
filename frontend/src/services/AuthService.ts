@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { AuthenticationDto } from '../interfaces/auth/dto/AuthenticationDto';
 import { SignInDto } from '../interfaces/auth/dto/SignInDto';
 import { SignUpDto } from '../interfaces/auth/dto/SignUpDto';
-import { TOKEN_KEY } from '@/config/constants';
+import { REFRESH_TOKEN_KEY, TOKEN_KEY } from '@/config/constants';
 import Storage from '@/utils/Storage';
 
 export default class AuthService {
@@ -14,6 +14,8 @@ export default class AuthService {
    * @returns {Promise<AxiosResponse<AuthenticationDto>>} User's data and token
    */
   static async login(credentials: SignInDto): Promise<AxiosResponse<AuthenticationDto>> {
+    Storage.remove(TOKEN_KEY);
+    Storage.remove(REFRESH_TOKEN_KEY);
     console.log('login credentials', credentials);
     return api.post<AuthenticationDto>('/auth/sign-in', credentials);
   }
@@ -24,6 +26,8 @@ export default class AuthService {
    * @returns {Promise<AxiosResponse<AuthenticationDto>>} User's data and token
    */
   static async register(credentials: SignUpDto): Promise<AxiosResponse<AuthenticationDto>> {
+    Storage.remove(TOKEN_KEY);
+    Storage.remove(REFRESH_TOKEN_KEY);
     console.log('register credentials', credentials);
     return api.post<AuthenticationDto>('/auth/sign-up', credentials);
   }
@@ -31,10 +35,12 @@ export default class AuthService {
   /**
    * Save the token in the local storage
    * @param {string} token Access token
+   * @param {string} rtoken Refresh token
    */
-  static saveToken(token: string): void {
+  static saveToken(token: string, rtoken: string): void {
     if (Storage.isLocalStorageAvailable()) {
       Storage.set(TOKEN_KEY, token);
+      Storage.set(REFRESH_TOKEN_KEY, rtoken);
     } else {
       console.warn('Unable to save token, localStorage is not available');
     }
