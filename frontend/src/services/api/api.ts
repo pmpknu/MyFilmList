@@ -3,6 +3,7 @@ import Storage from '../../utils/Storage';
 import { TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY } from '../../config/constants';
 import store from '../../store';
 import { addRequest } from '../../store/slices/requestSlice';
+import { RefreshDto } from '@/interfaces/refresh/dto/RefreshDto';
 
 const instance = axios.create({
   baseURL: API_URL,
@@ -43,7 +44,7 @@ instance.interceptors.response.use(
       originalConfig._isRetry = true;
 
       try {
-        const rtoken = Storage.get(REFRESH_TOKEN_KEY);
+        const rtoken: RefreshDto = Storage.get(REFRESH_TOKEN_KEY);
         if (!rtoken) {
           console.log('Missing refresh token');
           return Promise.reject(error);
