@@ -10,9 +10,6 @@ public class ReviewCreateDto {
   private String text;
 
   @NotNull
-  private Boolean visible;
-
-  @NotNull
   @Min(1)
   @Max(10)
   private Integer rating;
