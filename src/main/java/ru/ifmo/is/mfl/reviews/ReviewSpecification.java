@@ -23,7 +23,8 @@ public class ReviewSpecification {
   }
 
   public Specification<Review> visible(User currentUser) {
-    var currentUserId = currentUser == null ? -1 : currentUser.getId();
-    return withVisible().or(withUser(currentUserId));
+    return currentUser == null
+      ? withVisible()
+      : withVisible().or(withUser(currentUser.getId()));
   }
 }
