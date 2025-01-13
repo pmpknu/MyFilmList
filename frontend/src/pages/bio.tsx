@@ -155,7 +155,8 @@ const BioPage: React.FC = () => {
       const formData = new FormData();
       formData.append("file", photoFile);
       try {
-        await UserService.uploadPhoto(formData);
+        const response = await UserService.uploadPhoto(formData);
+
         setIsModalOpen(false);
         fetchCurrentUser();
       } catch (error) {
@@ -169,14 +170,14 @@ const BioPage: React.FC = () => {
       {user && (
         <Card>
           <CardHeader>
-            <Avatar
-                size="lg"
+            <Avatar style={{ cursor: "pointer", margin: "0 auto" }}
+                showFallback
+                className="w-15 h-15 text-large"
+                name = {user.username}
                 src={photoFile ? URL.createObjectURL(photoFile) : user.photo || undefined}
                 alt="User Photo"
                 onClick={() => setIsModalOpen(true)}
               />
-            <Spacer x={1.5} />
-            <h2>{user.username}</h2>
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
               <ModalContent>
