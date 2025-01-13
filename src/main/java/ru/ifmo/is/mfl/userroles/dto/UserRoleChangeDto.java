@@ -7,7 +7,7 @@ import ru.ifmo.is.mfl.userroles.Role;
 
 @Data
 @Schema(description = "Изменение роли пользователя")
-public class UserRoleCreateDto {
+public class UserRoleChangeDto {
   @Schema(description = "Роль", example = "ROLE_ADMIN")
   @NotNull
   private Role role;

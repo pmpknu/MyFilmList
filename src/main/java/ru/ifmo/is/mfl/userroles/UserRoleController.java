@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
 import ru.ifmo.is.mfl.common.framework.ApplicationService;
-import ru.ifmo.is.mfl.userroles.dto.UserRoleCreateDto;
+import ru.ifmo.is.mfl.userroles.dto.UserRoleChangeDto;
 import ru.ifmo.is.mfl.users.UserMapper;
 import ru.ifmo.is.mfl.users.dto.UserDto;
 
@@ -30,7 +30,7 @@ public class UserRoleController extends ApplicationService {
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
   @Operation(summary = "Добавление роли пользователю", security = @SecurityRequirement(name = "bearerAuth"))
-  public ResponseEntity<UserDto> create(@PathVariable int id, @RequestBody @Valid UserRoleCreateDto request) {
+  public ResponseEntity<UserDto> create(@PathVariable int id, @RequestBody @Valid UserRoleChangeDto request) {
     var user = userService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
     user = service.add(user, currentUser(), request);
     return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.map(userService.save(user)));
@@ -39,7 +39,7 @@ public class UserRoleController extends ApplicationService {
   @DeleteMapping
   @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
   @Operation(summary = "Удаление роли пользователя", security = @SecurityRequirement(name = "bearerAuth"))
-  public ResponseEntity<UserDto> delete(@PathVariable int id, @RequestBody @Valid UserRoleCreateDto request) {
+  public ResponseEntity<UserDto> delete(@PathVariable int id, @RequestBody @Valid UserRoleChangeDto request) {
     var user = userService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
     user = service.remove(user, currentUser(), request);
     return ResponseEntity.ok(userMapper.map(userService.save(user)));
