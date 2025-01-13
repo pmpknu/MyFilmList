@@ -99,4 +99,12 @@ export default class AuthService {
   static async signOut(): Promise<AxiosResponse<void>> {
     return api.delete<void>('/auth/sign-out');
   }
+
+  /**
+   * Get current user
+   * @returns {Promise<AxiosResponse<AuthenticationDto>>} Current user's data
+   */
+  static async getCurrentUser(): Promise<AxiosResponse<AuthenticationDto>> {
+    return api.get<AuthenticationDto>('/auth/me');
+  }
 }
