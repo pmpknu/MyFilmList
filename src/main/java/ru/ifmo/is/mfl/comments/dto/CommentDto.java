@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import ru.ifmo.is.mfl.common.framework.dto.CrudDto;
 import ru.ifmo.is.mfl.users.dto.UserDto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -18,5 +18,6 @@ public class CommentDto extends CrudDto {
   private Integer movieId;
   private boolean visible;
   private String text;
-  private LocalDateTime date;
+  private Instant createdAt;
+  private Instant updatedAt;
 }
