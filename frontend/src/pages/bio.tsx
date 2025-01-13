@@ -151,38 +151,69 @@ const BioPage: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handlePhotoSave = async () => {
+    if (photoFile) {
+      const formData = new FormData();
+      formData.append("file", photoFile);
+      try {
+        await UserService.uploadPhoto(formData);
+        setIsModalOpen(false);
+        fetchCurrentUser();
+      } catch (error) {
+        console.error("Failed to upload photo", error);
+      }
+    }
+  };
+
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
       {user && (
         <Card>
           <CardHeader>
             <Avatar
-              size="lg"
-              src={photoFile ? URL.createObjectURL(photoFile) : user.photo || undefined}
-              alt="User Photo"
-              onClick={() => setIsModalOpen(true)}
-            />
+                size="lg"
+                src={photoFile ? URL.createObjectURL(photoFile) : user.photo || undefined}
+                alt="User Photo"
+                onClick={() => setIsModalOpen(true)}
+              />
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
               <ModalContent>
                 <ModalHeader>
                   <h4>Upload Photo</h4>
                 </ModalHeader>
                 <ModalBody>
-                  <div
-                    {...getRootProps()}
-                    style={{ border: "1px dashed #ccc", padding: "10px", textAlign: "center" }}
-                  >
-                    <input {...getInputProps()} />
-                    <h3>Drag and drop a photo here, or click to select one</h3>
-                  </div>
+                  {photoFile ? (
+                    <div style={{ textAlign: "center" }}>
+                      <p>File: {photoFile.name}</p>
+                    </div>
+                  ) : (
+                    <div
+                      {...getRootProps()}
+                      style={{ border: "1px dashed #ccc", padding: "10px", textAlign: "center" }}
+                    >
+                      <input {...getInputProps()} />
+                      <h3>Drag and drop a photo here, or click to select one</h3>
+                    </div>
+                  )}
                 </ModalBody>
                 <ModalFooter>
-                  <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                  <Button
+                    onClick={() => {
+                      setPhotoFile(null);
+                      setIsModalOpen(false);
+                    }}
+                    color="default"
+                  >
+                    Cancel
+                  </Button>
+                  {photoFile && (
+                    <Button onClick={handlePhotoSave} color="primary">
+                      Save
+                    </Button>
+                  )}
                 </ModalFooter>
               </ModalContent>
             </Modal>
-            <Spacer x={1} />
-            <h1>{user.username}</h1>
           </CardHeader>
           <CardBody>
             <Input
