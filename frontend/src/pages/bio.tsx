@@ -12,6 +12,11 @@ import {
   CardBody,
   CardFooter,
   Textarea,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalContent,
 } from "@nextui-org/react";
 import { useDropzone } from "react-dropzone";
 import { UserUpdateDto } from "@/interfaces/user/dto/UserUpdateDto";
@@ -144,6 +149,8 @@ const BioPage: React.FC = () => {
 
   const saveButtonColor: 'default' | 'primary' = isSaveDisabled ? 'default' : 'primary';
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
       {user && (
@@ -153,7 +160,27 @@ const BioPage: React.FC = () => {
               size="lg"
               src={photoFile ? URL.createObjectURL(photoFile) : user.photo || undefined}
               alt="User Photo"
+              onClick={() => setIsModalOpen(true)}
             />
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+              <ModalContent>
+                <ModalHeader>
+                  <h4>Upload Photo</h4>
+                </ModalHeader>
+                <ModalBody>
+                  <div
+                    {...getRootProps()}
+                    style={{ border: "1px dashed #ccc", padding: "10px", textAlign: "center" }}
+                  >
+                    <input {...getInputProps()} />
+                    <h3>Drag and drop a photo here, or click to select one</h3>
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
             <Spacer x={1} />
             <h1>{user.username}</h1>
           </CardHeader>
