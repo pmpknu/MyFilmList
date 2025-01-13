@@ -10,10 +10,10 @@ export default class UserService {
     /**
      * Search and filter users
      * @param {SearchUserDto} searchParams Search parameters
-     * @returns {Promise<AxiosResponse<UserDto[]>>} List of users
+     * @returns {Promise<AxiosResponse<Paged<UserDto>>} List of users
      */
-    static async searchUsers(searchParams: SearchDto): Promise<AxiosResponse<UserDto[]>> {
-        return api.post<UserDto[]>('/users/search', searchParams);
+    static async searchUsers(searchParams: SearchDto, page: number = 0, size: number = 1, sort: string[] = []): Promise<AxiosResponse<Paged<UserDto>>> {
+        return api.post<Paged<UserDto>>(`/users/search${createCrudUri(page, size, sort)}`, searchParams);
     }
 
     /**
