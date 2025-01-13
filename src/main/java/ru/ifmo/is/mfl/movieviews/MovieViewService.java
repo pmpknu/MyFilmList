@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.ifmo.is.mfl.common.errors.ResourceAlreadyExists;
-import ru.ifmo.is.mfl.common.framework.ApplicationService;
+import ru.ifmo.is.mfl.common.application.ApplicationService;
 import ru.ifmo.is.mfl.movies.Movie;
 import ru.ifmo.is.mfl.movieviews.dto.*;
 import ru.ifmo.is.mfl.users.User;

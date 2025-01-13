@@ -84,7 +84,8 @@ CREATE TABLE comments (
   watchlist_id  INT REFERENCES watch_lists(id) ON DELETE CASCADE,
   visible BOOLEAN NOT NULL DEFAULT TRUE,
   text TEXT NOT NULL,
-  date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   CONSTRAINT chk_comment_subject_nn CHECK (review_id IS NOT NULL OR movie_id IS NOT NULL OR watchlist_id IS NOT NULL)
 );
 
@@ -94,6 +95,7 @@ CREATE TABLE reports (
   review_id   INT REFERENCES reviews(id) ON DELETE RESTRICT,
   comment_id  INT REFERENCES comments(id) ON DELETE RESTRICT,
   resolved BOOLEAN NOT NULL DEFAULT FALSE,
+  resolver_id INT REFERENCES users(id) ON DELETE SET NULL,
   issue VARCHAR(127) NOT NULL,
   text TEXT,
   date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

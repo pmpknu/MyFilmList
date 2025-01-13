@@ -26,6 +26,10 @@ public class StorageService {
   }
 
   public String getFileUrl(String filename) {
+    if (filename == null) {
+      return null;
+    }
+
     var host = provider.getProperties().getHost() + ":" + provider.getProperties().getPortApi();
     var bucket = provider.bucket();
     return String.format("%s/%s/%s", host, bucket, filename);

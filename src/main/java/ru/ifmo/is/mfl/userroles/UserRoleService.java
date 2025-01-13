@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.ifmo.is.mfl.common.errors.PolicyViolationError;
 import ru.ifmo.is.mfl.common.errors.ResourceAlreadyExists;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
-import ru.ifmo.is.mfl.userroles.dto.UserRoleCreateDto;
+import ru.ifmo.is.mfl.userroles.dto.UserRoleChangeDto;
 import ru.ifmo.is.mfl.users.User;
 
 import java.util.Set;
@@ -21,7 +21,7 @@ public class UserRoleService {
   private final UserRolePolicy policy;
 
   @Transactional
-  public User add(User user, User currentUser, UserRoleCreateDto dto) {
+  public User add(User user, User currentUser, UserRoleChangeDto dto) {
     policy.update(currentUser, user);
     var role = dto.getRole();
 
@@ -37,7 +37,7 @@ public class UserRoleService {
   }
 
   @Transactional(isolation = Isolation.REPEATABLE_READ)
-  public User remove(User user, User currentUser, UserRoleCreateDto dto) {
+  public User remove(User user, User currentUser, UserRoleChangeDto dto) {
     policy.delete(currentUser, user);
     var role = dto.getRole();
 

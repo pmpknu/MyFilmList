@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ru.ifmo.is.mfl.common.errors.ResourceAlreadyExists;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
-import ru.ifmo.is.mfl.common.framework.ApplicationService;
+import ru.ifmo.is.mfl.common.application.ApplicationService;
 import ru.ifmo.is.mfl.common.search.SearchDto;
 import ru.ifmo.is.mfl.common.search.SearchMapper;
 import ru.ifmo.is.mfl.movies.Movie;
@@ -27,6 +27,7 @@ import ru.ifmo.is.mfl.users.User;
 import ru.ifmo.is.mfl.watchlists.dto.*;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -49,15 +50,15 @@ public class WatchListService extends ApplicationService {
   private final StorageService storageService;
   private final ImageProcessor imageProcessor;
 
-  public WatchList findById(int id) {
+  public Optional<WatchList> findById(int id) {
     var watchList = repository.findById(id);
     if (watchList.isEmpty()) {
-      return null;
+      return Optional.empty();
     }
     if (watchList.get().isVisibility() || policy.canUpdate(currentUser(), watchList.get())) {
-      return watchList.get();
+      return watchList;
     }
-    return null;
+    return Optional.empty();
   }
 
   public Page<MovieWithAdditionalInfoDto> getMovies(WatchList watchList, Pageable pageable) {
@@ -112,7 +113,7 @@ public class WatchListService extends ApplicationService {
       return watchLists.map(mapper::map);
     }
 
-    var watchLists = repository.findAll(specification.visibleSpecification(currentUser()), pageable);
+    var watchLists = repository.findAll(specification.visible(currentUser()), pageable);
     return watchLists.map(mapper::map);
   }
 
@@ -121,13 +122,13 @@ public class WatchListService extends ApplicationService {
 
     // Admins and moderators can see all user's watchlists
     if (currentUser() != null && (currentUser().isAdmin() || currentUser().isModerator())) {
-      var watchLists = repository.findAll(specification.withUserCreator(user.getId()), pageable);
+      var watchLists = repository.findAll(specification.withUser(user.getId()), pageable);
       return watchLists.map(mapper::map);
     }
 
     var watchLists = repository.findAll(
-      specification.visibleSpecification(currentUser())
-        .and(specification.withUserCreator(user.getId())),
+      specification.visible(currentUser())
+        .and(specification.withUser(user.getId())),
       pageable
     );
     return watchLists.map(mapper::map);
@@ -143,7 +144,7 @@ public class WatchListService extends ApplicationService {
     }
 
     var watchLists = repository.findAll(
-      specification.visibleSpecification(currentUser())
+      specification.visible(currentUser())
         .and(specification.hasMovie(movie)),
       pageable
     );
@@ -160,7 +161,7 @@ public class WatchListService extends ApplicationService {
     }
 
     var watchLists = repository.findAll(
-      specification.visibleSpecification(currentUser())
+      specification.visible(currentUser())
         .and(searchMapper.map(searchData)), pageable
     );
     return watchLists.map(mapper::map);

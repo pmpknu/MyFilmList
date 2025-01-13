@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ru.ifmo.is.mfl.common.errors.ResourceAlreadyExists;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
-import ru.ifmo.is.mfl.common.framework.ApplicationService;
+import ru.ifmo.is.mfl.common.application.ApplicationService;
 import ru.ifmo.is.mfl.movies.Movie;
 import ru.ifmo.is.mfl.movieviews.MovieViewService;
 import ru.ifmo.is.mfl.ratings.dto.*;

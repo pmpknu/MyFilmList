@@ -1,4 +1,4 @@
-package ru.ifmo.is.mfl.events.filters;
+package ru.ifmo.is.mfl.common.http.filters;
 
 import lombok.NonNull;
 import com.fasterxml.uuid.Generators;

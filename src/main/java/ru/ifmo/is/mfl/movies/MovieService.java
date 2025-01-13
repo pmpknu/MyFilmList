@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
-import ru.ifmo.is.mfl.common.framework.ApplicationService;
+import ru.ifmo.is.mfl.common.application.ApplicationService;
 import ru.ifmo.is.mfl.common.search.SearchDto;
 import ru.ifmo.is.mfl.common.search.SearchMapper;
 import ru.ifmo.is.mfl.common.utils.images.ImageProcessor;

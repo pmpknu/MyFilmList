@@ -21,6 +21,9 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class UserMailer {
 
+  @Value("${app.client.host}")
+  private final String clientHost;
+
   @Value("${app.mail.links.confirm_user}")
   private final String confirmationLinkTemplate;
 
@@ -41,6 +44,7 @@ public class UserMailer {
 
     var model = new Context(locale);
     model.setVariable("user", user);
+    model.setVariable("logo", mailLogo());
     model.setVariable("passwordResetLink", passwordResetLink);
 
     var htmlContent = templateEngine.process("auth_mail/password_reset", model);
@@ -56,6 +60,7 @@ public class UserMailer {
 
     var model = new Context(locale);
     model.setVariable("user", user);
+    model.setVariable("logo", mailLogo());
     model.setVariable("confirmationLink", confirmationUrl);
 
     var htmlContent = templateEngine.process("auth_mail/" + action, model);
@@ -74,5 +79,9 @@ public class UserMailer {
     };
 
     mailSender.send(preparator);
+  }
+
+  private String mailLogo() {
+    return clientHost + "/logo-mail.png";
   }
 }

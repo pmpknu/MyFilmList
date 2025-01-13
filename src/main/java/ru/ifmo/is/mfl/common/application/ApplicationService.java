@@ -1,4 +1,4 @@
-package ru.ifmo.is.mfl.common.framework;
+package ru.ifmo.is.mfl.common.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

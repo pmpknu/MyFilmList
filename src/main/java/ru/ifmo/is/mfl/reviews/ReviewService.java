@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.ifmo.is.mfl.common.errors.PolicyViolationError;
 import ru.ifmo.is.mfl.common.errors.ResourceAlreadyExists;
 import ru.ifmo.is.mfl.common.errors.ResourceNotFoundException;
-import ru.ifmo.is.mfl.common.framework.ApplicationService;
+import ru.ifmo.is.mfl.common.application.ApplicationService;
 import ru.ifmo.is.mfl.common.search.SearchDto;
 import ru.ifmo.is.mfl.common.search.SearchMapper;
 
@@ -19,6 +19,7 @@ import ru.ifmo.is.mfl.reviews.dto.*;
 import ru.ifmo.is.mfl.users.User;
 
 import java.time.Instant;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,17 @@ public class ReviewService extends ApplicationService {
   private final ReviewRepository repository;
   private final ReviewSpecification specification;
   private final SearchMapper<Review> searchMapper;
+
+  public Optional<Review> findById(int id) {
+    var review = repository.findById(id);
+    if (review.isEmpty()) {
+      return Optional.empty();
+    }
+    if (review.get().isVisible() || policy.canUpdate(currentUser(), review.get())) {
+      return review;
+    }
+    return Optional.empty();
+  }
 
   public Page<ReviewDto> getAll(Pageable pageable) {
     policy.showAll(currentUser());
