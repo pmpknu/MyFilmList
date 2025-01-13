@@ -47,14 +47,14 @@ public class ApplicationRouter {
         .requestMatchers(HttpMethod.DELETE, "/api/movies/*/views").hasRole("USER") // Current user can unmark watched movie
 
         // Comments
-        .requestMatchers(HttpMethod.GET, "/api/movies/*/comments").permitAll() // Get all movie comments // TODO
-        .requestMatchers(HttpMethod.GET, "/api/reviews/*/comments").permitAll() // Get all review comments // TODO
-        .requestMatchers(HttpMethod.GET, "/api/watchlists/*/comments").permitAll() // Get all watchlist comments // TODO
-        .requestMatchers(HttpMethod.POST, "/api/movies/*/comments").hasRole("USER") // Add comment to movie // TODO
-        .requestMatchers(HttpMethod.POST, "/api/reviews/*/comments").hasRole("USER") // Add comment to review // TODO
-        .requestMatchers(HttpMethod.POST, "/api/watchlists/*/comments").hasRole("USER") // Add comment to watchlist // TODO
-        .requestMatchers(HttpMethod.PATCH, "/api/comments/**").hasRole("USER") // Change comment by ID // TODO
-        .requestMatchers(HttpMethod.DELETE, "/api/comments/**").hasRole("USER") // Delete comment by ID // TODO
+        .requestMatchers(HttpMethod.GET, "/api/movies/*/comments").permitAll() // Get all movie comments
+        .requestMatchers(HttpMethod.GET, "/api/reviews/*/comments").permitAll() // Get all review comments
+        .requestMatchers(HttpMethod.GET, "/api/watchlists/*/comments").permitAll() // Get all watchlist comments
+        .requestMatchers(HttpMethod.POST, "/api/movies/*/comments").hasRole("USER") // Add comment to movie
+        .requestMatchers(HttpMethod.POST, "/api/reviews/*/comments").hasRole("USER") // Add comment to review
+        .requestMatchers(HttpMethod.POST, "/api/watchlists/*/comments").hasRole("USER") // Add comment to watchlist
+        .requestMatchers(HttpMethod.PATCH, "/api/comments/**").hasRole("USER") // Change comment by ID
+        .requestMatchers(HttpMethod.DELETE, "/api/comments/**").hasRole("USER") // Delete comment by ID
 
         // Ratings
         .requestMatchers(HttpMethod.GET, "/api/users/*/ratings").permitAll() // Get all user's ratings
