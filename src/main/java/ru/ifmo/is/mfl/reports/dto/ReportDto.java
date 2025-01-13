@@ -15,8 +15,8 @@ import java.time.Instant;
 public class ReportDto extends CrudDto {
   private int id;
   private UserDto user;
-  private ReviewDto reviewId;
-  private CommentDto commentId;
+  private ReviewDto review;
+  private CommentDto comment;
   private boolean resolved;
   private UserDto resolver;
   private String issue;
