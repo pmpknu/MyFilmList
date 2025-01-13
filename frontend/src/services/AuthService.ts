@@ -6,6 +6,7 @@ import { SignInDto } from '../interfaces/auth/dto/SignInDto';
 import { SignUpDto } from '../interfaces/auth/dto/SignUpDto';
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from '@/config/constants';
 import Storage from '@/utils/Storage';
+import { UserDto } from '@/interfaces/user/dto/UserDto';
 
 export default class AuthService {
   /**
@@ -85,11 +86,10 @@ export default class AuthService {
 
   /**
    * Resend confirmation email
-   * @param {string} email User's email
    * @returns {Promise<AxiosResponse<void>>}
    */
-  static async resendConfirmation(email: string): Promise<AxiosResponse<void>> {
-    return api.get<void>('/auth/resend-confirmation', { params: { email } });
+  static async resendConfirmation(): Promise<AxiosResponse<UserDto>> {
+    return api.get<UserDto>('/auth/resend-confirmation');
   }
 
   /**

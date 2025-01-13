@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import AuthService from "@/services/AuthService";
 import UserService from "@/services/UserService";
 import { UserDto } from "@/interfaces/user/dto/UserDto";
@@ -22,6 +22,7 @@ import { useDropzone } from "react-dropzone";
 import { UserUpdateDto } from "@/interfaces/user/dto/UserUpdateDto";
 import { useRouter } from "next/router";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/styles/Icons";
+import { Role } from "@/interfaces/role/model/UserRole";
 
 const BioPage: React.FC = () => {
   const router = useRouter();
@@ -165,6 +166,23 @@ const BioPage: React.FC = () => {
     }
   };
 
+  const [isApprovedUser, setUnApprovedUser] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    if (user.roles.includes(Role.ROLE_USER)) {
+      setUnApprovedUser(true);
+  }}, [user?.roles, isApprovedUser]);
+
+  const handleResendConfirmation = async () => {
+    try {
+      const response = await AuthService.resendConfirmation();
+      setUser(response.data);
+    } catch (error) {
+      console.error("Failed to resend confirmation", error);
+    }
+  };
+
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
       {user && (
@@ -174,9 +192,10 @@ const BioPage: React.FC = () => {
                 showFallback
                 className="w-15 h-15 text-large"
                 name = {user.username}
+                isDisabled={!isApprovedUser}
                 src={photoFile ? URL.createObjectURL(photoFile) : user.photo || undefined}
                 alt="User Photo"
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => setIsModalOpen(true && isApprovedUser)}
               />
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -223,7 +242,7 @@ const BioPage: React.FC = () => {
               isClearable
               label="Username"
               value={user.username}
-              isReadOnly={!isEditing}
+              isReadOnly={!isEditing || !isApprovedUser}
               isRequired={isEditing}
               onClear={() => 
                 setUser({ ...user, username: '' })
@@ -237,24 +256,35 @@ const BioPage: React.FC = () => {
               isClearable
               label="Email"
               value={user.email}
-              isReadOnly={!isEditing}
+              isReadOnly={!isEditing || !isApprovedUser}
               isRequired={isEditing}
               onClear={() => setUser({ ...user, email: '' })}
               onChange={(e) => setUser({ ...user, email: e.target.value })}
               isInvalid={emailError !== ''}
               errorMessage={emailError}
             />
+            {!isApprovedUser && (
+              <>
+              <h1>You have unapproved accout. Check out your email or
+              <button
+                style={{ color: "blue", cursor: "pointer" }}
+                onClick={handleResendConfirmation}
+              >resend confirmation
+              </button>
+              </h1>
+              </>
+            )}
             <Spacer y={0.5} />
             <Textarea
               label="Bio"
               value={user.bio || "No bio available"}
-              isReadOnly={!isEditing}
+              isReadOnly={!isEditing || !isApprovedUser}
               onChange={(e) => setUser({ ...user, bio: e.target.value })}
             />
             <Spacer y={0.5} />
             <Input
               className="max-w-xs"
-              endContent={
+              endContent={isEditing && (
                 <button
                   aria-label="toggle password visibility"
                   className="focus:outline-none"
@@ -266,13 +296,13 @@ const BioPage: React.FC = () => {
                   ) : (
                     <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                   )}
-                </button>
+                </button>)
               }
               label="Current Password"
               placeholder="Enter your password"
               type={isPasswordVisible ? 'text' : 'password'}
               value={passwordUpdate.currentPassword}
-              isReadOnly={!isEditing}
+              isReadOnly={!isEditing || !isApprovedUser}
               onChange={(e) =>
                 setPasswordUpdate({ ...passwordUpdate, currentPassword: e.target.value })
               }
@@ -283,7 +313,7 @@ const BioPage: React.FC = () => {
             <Spacer y={0.5} />
             <Input
               className="max-w-xs"
-              endContent={
+              endContent={isEditing && (
                 <button
                   aria-label="toggle password visibility"
                   className="focus:outline-none"
@@ -295,13 +325,13 @@ const BioPage: React.FC = () => {
                   ) : (
                     <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                   )}
-                </button>
+                </button>)
               }
               label="New Password"
               placeholder="Enter new password"
               type={isNewPasswordVisible ? 'text' : 'password'}
               value={passwordUpdate.newPassword}
-              isReadOnly={!isEditing}
+              isReadOnly={!isEditing || !isApprovedUser}
               onChange={(e) =>
                 setPasswordUpdate({ ...passwordUpdate, newPassword: e.target.value })
               }
@@ -311,7 +341,7 @@ const BioPage: React.FC = () => {
             />
           </CardBody>
           <CardFooter>
-            {isEditing ? (
+            {isEditing && isApprovedUser ? (
               <Button
                 onClick={handleSaveChanges}
                 disabled={isSaveDisabled}
