@@ -3,6 +3,8 @@ import { AxiosResponse } from 'axios';
 import { UserDto } from '../interfaces/user/dto/UserDto';
 import { SearchDto } from '@/interfaces/search/dto/SearchDto';
 import { UserUpdateDto } from '@/interfaces/user/dto/UserUpdateDto';
+import Paged from '@/interfaces/paged/models/Paged';
+import { createCrudUri } from '@/utils/uri';
 
 export default class UserService {
     /**
@@ -56,10 +58,12 @@ export default class UserService {
     }
 
     /**
-     * Get all users
-     * @returns {Promise<AxiosResponse<UserDto[]>>} List of all users
+     * Get all users with pagination
+     * @param {number} page Page number
+     * @param {number} size Page size
+     * @returns {Promise<AxiosResponse<Paged<UserDto>>>} Page of all users with total count
      */
-    static async getAllUsers(): Promise<AxiosResponse<UserDto[]>> {
-        return api.get<UserDto[]>('/users');
+    static async getAllUsers(page: number = 0, size: number = 20, sort: string[] = []): Promise<AxiosResponse<Paged<UserDto>>> {
+        return api.get<Paged<UserDto>>(`/users${createCrudUri(page, size, sort)}`);
     }
 }
