@@ -44,13 +44,13 @@ instance.interceptors.response.use(
       originalConfig._isRetry = true;
 
       try {
-        const rtoken: RefreshDto = Storage.get(REFRESH_TOKEN_KEY);
-        if (!rtoken) {
+        const refreshToken: RefreshDto = Storage.get(REFRESH_TOKEN_KEY);
+        if (!refreshToken) {
           console.log('Missing refresh token');
           return Promise.reject(error);
         }
 
-        const response = await axios.post(`${API_URL}/auth/refresh`, { rtoken });
+        const response = await axios.post(`${API_URL}/auth/refresh`, { refreshToken });
         Storage.set(TOKEN_KEY, response.data.accessToken);
         Storage.set(REFRESH_TOKEN_KEY, response.data.refreshToken);
         originalConfig.headers.Authorization = `Bearer ${response.data.accessToken}`;
