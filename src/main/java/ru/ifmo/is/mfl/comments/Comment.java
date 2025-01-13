@@ -1,6 +1,7 @@
 package ru.ifmo.is.mfl.comments;
 
 import lombok.*;
+import jakarta.validation.constraints.*;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,7 +33,7 @@ public class Comment extends CrudEntity {
   private User user;
 
   @JsonIgnore
-  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "review_id", referencedColumnName = "id")
   private Review review;
 
@@ -46,12 +47,19 @@ public class Comment extends CrudEntity {
   @JoinColumn(name = "movie_id", referencedColumnName = "id")
   private Movie movie;
 
+  @NotNull
   @Column(name = "visible", nullable = false)
   private boolean visible;
 
+  @NotNull
+  @NotBlank
   @Column(name = "text", nullable = false)
   private String text;
 
-  @Column(name = "date", nullable = false)
-  private Instant date;
+  @NonNull
+  @Column(name = "created_at", nullable = false)
+  private Instant createdAt;
+
+  @Column(name = "updated_at")
+  private Instant updatedAt;
 }
