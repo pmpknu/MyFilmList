@@ -40,11 +40,7 @@ public class WatchListController {
   @GetMapping("/watchlists/{id}/movies")
   @Operation(summary = "Получить все фильмы из коллекции")
   public ResponseEntity<Page<MovieWithAdditionalInfoDto>> movies(@PathVariable int id, @PageableDefault(size = 20) Pageable pageable) {
-    var watchList = service.findById(id);
-    if (watchList == null) {
-      throw new ResourceNotFoundException("Not Found: " + id);
-    }
-
+    var watchList = service.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
     var movies = service.getMovies(watchList, pageable);
     return ResponseEntity.ok()
       .header("X-Total-Count", String.valueOf(movies.getTotalElements()))

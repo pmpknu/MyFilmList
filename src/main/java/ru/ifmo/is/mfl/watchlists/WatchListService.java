@@ -27,6 +27,7 @@ import ru.ifmo.is.mfl.users.User;
 import ru.ifmo.is.mfl.watchlists.dto.*;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -49,15 +50,15 @@ public class WatchListService extends ApplicationService {
   private final StorageService storageService;
   private final ImageProcessor imageProcessor;
 
-  public WatchList findById(int id) {
+  public Optional<WatchList> findById(int id) {
     var watchList = repository.findById(id);
     if (watchList.isEmpty()) {
-      return null;
+      return Optional.empty();
     }
     if (watchList.get().isVisibility() || policy.canUpdate(currentUser(), watchList.get())) {
-      return watchList.get();
+      return watchList;
     }
-    return null;
+    return Optional.empty();
   }
 
   public Page<MovieWithAdditionalInfoDto> getMovies(WatchList watchList, Pageable pageable) {
