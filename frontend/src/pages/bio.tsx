@@ -22,7 +22,6 @@ import { useDropzone } from "react-dropzone";
 import { UserUpdateDto } from "@/interfaces/user/dto/UserUpdateDto";
 import { useRouter } from "next/router";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/styles/Icons";
-import { set } from "store";
 
 const BioPage: React.FC = () => {
   const router = useRouter();
@@ -176,6 +175,9 @@ const BioPage: React.FC = () => {
                 alt="User Photo"
                 onClick={() => setIsModalOpen(true)}
               />
+            <Spacer x={1.5} />
+            <h2>{user.username}</h2>
+
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
               <ModalContent>
                 <ModalHeader>
