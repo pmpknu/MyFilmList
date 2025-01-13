@@ -23,6 +23,11 @@ public abstract class CommentMapper implements CrudMapper<Comment, CommentDto, C
   @Mapping(source = "movie.id", target = "movieId")
   public abstract CommentDto map(Comment model);
 
+  @Mapping(source = "review.id", target = "reviewId")
+  @Mapping(source = "watchList.id", target = "watchListId")
+  @Mapping(source = "movie.id", target = "movieId")
+  public abstract CommentWithoutUserDto mapNoUsers(Comment model);
+
   @Mapping(target = "review.id", source = "reviewId")
   @Mapping(target = "watchList.id", source = "watchListId")
   @Mapping(target = "movie.id", source = "movieId")
