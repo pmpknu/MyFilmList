@@ -19,10 +19,6 @@ public class ApplicationRouter {
   public Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> getSecurityRoutes() {
     return request -> {
       request
-        // WebSockets
-        .requestMatchers("/ws/**").permitAll()
-        .requestMatchers("/ws").permitAll()
-
         // Only authenticated user can log out
         .requestMatchers("/api/auth/sign-out").authenticated()
         .requestMatchers("/api/auth/resend-confirmation").authenticated()
