@@ -150,6 +150,7 @@ const BioPage: React.FC = () => {
   const saveButtonColor: 'default' | 'primary' = isSaveDisabled ? 'default' : 'primary';
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
   const handlePhotoSave = async () => {
     if (photoFile) {
@@ -351,6 +352,44 @@ const BioPage: React.FC = () => {
             ) : (
               <Button onClick={handleEditMode}>Enter Edit Mode</Button>
             )}
+            <Button
+              color="danger"
+              onClick={() => setIsModalDeleteOpen(true)}
+            >
+              Delete Account
+            </Button>
+
+            <Modal isOpen={isModalDeleteOpen} onClose={() => setIsModalDeleteOpen(false)}>
+              <ModalContent>
+                <ModalHeader>
+                  <h4>Confirm Deletion</h4>
+                </ModalHeader>
+                <ModalBody>
+                  <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    onClick={() => setIsModalDeleteOpen(false)}
+                    color="success"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    color="danger"
+                    onClick={async () => {
+                      try {
+                        await UserService.deleteUser(user.id);
+                        router.push('/login');
+                      } catch (error) {
+                        console.error("Failed to delete account", error);
+                      }
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
           </CardFooter>
         </Card>
       )}
