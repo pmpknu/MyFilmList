@@ -15,7 +15,7 @@ export default class CommentService {
      * @returns {Promise<AxiosResponse<Paged<CommentDto>>>} List of comments for the movie
      */
     static async getCommentsForMovie(movieId: number, page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<CommentDto>>> {
-        return api.get<Paged<CommentDto>>(`/api/movies/${movieId}/comments${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<CommentDto>>(`/movies/${movieId}/comments${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -25,7 +25,7 @@ export default class CommentService {
      * @returns {Promise<AxiosResponse<CommentDto>>} Created comment data
      */
     static async addCommentToMovie(movieId: number, commentData: CommentDto): Promise<AxiosResponse<CommentDto>> {
-        return api.post<CommentDto>(`/api/movies/${movieId}/comments`, commentData);
+        return api.post<CommentDto>(`/movies/${movieId}/comments`, commentData);
     }
 
     /**
@@ -37,7 +37,7 @@ export default class CommentService {
      * @returns {Promise<AxiosResponse<Paged<CommentDto>>>} List of comments for the review
      */
     static async getCommentsForReview(reviewId: number, page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<CommentDto>>> {
-        return api.get<Paged<CommentDto>>(`/api/reviews/${reviewId}/comments${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<CommentDto>>(`/reviews/${reviewId}/comments${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -47,7 +47,7 @@ export default class CommentService {
      * @returns {Promise<AxiosResponse<CommentDto>>} Created comment data
      */
     static async addCommentToReview(reviewId: number, commentData: CommentDto): Promise<AxiosResponse<CommentDto>> {
-        return api.post<CommentDto>(`/api/reviews/${reviewId}/comments`, commentData);
+        return api.post<CommentDto>(`/reviews/${reviewId}/comments`, commentData);
     }
 
     /**
@@ -59,7 +59,7 @@ export default class CommentService {
      * @returns {Promise<AxiosResponse<Paged<CommentDto>>>} List of comments for the watchlist
      */
     static async getCommentsForWatchlist(watchListId: number, page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<CommentDto>>> {
-        return api.get<Paged<CommentDto>>(`/api/watchlists/${watchListId}/comments${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<CommentDto>>(`/watchlists/${watchListId}/comments${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -69,7 +69,7 @@ export default class CommentService {
      * @returns {Promise<AxiosResponse<CommentDto>>} Created comment data
      */
     static async addCommentToWatchlist(watchListId: number, commentData: CommentDto): Promise<AxiosResponse<CommentDto>> {
-        return api.post<CommentDto>(`/api/watchlists/${watchListId}/comments`, commentData);
+        return api.post<CommentDto>(`/watchlists/${watchListId}/comments`, commentData);
     }
 
     /**
@@ -78,7 +78,7 @@ export default class CommentService {
      * @returns {Promise<AxiosResponse<void>>} Response with no content
      */
     static async deleteComment(id: number): Promise<AxiosResponse<void>> {
-        return api.delete<void>(`/api/comments/${id}`);
+        return api.delete<void>(`/comments/${id}`);
     }
 
     /**
@@ -88,6 +88,6 @@ export default class CommentService {
      * @returns {Promise<AxiosResponse<CommentDto>>} Updated comment data
      */
     static async updateComment(id: number, commentData: CommentUpdateDto): Promise<AxiosResponse<CommentDto>> {
-        return api.patch<CommentDto>(`/api/comments/${id}`, commentData);
+        return api.patch<CommentDto>(`/comments/${id}`, commentData);
     }
 }

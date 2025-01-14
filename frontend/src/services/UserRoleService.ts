@@ -11,7 +11,7 @@ export default class UserRoleService {
      * @returns {Promise<AxiosResponse<UserDto>>} Updated user data
      */
     static async addRoleToUser(userId: number, roleData: UserRoleChangeDto): Promise<AxiosResponse<UserDto>> {
-        return api.post<UserDto>(`/api/users/${userId}/roles`, roleData);
+        return api.post<UserDto>(`/users/${userId}/roles`, roleData);
     }
 
     /**
@@ -21,6 +21,6 @@ export default class UserRoleService {
      * @returns {Promise<AxiosResponse<UserDto>>} Updated user data
      */
     static async removeRoleFromUser(userId: number, roleData: UserRoleChangeDto): Promise<AxiosResponse<UserDto>> {
-        return api.delete<UserDto>(`/api/users/${userId}/roles`, { data: roleData });
+        return api.delete<UserDto>(`/users/${userId}/roles`, { data: roleData });
     }
 }

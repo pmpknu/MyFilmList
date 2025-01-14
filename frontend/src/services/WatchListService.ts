@@ -16,7 +16,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<Paged<WatchListDto>>>} List of watchlists
      */
     static async getWatchListsForMovie(movieId: number, page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<WatchListDto>>> {
-        return api.get<Paged<WatchListDto>>(`/api/movies/${movieId}/watchlists${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<WatchListDto>>(`/movies/${movieId}/watchlists${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -28,7 +28,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<Paged<WatchListDto>>>} List of watchlists
      */
     static async getWatchListsForUser(userId: number, page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<WatchListDto>>> {
-        return api.get<Paged<WatchListDto>>(`/api/users/${userId}/watchlists${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<WatchListDto>>(`/users/${userId}/watchlists${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -39,7 +39,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<Paged<WatchListDto>>>} List of watchlists
      */
     static async getAllWatchLists(page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<WatchListDto>>> {
-        return api.get<Paged<WatchListDto>>(`/api/watchlists${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<WatchListDto>>(`/watchlists${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -48,7 +48,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<WatchListDto>>} Created watchlist
      */
     static async createWatchList(watchListData: WatchListCreateDto): Promise<AxiosResponse<WatchListDto>> {
-        return api.post<WatchListDto>('/api/watchlists', watchListData);
+        return api.post<WatchListDto>('/watchlists', watchListData);
     }
 
     /**
@@ -57,7 +57,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<WatchListDto>>} Watchlist data
      */
     static async getWatchListById(id: number): Promise<AxiosResponse<WatchListDto>> {
-        return api.get<WatchListDto>(`/api/watchlists/${id}`);
+        return api.get<WatchListDto>(`/watchlists/${id}`);
     }
 
     /**
@@ -66,7 +66,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<void>>}
      */
     static async deleteWatchList(id: number): Promise<AxiosResponse<void>> {
-        return api.delete<void>(`/api/watchlists/${id}`);
+        return api.delete<void>(`/watchlists/${id}`);
     }
 
     /**
@@ -76,7 +76,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<WatchListDto>>} Updated watchlist
      */
     static async updateWatchList(id: number, watchListData: WatchListUpdateDto): Promise<AxiosResponse<WatchListDto>> {
-        return api.patch<WatchListDto>(`/api/watchlists/${id}`, watchListData);
+        return api.patch<WatchListDto>(`/watchlists/${id}`, watchListData);
     }
 
     /**
@@ -85,7 +85,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<any[]>>} List of movies
      */
     static async getMoviesInWatchList(id: number): Promise<AxiosResponse<any[]>> {
-        return api.get<any[]>(`/api/watchlists/${id}/movies`);
+        return api.get<any[]>(`/watchlists/${id}/movies`);
     }
 
     /**
@@ -95,7 +95,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<void>>}
      */
     static async addMovieToWatchList(id: number, movieId: number): Promise<AxiosResponse<void>> {
-        return api.post<void>(`/api/watchlists/${id}/movies/${movieId}`);
+        return api.post<void>(`/watchlists/${id}/movies/${movieId}`);
     }
 
     /**
@@ -105,7 +105,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<void>>}
      */
     static async removeMovieFromWatchList(id: number, movieId: number): Promise<AxiosResponse<void>> {
-        return api.delete<void>(`/api/watchlists/${id}/movies/${movieId}`);
+        return api.delete<void>(`/watchlists/${id}/movies/${movieId}`);
     }
 
     /**
@@ -115,7 +115,7 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<WatchListDto>>} Updated watchlist
      */
     static async uploadWatchListPhoto(id: number, formData: FormData): Promise<AxiosResponse<WatchListDto>> {
-        return api.post<WatchListDto>(`/api/watchlists/${id}/photo`, formData, {
+        return api.post<WatchListDto>(`/watchlists/${id}/photo`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -131,6 +131,6 @@ export default class WatchListService {
      * @returns {Promise<AxiosResponse<Paged<WatchListDto>>>} Filtered watchlists
      */
     static async searchWatchLists(searchParams: any, page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<WatchListDto>>> {
-        return api.post<Paged<WatchListDto>>(`/api/watchlists/search${createCrudUri(page, size, sort)}`, searchParams);
+        return api.post<Paged<WatchListDto>>(`/watchlists/search${createCrudUri(page, size, sort)}`, searchParams);
     }
 }

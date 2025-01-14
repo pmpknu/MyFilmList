@@ -19,7 +19,7 @@ export default class ReviewService {
      * @returns {Promise<AxiosResponse<Paged<ReviewWithoutMovieDto>>>} List of reviews for the movie
      */
     static async getReviewsForMovie(movieId: number, page: number = 0, size: number = 20, sort: string[] = []): Promise<AxiosResponse<Paged<ReviewWithoutMovieDto>>> {
-        return api.get<Paged<ReviewWithoutMovieDto>>(`/api/movies/${movieId}/reviews${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<ReviewWithoutMovieDto>>(`/movies/${movieId}/reviews${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -29,7 +29,7 @@ export default class ReviewService {
      * @returns {Promise<AxiosResponse<ReviewDto>>} Created review data
      */
     static async addReviewToMovie(movieId: number, reviewData: ReviewCreateDto): Promise<AxiosResponse<ReviewDto>> {
-        return api.post<ReviewDto>(`/api/movies/${movieId}/reviews`, reviewData);
+        return api.post<ReviewDto>(`/movies/${movieId}/reviews`, reviewData);
     }
 
     /**
@@ -40,7 +40,7 @@ export default class ReviewService {
      * @returns {Promise<AxiosResponse<Paged<ReviewDto>>>} List of all reviews
      */
     static async getAllReviews(page: number = 0, size: number = 20, sort: string[] = []): Promise<AxiosResponse<Paged<ReviewDto>>> {
-        return api.get<Paged<ReviewDto>>(`/api/reviews${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<ReviewDto>>(`/reviews${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -49,7 +49,7 @@ export default class ReviewService {
      * @returns {Promise<AxiosResponse<ReviewDto>>} Review data
      */
     static async getReviewById(id: number): Promise<AxiosResponse<ReviewDto>> {
-        return api.get<ReviewDto>(`/api/reviews/${id}`);
+        return api.get<ReviewDto>(`/reviews/${id}`);
     }
 
     /**
@@ -58,7 +58,7 @@ export default class ReviewService {
      * @returns {Promise<AxiosResponse<void>>} Response with no content
      */
     static async deleteReview(id: number): Promise<AxiosResponse<void>> {
-        return api.delete<void>(`/api/reviews/${id}`);
+        return api.delete<void>(`/reviews/${id}`);
     }
 
     /**
@@ -68,7 +68,7 @@ export default class ReviewService {
      * @returns {Promise<AxiosResponse<ReviewDto>>} Updated review data
      */
     static async updateReview(id: number, reviewData: ReviewUpdateDto): Promise<AxiosResponse<ReviewDto>> {
-        return api.patch<ReviewDto>(`/api/reviews/${id}`, reviewData);
+        return api.patch<ReviewDto>(`/reviews/${id}`, reviewData);
     }
 
     /**
@@ -77,7 +77,7 @@ export default class ReviewService {
      * @returns {Promise<AxiosResponse<Paged<ReviewDto>>>} Filtered list of reviews
      */
     static async searchReviews(searchParams: SearchDto, page: number = 0, size: number = 20, sort: string[] = []): Promise<AxiosResponse<Paged<ReviewDto>>> {
-        return api.post<Paged<ReviewDto>>(`/api/reviews/search${createCrudUri(page, size, sort)}`, searchParams);
+        return api.post<Paged<ReviewDto>>(`/reviews/search${createCrudUri(page, size, sort)}`, searchParams);
     }
 
     /**
@@ -89,6 +89,6 @@ export default class ReviewService {
      * @returns {Promise<AxiosResponse<Paged<ReviewWithoutUserDto>>>} List of reviews by the user
      */
     static async getReviewsByUser(userId: number, page: number = 0, size: number = 20, sort: string[] = []): Promise<AxiosResponse<Paged<ReviewWithoutUserDto>>> {
-        return api.get<Paged<ReviewWithoutUserDto>>(`/api/users/${userId}/reviews${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<ReviewWithoutUserDto>>(`/users/${userId}/reviews${createCrudUri(page, size, sort)}`);
     }
 }

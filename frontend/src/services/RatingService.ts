@@ -18,7 +18,7 @@ export default class RatingService {
      * @returns {Promise<AxiosResponse<Paged<RatingWithoutMovieDto>>>} List of ratings for the movie
      */
     static async getRatingsForMovie(movieId: number, page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<RatingWithoutMovieDto>>> {
-        return api.get<Paged<RatingWithoutMovieDto>>(`/api/movies/${movieId}/ratings${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<RatingWithoutMovieDto>>(`/movies/${movieId}/ratings${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -28,7 +28,7 @@ export default class RatingService {
      * @returns {Promise<AxiosResponse<RatingDto>>} Response with the created rating
      */
     static async addRatingToMovie(movieId: number, ratingData: RatingCreateDto): Promise<AxiosResponse<RatingDto>> {
-        return api.post<RatingDto>(`/api/movies/${movieId}/ratings`, ratingData);
+        return api.post<RatingDto>(`/movies/${movieId}/ratings`, ratingData);
     }
 
     /**
@@ -37,7 +37,7 @@ export default class RatingService {
      * @returns {Promise<AxiosResponse<void>>} Response confirming the deletion
      */
     static async deleteRatingForMovie(movieId: number): Promise<AxiosResponse<void>> {
-        return api.delete<void>(`/api/movies/${movieId}/ratings`);
+        return api.delete<void>(`/movies/${movieId}/ratings`);
     }
 
     /**
@@ -47,7 +47,7 @@ export default class RatingService {
      * @returns {Promise<AxiosResponse<RatingDto>>} Response with the updated rating
      */
     static async updateRatingForMovie(movieId: number, ratingData: RatingUpdateDto): Promise<AxiosResponse<RatingDto>> {
-        return api.patch<RatingDto>(`/api/movies/${movieId}/ratings`, ratingData);
+        return api.patch<RatingDto>(`/movies/${movieId}/ratings`, ratingData);
     }
 
     /**
@@ -59,6 +59,6 @@ export default class RatingService {
      * @returns {Promise<AxiosResponse<Paged<RatingWithoutUserDto>>>} List of ratings by the user
      */
     static async getRatingsByUser(userId: number, page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<RatingWithoutUserDto>>> {
-        return api.get<Paged<RatingWithoutUserDto>>(`/api/users/${userId}/ratings${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<RatingWithoutUserDto>>(`/users/${userId}/ratings${createCrudUri(page, size, sort)}`);
     }
 }

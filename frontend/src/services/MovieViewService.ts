@@ -16,7 +16,7 @@ export default class MovieViewService {
      * @returns {Promise<AxiosResponse<Paged<MovieViewWithoutMovieDto>>>} List of views for the movie
      */
     static async getViewsForMovie(movieId: number, page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<MovieViewWithoutMovieDto>>> {
-        return api.get<Paged<MovieViewWithoutMovieDto>>(`/api/movies/${movieId}/views${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<MovieViewWithoutMovieDto>>(`/movies/${movieId}/views${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -25,7 +25,7 @@ export default class MovieViewService {
      * @returns {Promise<AxiosResponse<MovieViewDto>>} Response confirming the view action
      */
     static async markMovieAsViewed(movieId: number): Promise<AxiosResponse<MovieViewDto>> {
-        return api.post<MovieViewDto>(`/api/movies/${movieId}/views`, {});
+        return api.post<MovieViewDto>(`/movies/${movieId}/views`, {});
     }
 
     /**
@@ -34,7 +34,7 @@ export default class MovieViewService {
      * @returns {Promise<AxiosResponse<void>>} Response confirming the unview action
      */
     static async unmarkMovieAsViewed(movieId: number): Promise<AxiosResponse<void>> {
-        return api.delete<void>(`/api/movies/${movieId}/views`);
+        return api.delete<void>(`/movies/${movieId}/views`);
     }
 
     /**
@@ -46,6 +46,6 @@ export default class MovieViewService {
      * @returns {Promise<AxiosResponse<Paged<MovieViewWithoutUserDto>>>} List of views for the user
      */
     static async getViewsForUser(userId: number, page: number = 0, size: number = 20, sort: string[]): Promise<AxiosResponse<Paged<MovieViewWithoutUserDto>>> {
-        return api.get<Paged<MovieViewWithoutUserDto>>(`/api/users/${userId}/views${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<MovieViewWithoutUserDto>>(`/users/${userId}/views${createCrudUri(page, size, sort)}`);
     }
 }
