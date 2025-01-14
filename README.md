@@ -1,4 +1,4 @@
-<img align="right" src="https://raw.githubusercontent.com/maxbarsukov/MyFilmList/refs/heads/master/docs/assets/logo-readme.png" alt="MyFilmList logo" width="365">
+<img align="right" src="https://raw.githubusercontent.com/maxbarsukov/MyFilmList/refs/heads/master/docs/assets/logo-readme.png" alt="MyFilmList logo" width="260">
 
 # MyFilmList
 
