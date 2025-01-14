@@ -1,0 +1,40 @@
+{
+  "[java]": {
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.formatOnType": true,
+    "editor.wordBasedSuggestions": "off",
+    "editor.trimAutoWhitespace": false,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    },
+
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.format.settings.url": ".vscode/eclipse-java-google-style.xml",
+    "java.format.settings.profile": "GoogleStyle",
+    "spring.initializr.uri": "https://start.spring.io",
+    "java.test.runner": "junit5",
+    "java.import.gradle.enabled": true,
+    "java.import.maven.enabled": true
+  },
+
+  "[json]": {
+    "editor.tabSize": 2
+  },
+
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true
+  },
+
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on",
+    "editor.renderWhitespace": "all",
+    "editor.acceptSuggestionOnEnter": "off"
+  }
+}

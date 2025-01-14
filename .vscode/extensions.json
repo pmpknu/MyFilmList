@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "vscjava.vscode-java-pack",
+    "redhat.java",
+    "vscjava.vscode-spring-boot",
+    "vscjava.vscode-spring-initializr",
+    "pivotal.vscode-spring-boot",
+    "esbenp.prettier-vscode",
+    "vscjava.vscode-java-test",
+    "vscjava.vscode-java-dependency",
+    "vscjava.vscode-java-debug"
+  ]
+}
