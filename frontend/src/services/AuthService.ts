@@ -1,10 +1,10 @@
 import api from './api/api';
 
-import { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { AuthenticationDto } from '../interfaces/auth/dto/AuthenticationDto';
 import { SignInDto } from '../interfaces/auth/dto/SignInDto';
 import { SignUpDto } from '../interfaces/auth/dto/SignUpDto';
-import { REFRESH_TOKEN_KEY, TOKEN_KEY } from '@/config/constants';
+import { API_URL, REFRESH_TOKEN_KEY, TOKEN_KEY } from '@/config/constants';
 import Storage from '@/utils/Storage';
 import { UserDto } from '@/interfaces/user/dto/UserDto';
 
@@ -97,7 +97,9 @@ export default class AuthService {
    * @returns {Promise<AxiosResponse<void>>}
    */
   static async signOut(): Promise<AxiosResponse<void>> {
-    return api.delete<void>('/auth/sign-out');
+    Storage.remove(TOKEN_KEY);
+    Storage.remove(REFRESH_TOKEN_KEY);
+    return api.delete<void>(`/auth/sign-out`);
   }
 
   /**

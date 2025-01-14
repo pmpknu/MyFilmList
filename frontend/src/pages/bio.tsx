@@ -42,9 +42,13 @@ const BioPage: React.FC = () => {
         router.push('/login');
       }
       setUser(response.data.user);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to fetch current user", error);
-      router.push('/login');
+      if (error.response?.status === 403) {
+        router.push('/login');
+      } else {
+        console.error("An unexpected error occurred", error);
+      }
     }
   };
 
@@ -77,8 +81,12 @@ const BioPage: React.FC = () => {
 
       setIsEditing(false);
       fetchCurrentUser();
-    } catch (error) {
-      console.error("Failed to save changes", error);
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        router.push('/login');
+      } else {
+        console.error("Failed to save changes", error);
+      }
     }
   };
 
@@ -390,6 +398,23 @@ const BioPage: React.FC = () => {
                 </ModalFooter>
               </ModalContent>
             </Modal>
+            <Button
+              color="warning"
+              onClick={async () => {
+                try {
+                  await AuthService.signOut();
+                  router.push('/login');
+                } catch (error: any) {
+                  if (error.response?.status === 403) {
+                    router.push('/login');
+                  } else {
+                    console.error("Failed to logout", error);
+                  }
+                }
+              }}
+            >
+              Logout
+            </Button>
           </CardFooter>
         </Card>
       )}
