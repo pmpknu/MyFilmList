@@ -54,6 +54,7 @@ public class RatingService extends ApplicationService {
       .build();
 
     movieViewService.watchMovie(movie);
+    movie.incrementRatedCounter();
 
     return mapper.map(repository.save(rating));
   }
@@ -76,6 +77,7 @@ public class RatingService extends ApplicationService {
 
     return rating.map(o -> {
       policy.delete(currentUser(), o);
+      movie.decrementRatedCounter();
       repository.delete(o);
       return true;
     }).orElse(false);

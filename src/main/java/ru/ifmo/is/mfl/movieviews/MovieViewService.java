@@ -51,6 +51,7 @@ public class MovieViewService extends ApplicationService {
       .watchDate(Instant.now())
       .build();
 
+    movie.incrementViewedCounter();
     return mapper.map(repository.save(view));
   }
 
@@ -66,6 +67,7 @@ public class MovieViewService extends ApplicationService {
       .watchDate(Instant.now())
       .build();
 
+    movie.incrementViewedCounter();
     repository.save(view);
   }
 
@@ -75,6 +77,7 @@ public class MovieViewService extends ApplicationService {
 
     return view.map(o -> {
       policy.delete(currentUser(), o);
+      movie.decrementViewedCounter();
       repository.delete(o);
       return true;
     }).orElse(false);
