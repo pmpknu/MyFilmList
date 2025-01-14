@@ -34,11 +34,13 @@ public class ApplicationRouter {
         .requestMatchers(HttpMethod.GET, "/api/feed/**").authenticated() // Every registered user can view news feed // TODO
 
         // Reports
-        .requestMatchers(HttpMethod.POST, "/api/reviews/*/reports").hasRole("USER") // User can report review // TODO
-        .requestMatchers(HttpMethod.POST, "/api/comments/*/reports").hasRole("USER") // User can report comment // TODO
-        .requestMatchers(HttpMethod.GET, "/api/reports/**").hasAnyRole("ADMIN", "MODERATOR") // Admin can view all report // TODO
-        .requestMatchers(HttpMethod.GET, "/api/reports/pending").hasAnyRole("ADMIN", "MODERATOR") // Admin can view pending report // TODO
-        .requestMatchers(HttpMethod.PATCH, "/api/reports/**").hasAnyRole("ADMIN", "MODERATOR") // Admin can update reports // TODO
+        .requestMatchers(HttpMethod.POST, "/api/reviews/*/reports").permitAll() // User can report review
+        .requestMatchers(HttpMethod.POST, "/api/comments/*/reports").permitAll() // User can report comment
+        .requestMatchers(HttpMethod.GET, "/api/reports/**").hasAnyRole("ADMIN", "MODERATOR") // Admin can view all reports
+        .requestMatchers(HttpMethod.GET, "/api/reports/pending").hasAnyRole("ADMIN", "MODERATOR") // Admin can view pending report
+        .requestMatchers(HttpMethod.POST, "/api/reports/search").hasAnyRole("ADMIN", "MODERATOR") // Admin can search reports
+        .requestMatchers(HttpMethod.PATCH, "/api/reports/**").hasAnyRole("ADMIN", "MODERATOR") // Admin can update reports
+        .requestMatchers(HttpMethod.DELETE, "/api/reports/**").hasAnyRole("ADMIN") // Only admin can delete reports
 
         // Movie views
         .requestMatchers(HttpMethod.GET, "/api/users/*/views").permitAll() // Get all user's views

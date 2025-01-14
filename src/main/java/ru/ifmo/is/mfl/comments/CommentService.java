@@ -19,6 +19,7 @@ import ru.ifmo.is.mfl.reviews.Review;
 import ru.ifmo.is.mfl.watchlists.WatchList;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -29,6 +30,17 @@ public class CommentService extends ApplicationService {
   private final CommentPolicy policy;
   private final CommentRepository repository;
   private final CommentSpecification specification;
+
+  public Optional<Comment> findById(int id) {
+    var comment = repository.findById(id);
+    if (comment.isEmpty()) {
+      return Optional.empty();
+    }
+    if (comment.get().isVisible() || policy.canUpdate(currentUser(), comment.get())) {
+      return comment;
+    }
+    return Optional.empty();
+  }
 
   public Page<CommentDto> getAll(Review review, Pageable pageable) {
     return getCommentsBySpecification(review.getId(), specification::withReview, pageable);
