@@ -1,51 +1,54 @@
 import api from './api/api';
 import { AxiosResponse } from 'axios';
+import { MovieCreateDto } from '@/interfaces/movie/dto/MovieCreateDto';
 import { MovieDto } from '@/interfaces/movie/dto/MovieDto';
 import { MovieUpdateDto } from '@/interfaces/movie/dto/MovieUpdateDto';
+import { MovieWithAdditionalInfoDto } from '@/interfaces/movie/dto/MovieWithAdditionalInfoDto';
+import { SearchDto } from '@/interfaces/search/dto/SearchDto';
 import Paged from '@/interfaces/paged/models/Paged';
 import { createCrudUri } from '@/utils/uri';
-import { SearchDto } from '@/interfaces/search/dto/SearchDto';
 
 export default class MovieService {
     /**
-     * Get all movies with pagination
+     * Get all movies
      * @param {number} page Page number
      * @param {number} size Page size
-     * @returns {Promise<AxiosResponse<Paged<MovieDto>>>} Page of all movies with total count
+     * @param {string[]} sort Sorting parameters
+     * @returns {Promise<AxiosResponse<Paged<MovieWithAdditionalInfoDto>>>} List of movies
      */
-    static async getAllMovies(page: number = 0, size: number = 20, sort: string[] = []): Promise<AxiosResponse<Paged<MovieDto>>> {
-        return api.get<Paged<MovieDto>>(`/api/movies${createCrudUri(page, size, sort)}`);
+    static async getAllMovies(page: number = 0, size: number = 20, sort: string[] = []): Promise<AxiosResponse<Paged<MovieWithAdditionalInfoDto>>> {
+        return api.get<Paged<MovieWithAdditionalInfoDto>>(`/api/movies${createCrudUri(page, size, sort)}`);
     }
 
     /**
      * Create a new movie
-     * @param {MovieDto} movieData Movie data to create
+     * @param {MovieCreateDto} movieData Data for creating the movie
      * @returns {Promise<AxiosResponse<MovieDto>>} Created movie data
      */
-    static async createMovie(movieData: MovieDto): Promise<AxiosResponse<MovieDto>> {
+    static async createMovie(movieData: MovieCreateDto): Promise<AxiosResponse<MovieDto>> {
         return api.post<MovieDto>('/api/movies', movieData);
     }
 
     /**
-     * Get movie by ID
+     * Get a movie by ID
      * @param {number} id Movie ID
-     * @returns {Promise<AxiosResponse<MovieDto>>} Movie data
+     * @returns {Promise<AxiosResponse<MovieWithAdditionalInfoDto>>} Movie data
      */
-    static async getMovieById(id: number): Promise<AxiosResponse<MovieDto>> {
-        return api.get<MovieDto>(`/api/movies/${id}`);
+    static async getMovieById(id: number): Promise<AxiosResponse<MovieWithAdditionalInfoDto>> {
+        return api.get<MovieWithAdditionalInfoDto>(`/api/movies/${id}`);
     }
 
     /**
-     * Delete movie by ID
+     * Delete a movie by ID
      * @param {number} id Movie ID
-     * @returns {Promise<AxiosResponse<void>>}
+     * @returns {Promise<AxiosResponse<void>>} Response with no content
      */
     static async deleteMovie(id: number): Promise<AxiosResponse<void>> {
         return api.delete<void>(`/api/movies/${id}`);
     }
 
     /**
-     * Update movie by ID
+     * Update a movie by ID
      * @param {number} id Movie ID
      * @param {MovieUpdateDto} movieData Updated movie data
      * @returns {Promise<AxiosResponse<MovieDto>>} Updated movie data
@@ -55,12 +58,12 @@ export default class MovieService {
     }
 
     /**
-     * Upload poster for the movie
-     * @param {FormData} formData Form data containing the poster
+     * Upload a poster for a movie
      * @param {number} id Movie ID
+     * @param {FormData} formData Form data containing the poster
      * @returns {Promise<AxiosResponse<MovieDto>>} Updated movie data with poster
      */
-    static async uploadPoster(id: number, formData: FormData): Promise<AxiosResponse<MovieDto>> {
+    static async uploadMoviePoster(id: number, formData: FormData): Promise<AxiosResponse<MovieDto>> {
         return api.post<MovieDto>(`/api/movies/${id}/poster`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -71,9 +74,12 @@ export default class MovieService {
     /**
      * Search and filter movies
      * @param {SearchDto} searchParams Search parameters
-     * @returns {Promise<AxiosResponse<Paged<MovieDto>>>} List of movies
+     * @param {number} page Page number
+     * @param {number} size Page size
+     * @param {string[]} sort Sorting parameters
+     * @returns {Promise<AxiosResponse<Paged<MovieWithAdditionalInfoDto>>>} Filtered list of movies
      */
-    static async searchMovies(searchParams: SearchDto, page: number = 0, size: number = 1, sort: string[] = []): Promise<AxiosResponse<Paged<MovieDto>>> {
-        return api.post<Paged<MovieDto>>(`/api/movies/search${createCrudUri(page, size, sort)}`, searchParams);
+    static async searchMovies(searchParams: SearchDto, page: number = 0, size: number = 20, sort: string[] = []): Promise<AxiosResponse<Paged<MovieWithAdditionalInfoDto>>> {
+        return api.post<Paged<MovieWithAdditionalInfoDto>>(`/api/movies/search${createCrudUri(page, size, sort)}`, searchParams);
     }
 }
