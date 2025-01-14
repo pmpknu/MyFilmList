@@ -21,6 +21,11 @@ public abstract class MovieMapper implements CrudMapper<Movie, MovieDto, MovieCr
   @Autowired
   public StorageService storageService;
 
+  @Mapping(target = "viewedCounter", constant = "0")
+  @Mapping(target = "ratedCounter", constant = "0")
+  @Mapping(target = "reviewedCounter", constant = "0")
+  @Mapping(target = "watchlistsCounter", constant = "0")
+  @Mapping(target = "commentsCounter", constant = "0")
   public abstract Movie map(MovieCreateDto dto);
 
   @Mapping(target = "poster", expression = "java(storageService.getFileUrl(model.getPoster()))")

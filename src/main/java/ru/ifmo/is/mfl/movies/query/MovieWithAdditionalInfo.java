@@ -32,6 +32,11 @@ public class MovieWithAdditionalInfo extends Movie {
       movie.getDirector(),
       movie.getSeasons(),
       movie.getSeries(),
+      movie.getViewedCounter(),
+      movie.getRatedCounter(),
+      movie.getReviewedCounter(),
+      movie.getWatchlistsCounter(),
+      movie.getCommentsCounter(),
       currentUserRating,
       currentUserViewed
     );
@@ -53,6 +58,11 @@ public class MovieWithAdditionalInfo extends Movie {
     @Size(max = 127) String director,
     Integer seasons,
     Integer series,
+    int viewedCounter,
+    int ratedCounter,
+    int reviewedCounter,
+    int watchlistsCounter,
+    int commentsCounter,
     Integer currentUserRating,
     Boolean currentUserViewed
   ) {
@@ -71,7 +81,12 @@ public class MovieWithAdditionalInfo extends Movie {
       actors,
       director,
       seasons,
-      series
+      series,
+      viewedCounter,
+      ratedCounter,
+      reviewedCounter,
+      watchlistsCounter,
+      commentsCounter
     );
     this.currentUserRating = currentUserRating;
     this.currentUserViewed = currentUserViewed;

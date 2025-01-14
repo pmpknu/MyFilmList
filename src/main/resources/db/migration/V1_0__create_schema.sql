@@ -39,7 +39,12 @@ CREATE TABLE movies (
   actors TEXT,
   director VARCHAR(127),
   seasons INT CHECK (seasons IS NULL OR seasons >= 0),
-  series INT CHECK (series IS NULL OR series >= 0)
+  series INT CHECK (series IS NULL OR series >= 0),
+  viewed_counter INT NOT NULL DEFAULT 0,
+  rated_counter INT NOT NULL DEFAULT 0,
+  reviewed_counter INT NOT NULL DEFAULT 0,
+  watchlists_counter INT NOT NULL DEFAULT 0,
+  comments_counter INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE movie_watch_lists (

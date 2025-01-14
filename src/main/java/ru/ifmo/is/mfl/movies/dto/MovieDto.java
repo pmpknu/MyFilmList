@@ -24,4 +24,9 @@ public class MovieDto extends CrudDto {
   private String director;
   private Integer seasons;
   private Integer series;
+  private int viewedCounter;
+  private int ratedCounter;
+  private int reviewedCounter;
+  private int watchlistsCounter;
+  private int commentsCounter;
 }
