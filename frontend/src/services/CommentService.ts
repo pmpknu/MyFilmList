@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 import { CommentDto } from '@/interfaces/comment/dto/CommentDto';
 import Paged from '@/interfaces/paged/models/Paged';
 import { createCrudUri } from '@/utils/uri';
-import { s } from 'framer-motion/client';
+import { CommentUpdateDto } from '@/interfaces/comment/dto/CommentUpdateDto';
 
 export default class CommentService {
     /**
@@ -87,7 +87,7 @@ export default class CommentService {
      * @param {CommentDto} commentData Updated comment data
      * @returns {Promise<AxiosResponse<CommentDto>>} Updated comment data
      */
-    static async updateComment(id: number, commentData: CommentDto): Promise<AxiosResponse<CommentDto>> {
+    static async updateComment(id: number, commentData: CommentUpdateDto): Promise<AxiosResponse<CommentDto>> {
         return api.patch<CommentDto>(`/api/comments/${id}`, commentData);
     }
 }
