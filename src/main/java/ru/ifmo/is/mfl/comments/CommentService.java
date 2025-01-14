@@ -78,19 +78,23 @@ public class CommentService extends ApplicationService {
       throw new PolicyViolationError("You are not allowed to change visibility of comment #" + comment.getId());
     }
 
+    if (dto.getVisible() != null && comment.getMovie() != null) {
+      if (dto.getVisible().get()) {
+        if (!comment.isVisible()) {
+          // made it public
+          comment.getMovie().incrementCommentsCounter();
+        }
+      } else {
+        if (comment.isVisible()) {
+          // made it private
+          comment.getMovie().decrementCommentsCounter();
+        }
+      }
+    }
+
     mapper.update(dto, comment);
     if (currentUser().equals(comment.getUser())) {
       comment.setUpdatedAt(Instant.now());
-    }
-
-    if (dto.getVisible() != null && comment.getMovie() != null) {
-      if (dto.getVisible().get()) {
-        // made it public
-        comment.getMovie().incrementReviewedCounter();
-      } else {
-        // made it private
-        comment.getMovie().decrementReviewedCounter();
-      }
     }
 
     repository.save(comment);
@@ -103,7 +107,7 @@ public class CommentService extends ApplicationService {
     return comment.map(c -> {
       policy.delete(currentUser(), c);
       if (c.isVisible() && c.getMovie() != null) {
-        c.getMovie().decrementReviewedCounter();
+        c.getMovie().decrementCommentsCounter();
       }
       repository.delete(c);
       return true;

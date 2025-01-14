@@ -137,11 +137,15 @@ public class ReviewService extends ApplicationService {
 
     if (dto.getVisible() != null) {
       if (dto.getVisible().get()) {
-        // made it public
-        review.getMovie().incrementReviewedCounter();
+        if (!review.isVisible()) {
+          // made it public
+          review.getMovie().incrementReviewedCounter();
+        }
       } else {
-        // made it private
-        review.getMovie().decrementReviewedCounter();
+        if (review.isVisible()) {
+          // made it private
+          review.getMovie().decrementReviewedCounter();
+        }
       }
     }
 
