@@ -199,10 +199,10 @@ const BioPage: React.FC = () => {
           <CardHeader>
             <Avatar style={{ cursor: "pointer", margin: "0 auto" }}
                 showFallback
-                className="w-15 h-15 text-large"
+                className={user.photo || photoFile ? "w-15 h-15 text-large" : ""}
                 name = {user.username}
                 isDisabled={!isApprovedUser}
-                src={photoFile ? URL.createObjectURL(photoFile) : user.photo || undefined}
+                src={photoFile ? URL.createObjectURL(photoFile) : user.photo}
                 alt="User Photo"
                 onClick={() => setIsModalOpen(true && isApprovedUser)}
               />
