@@ -31,7 +31,8 @@ public class ApplicationRouter {
         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
 
         // Feed
-        .requestMatchers(HttpMethod.GET, "/api/feed/**").authenticated() // Every registered user can view news feed // TODO
+        .requestMatchers(HttpMethod.GET, "/api/movies/feed").permitAll() // Every user can view recommended movies
+        .requestMatchers(HttpMethod.GET, "/api/watchlists/feed").permitAll() // Every user can view recommended watchlists
 
         // Reports
         .requestMatchers(HttpMethod.POST, "/api/reviews/*/reports").permitAll() // User can report review
