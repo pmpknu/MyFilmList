@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ru.ifmo.is.mfl.movies.dto.MovieDto;
+import ru.ifmo.is.mfl.watchlists.dto.WatchListDto;
 
 @RestController
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -22,10 +23,19 @@ public class FeedController {
 
   @GetMapping("/movies/feed")
   @Operation(summary = "Получить рекомендованные фильмы")
-  public ResponseEntity<Page<MovieDto>> index(@PageableDefault(size = 20) Pageable pageable) {
+  public ResponseEntity<Page<MovieDto>> movies(@PageableDefault(size = 20) Pageable pageable) {
     var movies = service.getRecommendedMovies(pageable);
     return ResponseEntity.ok()
       .header("X-Total-Count", String.valueOf(movies.getTotalElements()))
       .body(movies);
+  }
+
+  @GetMapping("/watchlists/feed")
+  @Operation(summary = "Получить рекомендованные коллекции")
+  public ResponseEntity<Page<WatchListDto>> watchLists(@PageableDefault(size = 20) Pageable pageable) {
+    var watchLists = service.getRecommendedWatchLists(pageable);
+    return ResponseEntity.ok()
+      .header("X-Total-Count", String.valueOf(watchLists.getTotalElements()))
+      .body(watchLists);
   }
 }
