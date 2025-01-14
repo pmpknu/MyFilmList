@@ -1,12 +1,12 @@
 # Security
 
-@maxbarsukov/MyFilmList takes the security of our software products and services seriously.
+MyFilmList takes the security of our software products and services seriously.
 
-If you believe you have found a security vulnerability in any @maxbarsukov/MyFilmList -owned repository, please report it to us as described below.
+If you believe you have found a security vulnerability in any MyFilmList-owned repository, please report it to us as described below.
 
 ## Reporting security issues
 
-⚠️ Please do not report security vulnerabilities through public GitHub issues. ⚠️ 
+⚠️ Please do not report security vulnerabilities through public GitHub issues. ⚠️
 
 Instead, please kindly email us at maximbarsukov@bk.ru
 
