@@ -60,7 +60,7 @@ public class ReportService extends ApplicationService {
   public ReportDto create(ReportCreateDto dto, Comment comment) {
     policy.create(currentUser());
 
-    if (repository.findByUserAndComment(currentUser(), comment).isPresent()) {
+    if (currentUser() != null && repository.findByUserAndComment(currentUser(), comment).isPresent()) {
       throw new ResourceAlreadyExists("You already reported this comment.");
     }
 
@@ -81,7 +81,7 @@ public class ReportService extends ApplicationService {
   public ReportDto create(ReportCreateDto dto, Review review) {
     policy.create(currentUser());
 
-    if (repository.findByUserAndReview(currentUser(), review).isPresent()) {
+    if (currentUser() != null && repository.findByUserAndReview(currentUser(), review).isPresent()) {
       throw new ResourceAlreadyExists("You already reported this review.");
     }
 
