@@ -120,6 +120,8 @@ public class ReviewService extends ApplicationService {
     review.setDate(Instant.now());
     review.setViewedCounter(0);
 
+    movie.incrementReviewedCounter();
+
     repository.save(review);
     return mapper.map(review);
   }
@@ -133,6 +135,16 @@ public class ReviewService extends ApplicationService {
       throw new PolicyViolationError("You are not allowed to change visibility of review #" + review.getId());
     }
 
+    if (dto.getVisible() != null) {
+      if (dto.getVisible().get()) {
+        // made it public
+        review.getMovie().incrementReviewedCounter();
+      } else {
+        // made it private
+        review.getMovie().decrementReviewedCounter();
+      }
+    }
+
     mapper.update(dto, review);
     repository.save(review);
 
@@ -144,6 +156,9 @@ public class ReviewService extends ApplicationService {
     var review = repository.findById(id);
     return review.map(r -> {
       policy.delete(currentUser(), r);
+      if (r.isVisible()) {
+        r.getMovie().decrementReviewedCounter();
+      }
       repository.delete(r);
       return true;
     }).orElse(false);

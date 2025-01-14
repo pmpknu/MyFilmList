@@ -83,6 +83,16 @@ public class CommentService extends ApplicationService {
       comment.setUpdatedAt(Instant.now());
     }
 
+    if (dto.getVisible() != null && comment.getMovie() != null) {
+      if (dto.getVisible().get()) {
+        // made it public
+        comment.getMovie().incrementReviewedCounter();
+      } else {
+        // made it private
+        comment.getMovie().decrementReviewedCounter();
+      }
+    }
+
     repository.save(comment);
     return mapper.map(comment);
   }
@@ -92,12 +102,15 @@ public class CommentService extends ApplicationService {
     var comment = repository.findById(id);
     return comment.map(c -> {
       policy.delete(currentUser(), c);
+      if (c.isVisible() && c.getMovie() != null) {
+        c.getMovie().decrementReviewedCounter();
+      }
       repository.delete(c);
       return true;
     }).orElse(false);
   }
 
-  @Transactional
+  @Transactional(isolation = Isolation.REPEATABLE_READ)
   public CommentDto createSubject(CommentCreateDto dto, CrudEntity entity) {
     policy.create(currentUser());
 
@@ -115,6 +128,7 @@ public class CommentService extends ApplicationService {
       comment.setWatchList((WatchList) entity);
     }
     if (entity instanceof Movie) {
+      ((Movie) entity).incrementCommentsCounter();
       comment.setMovie((Movie) entity);
     }
 
