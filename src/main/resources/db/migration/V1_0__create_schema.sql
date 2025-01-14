@@ -43,7 +43,6 @@ CREATE TABLE movies (
   viewed_counter INT NOT NULL DEFAULT 0,
   rated_counter INT NOT NULL DEFAULT 0,
   reviewed_counter INT NOT NULL DEFAULT 0,
-  watchlists_counter INT NOT NULL DEFAULT 0,
   comments_counter INT NOT NULL DEFAULT 0
 );
 

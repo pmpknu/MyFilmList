@@ -35,7 +35,6 @@ public class MovieWithAdditionalInfo extends Movie {
       movie.getViewedCounter(),
       movie.getRatedCounter(),
       movie.getReviewedCounter(),
-      movie.getWatchlistsCounter(),
       movie.getCommentsCounter(),
       currentUserRating,
       currentUserViewed
@@ -61,7 +60,6 @@ public class MovieWithAdditionalInfo extends Movie {
     int viewedCounter,
     int ratedCounter,
     int reviewedCounter,
-    int watchlistsCounter,
     int commentsCounter,
     Integer currentUserRating,
     Boolean currentUserViewed
@@ -85,7 +83,6 @@ public class MovieWithAdditionalInfo extends Movie {
       viewedCounter,
       ratedCounter,
       reviewedCounter,
-      watchlistsCounter,
       commentsCounter
     );
     this.currentUserRating = currentUserRating;

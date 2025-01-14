@@ -113,18 +113,6 @@ public class Movie extends CrudEntity {
   }
 
   @NotNull
-  @Column(name = "watchlists_counter", nullable = false)
-  private int watchlistsCounter;
-
-  public void incrementWatchlistsCounter() {
-    watchlistsCounter++;
-  }
-
-  public void decrementWatchlistsCounter() {
-    watchlistsCounter--;
-  }
-
-  @NotNull
   @Column(name = "comments_counter", nullable = false)
   private int commentsCounter;
 
