@@ -182,6 +182,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
 
+  // 410
+  @ExceptionHandler({ StaleRequestException.class })
+  public ResponseEntity<Object> handleStaleRequestException(Exception ex) {
+    logger.info(ex.getClass().getName());
+    final ApiError apiError = new ApiError(
+      HttpStatus.GONE,
+      ex.getLocalizedMessage(),
+      "You are trying to perform an action whose time limit has expired"
+    );
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
+
   // 415
   @Override
   protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(final HttpMediaTypeNotSupportedException ex, final HttpHeaders headers, final HttpStatusCode status, final WebRequest request) {
