@@ -17,6 +17,9 @@
   // Multiple headings with the same content. That's fine.
   "MD024": false,
 
+  // Wrong detection of multiple quotes.
+  "MD028": false,
+
   // Sometimes it needed to place fences in list and so on...
   "MD031": false,
 
