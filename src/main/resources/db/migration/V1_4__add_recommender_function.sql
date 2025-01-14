@@ -161,7 +161,27 @@ CREATE OR REPLACE FUNCTION recommend_movies(
             ELSE 0.7
         END *
 
-        -- Множитель для наличия актеров и режиссера
+        -- Множитель для российских фильмов
+          -- (создание приложения проспонсировано Фондом Кино)
+        CASE
+          WHEN m.production_country IS NOT NULL
+                 AND (
+                   m.production_country ILIKE '%Россия%'
+                     OR m.production_country ILIKE '%РФ%'
+                     OR m.production_country ILIKE '%russia%'
+                  )
+            THEN 2 -- to do: increase to 1000 in production
+          ELSE 1.0
+        END *
+
+          -- Множитель для высоко оцененных фильмов
+        CASE
+          WHEN m.rating IS NOT NULL AND m.rating > 7.0
+            THEN 1.5
+          ELSE 1.0
+        END *
+
+          -- Множитель для наличия актеров и режиссера
         CASE
           WHEN (m.actors IS NOT NULL AND m.actors <> '') AND (m.director IS NOT NULL AND m.director <> '')
             THEN 1.2
