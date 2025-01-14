@@ -23,6 +23,7 @@ import { UserUpdateDto } from "@/interfaces/user/dto/UserUpdateDto";
 import { useRouter } from "next/router";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/styles/Icons";
 import { Role } from "@/interfaces/role/model/UserRole";
+import UploadPhotoModal from "@/components/UploadPhotoModal";
 
 const BioPage: React.FC = () => {
   const router = useRouter();
@@ -207,44 +208,13 @@ const BioPage: React.FC = () => {
                 onClick={() => setIsModalOpen(true && isApprovedUser)}
               />
 
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-              <ModalContent>
-                <ModalHeader>
-                  <h4>Upload Photo</h4>
-                </ModalHeader>
-                <ModalBody>
-                  {photoFile ? (
-                    <div style={{ textAlign: "center" }}>
-                      <p>File: {photoFile.name}</p>
-                    </div>
-                  ) : (
-                    <div
-                      {...getRootProps()}
-                      style={{ border: "1px dashed #ccc", padding: "10px", textAlign: "center" }}
-                    >
-                      <input {...getInputProps()} />
-                      <h3>Drag and drop a photo here, or click to select one</h3>
-                    </div>
-                  )}
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    onClick={() => {
-                      setPhotoFile(null);
-                      setIsModalOpen(false);
-                    }}
-                    color="default"
-                  >
-                    Cancel
-                  </Button>
-                  {photoFile && (
-                    <Button onClick={handlePhotoSave} color="primary">
-                      Save
-                    </Button>
-                  )}
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
+              <UploadPhotoModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                photoFile={photoFile}
+                setPhotoFile={setPhotoFile}
+                handlePhotoSave={handlePhotoSave}
+              />
           </CardHeader>
           <CardBody>
             <Input
