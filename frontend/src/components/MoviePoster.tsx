@@ -2,7 +2,7 @@ import { Card, CardHeader, Image } from '@nextui-org/react';
 import UploadPhotoModal from './UploadPhotoModal';
 
 export interface MoviePosterProps {
-  posterUrl: string;
+  posterUrl: string | undefined;
   title: string;
   handleFunction: () => void;
 }
@@ -18,6 +18,8 @@ const MoviePoster: React.FC<MoviePosterProps> = ({ posterUrl, title, handleFunct
         alt="Card background"
         className="z-0 w-full h-full object-cover"
         src={posterUrl}
+        height={400}
+        width={300}
         onClick={handleFunction}
       />
     </Card>

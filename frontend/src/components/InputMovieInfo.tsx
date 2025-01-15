@@ -1,12 +1,13 @@
 import { Input, Switch, Spacer, Textarea, DateInput, DateValue, Button } from '@nextui-org/react';
-import { useState } from 'react';
+import { CalendarDate } from '@internationalized/date';
+import { useEffect, useState } from 'react';
 import { TagManager } from './TagManager';
 import { MovieCreateDto } from '@/interfaces/movie/dto/MovieCreateDto';
 import { MovieUpdateDto } from '@/interfaces/movie/dto/MovieUpdateDto';
 import { InputMovieInfoProps } from '@/types/InputMovieInfoProps';
-import { LocalDate, LocalDateFromString } from '@/types/LocalDate';
+import { DateFromLocalDate, LocalDate, LocalDateFromString } from '@/types/LocalDate';
 
-const InputMovieInfo = <T extends MovieCreateDto | MovieUpdateDto>({ onSubmit }: InputMovieInfoProps<T>) => {
+const InputMovieInfo = <T extends MovieCreateDto | MovieUpdateDto>({ onSubmit, initialData }: InputMovieInfoProps<T>) => {
   const [isFilm, setIsFilm] = useState(false);
   const [dateValue, setDateValue] = useState<DateValue>();
 
@@ -23,6 +24,28 @@ const InputMovieInfo = <T extends MovieCreateDto | MovieUpdateDto>({ onSubmit }:
   const [seasons, setSeasons] = useState(0);
   const [series, setSeries] = useState(0);
 
+  const doif = (condition: any, callback: (param: any) => void) => {
+    if (condition) callback(condition);
+  }
+
+  useEffect(() => {
+    if (initialData) {
+      doif(initialData.title, setTitle)
+      doif(initialData.description, setDescription);
+      doif(initialData.releaseDate,handleLocalDateChange);
+      doif(initialData.duration,setDuration);
+      doif(initialData.categories?.split(','),setCategories);
+      doif(initialData.tags?.split(',') ,setTags);
+      doif(initialData.productionCountry?.split(','),setProductionCountry);
+      doif(initialData.genres?.split(','),setGenres);
+      doif(initialData.actors?.split(','),setActors);
+      doif(initialData.director?.split(',') ,setDirector);
+      doif(initialData.seasons,setSeasons);
+      doif(initialData.series,setSeries);
+      doif(initialData.seasons === undefined,setIsFilm);
+    }
+  }, [initialData]);
+
   const handleToggle = (checked: boolean) => {
     setIsFilm(checked);
     if (checked) {
@@ -30,6 +53,15 @@ const InputMovieInfo = <T extends MovieCreateDto | MovieUpdateDto>({ onSubmit }:
       setSeries(0);
     }
   };
+
+  const handleLocalDateChange = (date: LocalDate | null) => {
+    if (date) {
+      setReleaseDate(date);
+      const dateValue = DateFromLocalDate(date);
+      setDateValue(new CalendarDate(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDay())
+      );
+    }
+  }
 
   const handleDateChange = (date: DateValue | null) => {
     if (date) {
@@ -56,6 +88,12 @@ const InputMovieInfo = <T extends MovieCreateDto | MovieUpdateDto>({ onSubmit }:
 
     onSubmit(data);
   };
+
+  const handleInitialItems = (initialItems: string | null | undefined) => {
+    if (!initialItems) return [];
+    return initialItems?.split(',');
+  }
+
   return (
     <div style={{ marginLeft: '20px' }}>
       <h3>Movie Information</h3>
@@ -86,32 +124,32 @@ const InputMovieInfo = <T extends MovieCreateDto | MovieUpdateDto>({ onSubmit }:
       />
       <Spacer y={1} />
       <TagManager
-        initialItems={[]}
+        initialItems={handleInitialItems(initialData?.categories)}
         onItemsChange={setCategories}
         label='Categories'
       />
       <TagManager
-        initialItems={[]}
+        initialItems={handleInitialItems(initialData?.tags)}
         onItemsChange={setTags}
         label='Tags'
       />
       <TagManager
-        initialItems={[]}
+        initialItems={handleInitialItems(initialData?.productionCountry)}
         onItemsChange={setProductionCountry}
         label='Production country'
       />
       <TagManager
-        initialItems={[]}
+        initialItems={handleInitialItems(initialData?.genres)}
         onItemsChange={setGenres}
         label='Genres'
       />
       <TagManager
-        initialItems={[]}
+        initialItems={handleInitialItems(initialData?.actors)}
         onItemsChange={setActors}
         label='Actors'
       />
       <TagManager
-        initialItems={[]}
+        initialItems={handleInitialItems(initialData?.director)}
         onItemsChange={setDirector}
         label='Director'
       />
