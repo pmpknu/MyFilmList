@@ -1,16 +1,19 @@
-import { Input, Switch, Spacer, Textarea, DateInput, DateValue } from '@nextui-org/react';
+import { Input, Switch, Spacer, Textarea, DateInput, DateValue, Button } from '@nextui-org/react';
 import { useState } from 'react';
 import { TagManager } from './TagManager';
-import { DateTime } from 'luxon';
+import { MovieCreateDto } from '@/interfaces/movie/dto/MovieCreateDto';
+import { MovieUpdateDto } from '@/interfaces/movie/dto/MovieUpdateDto';
+import { InputMovieInfoProps } from '@/types/InputMovieInfoProps';
+import { LocalDate, LocalDateFromString } from '@/types/LocalDate';
 
-const InputMovieInfo = () => {
-  const [isFilm, setIsFilm] = useState(true);
+const InputMovieInfo = <T extends MovieCreateDto | MovieUpdateDto>({ onSubmit }: InputMovieInfoProps<T>) => {
+  const [isFilm, setIsFilm] = useState(false);
   const [dateValue, setDateValue] = useState<DateValue>();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [releaseDate, setReleaseDate] = useState<DateTime>();
-  const [duration, setDuration] = useState();
+  const [releaseDate, setReleaseDate] = useState<LocalDate>();
+  const [duration, setDuration] = useState<number | undefined>();
   const [categories, setCategories] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [productionCountry, setProductionCountry] = useState<string[]>([]);
@@ -19,7 +22,6 @@ const InputMovieInfo = () => {
   const [director, setDirector] = useState<string[]>([]);
   const [seasons, setSeasons] = useState(0);
   const [series, setSeries] = useState(0);
-  
 
   const handleToggle = (checked: boolean) => {
     setIsFilm(checked);
@@ -29,16 +31,31 @@ const InputMovieInfo = () => {
     }
   };
 
-
   const handleDateChange = (date: DateValue | null) => {
     if (date) {
       setDateValue(date);
-      setReleaseDate(
-        DateTime.fromJSDate(new Date(date.day, date.month, date.year))
-      );
+      setReleaseDate(LocalDateFromString(`${date.year}-${date.month}-${date.day}`));
     }
-  }
+  };
 
+  const handleSubmit = () => {
+    const data = {
+      title,
+      description,
+      releaseDate,
+      duration,
+      categories: categories.join(','),
+      tags: tags.join(','),
+      productionCountry: productionCountry.join(','),
+      genres: genres.join(','),
+      actors: actors.join(','),
+      director: director.join(','),
+      seasons: isFilm ? undefined : seasons,
+      series: isFilm ? undefined : series,
+    } as T;
+
+    onSubmit(data);
+  };
   return (
     <div style={{ marginLeft: '20px' }}>
       <h3>Movie Information</h3>
@@ -46,25 +63,27 @@ const InputMovieInfo = () => {
       <Input
         label="Title"
         placeholder="Movie Title"
-        fullWidth
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
       <Textarea
         label="Description"
         placeholder="Description"
-        fullWidth
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
       <DateInput
         label="Release Date"
         className="max-w-sm"
-        fullWidth
         value={dateValue}
         onChange={handleDateChange}
       />
-      <Input label="Duration" placeholder="Duration in minutes" fullWidth />
+      <Input
+        label="Duration"
+        placeholder="Duration in minutes"
+        value={duration?.toString() || ''}
+        onChange={(e) => setDuration(Number(e.target.value))}
+      />
       <Spacer y={1} />
       <TagManager
         initialItems={[]}
@@ -109,7 +128,6 @@ const InputMovieInfo = () => {
             type="number"
             value={seasons.toString()}
             onChange={(e) => setSeasons(Number(e.target.value))}
-            fullWidth
           />
           <Spacer y={0.5} />
           <Input
@@ -117,10 +135,14 @@ const InputMovieInfo = () => {
             type="number"
             value={series.toString()}
             onChange={(e) => setSeries(Number(e.target.value))}
-            fullWidth
           />
         </>
       )}
+      <Spacer y={1} />
+      <Button
+        onClick={handleSubmit}
+        color="success"
+        >Submit</Button>
     </div>
   );
 };
