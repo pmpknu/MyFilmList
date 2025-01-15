@@ -1,0 +1,27 @@
+[Unit]
+Description=MyFilmList API, running by Apache Tomcat
+After=syslog.target
+After=network.target
+After=nginx.service
+Wants=postgresql.service
+Wants=minio.service
+
+[Service]
+Type=simple
+
+User=deploy
+WorkingDirectory=/home/deploy/apps/mfl
+
+ExecStart=/bin/bash -lc 'export $(cat /home/deploy/apps/mfl/.env | xargs) && \
+  LD_LIBRARY_PATH=/home/deploy/tmp/jmagick/lib DYLD_LIBRARY_PATH=/home/deploy/tmp/jmagick/lib \
+  java -XX:+UseNUMA -XX:+UseCompressedOops -XX:+UseG1GC -Xms1024m -Xmx2048m \
+  -jar /home/deploy/apps/mfl/build/libs/mfl-0.1.0.jar'
+
+SuccessExitStatus=143
+
+Restart=always
+RestartSec=10
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target
