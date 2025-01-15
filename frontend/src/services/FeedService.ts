@@ -10,7 +10,7 @@ export default class FeedService {
      * @returns {Promise<AxiosResponse<Paged<MovieDto>>>} List of recommended movies
      */
     static async getRecommendedMovies(): Promise<AxiosResponse<Paged<MovieDto>>> {
-        return api.get<Paged<MovieDto>>('/api/movies/feed');
+        return api.get<Paged<MovieDto>>('/movies/feed');
     }
 
     /**
@@ -18,6 +18,6 @@ export default class FeedService {
      * @returns {Promise<AxiosResponse<Paged<WatchListDto>>>} List of recommended watchlists
      */
     static async getRecommendedWatchLists(): Promise<AxiosResponse<Paged<WatchListDto>>> {
-        return api.get<Paged<WatchListDto>>('/api/watchlists/feed');
+        return api.get<Paged<WatchListDto>>('/watchlists/feed');
     }
 }

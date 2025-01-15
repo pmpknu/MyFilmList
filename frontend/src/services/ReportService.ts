@@ -73,7 +73,7 @@ export default class ReportService {
      * @returns {Promise<AxiosResponse<Paged<ReportDto>>>} List of pending reports
      */
     static async getPendingReports(page: number = 0, size: number = 20, sort: string[] = []): Promise<AxiosResponse<Paged<ReportDto>>> {
-        return api.get<Paged<ReportDto>>(`/api/reports/pending${createCrudUri(page, size, sort)}`);
+        return api.get<Paged<ReportDto>>(`/reports/pending${createCrudUri(page, size, sort)}`);
     }
 
     /**
@@ -85,6 +85,6 @@ export default class ReportService {
      * @returns {Promise<AxiosResponse<Paged<ReportDto>>>} List of reports matching the search criteria
      */
     static async searchReports(searchParams: SearchDto, page: number = 0, size: number = 20, sort: string[] = []): Promise<AxiosResponse<Paged<ReportDto>>> {
-        return api.post<Paged<ReportDto>>(`/api/reports/search${createCrudUri(page, size, sort)}`, searchParams);
+        return api.post<Paged<ReportDto>>(`/reports/search${createCrudUri(page, size, sort)}`, searchParams);
     }
 }
