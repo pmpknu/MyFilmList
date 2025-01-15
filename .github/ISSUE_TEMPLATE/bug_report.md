@@ -9,7 +9,6 @@ assignees: maxbarsukov
 
 Before opening a new issue, please take a moment to review our [**community guidelines**](https://github.com/maxbarsukov/MyFilmList/blob/master/.github/CONTRIBUTING.md) to make the contribution process easy and effective for everyone involved.
 
-
 ## Description
 
 A clear and concise description of what the bug is.
@@ -20,9 +19,12 @@ A clear and concise description of what the bug is.
 A clear and concise description of what you expected to happen.
 
 **Your environment:**
+
 - OS:
 - Java & Spring versions:
 - Node.js version:
+- PostgreSQL versions:
+- Minio version:
 
 **Additional context**
 Add any other context about the problem here.

@@ -39,7 +39,11 @@ CREATE TABLE movies (
   actors TEXT,
   director VARCHAR(127),
   seasons INT CHECK (seasons IS NULL OR seasons >= 0),
-  series INT CHECK (series IS NULL OR series >= 0)
+  series INT CHECK (series IS NULL OR series >= 0),
+  viewed_counter INT NOT NULL DEFAULT 0,
+  rated_counter INT NOT NULL DEFAULT 0,
+  reviewed_counter INT NOT NULL DEFAULT 0,
+  comments_counter INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE movie_watch_lists (
@@ -95,6 +99,7 @@ CREATE TABLE reports (
   review_id   INT REFERENCES reviews(id) ON DELETE RESTRICT,
   comment_id  INT REFERENCES comments(id) ON DELETE RESTRICT,
   resolved BOOLEAN NOT NULL DEFAULT FALSE,
+  resolved_at TIMESTAMP,
   resolver_id INT REFERENCES users(id) ON DELETE SET NULL,
   issue VARCHAR(127) NOT NULL,
   text TEXT,

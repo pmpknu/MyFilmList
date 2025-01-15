@@ -2,7 +2,16 @@ blank_issues_enabled: false
 contact_links:
   - name: Feature Request
     url: https://github.com/maxbarsukov/MyFilmList/issues
-    about: Please suggest your ideas to make MyFilmList better in issues.
+    about: Please suggest your ideas to make MyFilmList better.
+
   - name: Questions and Discussions
     url: https://github.com/maxbarsukov/MyFilmList/discussions
     about: Visit our GitHub Discussions page to ask and answer questions, discuss features, or reach out for help.
+
+  - name: MyFilmList Community Chat
+    url: https://t.me/MyFilmListApp
+    about: We invite you to join our MyFilmList Community Chat, where you can find support from our team and the community, but where you can also share your projects or just talk about random stuff with other members of the MyFilmList community 😁.
+
+  - name: MyFilmList Public Backlog
+    url: https://github.com/users/maxbarsukov/projects/2
+    about: See what's next on our public backlog at Github Projects, where you can submit your ideas and vote for the features you want.

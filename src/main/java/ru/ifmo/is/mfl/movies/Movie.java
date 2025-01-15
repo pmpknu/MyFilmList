@@ -75,4 +75,52 @@ public class Movie extends CrudEntity {
 
   @Column(name = "series")
   private Integer series;
+
+  @NotNull
+  @Column(name = "viewed_counter", nullable = false)
+  private int viewedCounter;
+
+  public void incrementViewedCounter() {
+    viewedCounter++;
+  }
+
+  public void decrementViewedCounter() {
+    viewedCounter--;
+  }
+
+  @NotNull
+  @Column(name = "rated_counter", nullable = false)
+  private int ratedCounter;
+
+  public void incrementRatedCounter() {
+    ratedCounter++;
+  }
+
+  public void decrementRatedCounter() {
+    ratedCounter--;
+  }
+
+  @NotNull
+  @Column(name = "reviewed_counter", nullable = false)
+  private int reviewedCounter;
+
+  public void incrementReviewedCounter() {
+    reviewedCounter++;
+  }
+
+  public void decrementReviewedCounter() {
+    reviewedCounter--;
+  }
+
+  @NotNull
+  @Column(name = "comments_counter", nullable = false)
+  private int commentsCounter;
+
+  public void incrementCommentsCounter() {
+    commentsCounter++;
+  }
+
+  public void decrementCommentsCounter() {
+    commentsCounter--;
+  }
 }

@@ -19,6 +19,7 @@ import ru.ifmo.is.mfl.reviews.Review;
 import ru.ifmo.is.mfl.watchlists.WatchList;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -29,6 +30,17 @@ public class CommentService extends ApplicationService {
   private final CommentPolicy policy;
   private final CommentRepository repository;
   private final CommentSpecification specification;
+
+  public Optional<Comment> findById(int id) {
+    var comment = repository.findById(id);
+    if (comment.isEmpty()) {
+      return Optional.empty();
+    }
+    if (comment.get().isVisible() || policy.canUpdate(currentUser(), comment.get())) {
+      return comment;
+    }
+    return Optional.empty();
+  }
 
   public Page<CommentDto> getAll(Review review, Pageable pageable) {
     return getCommentsBySpecification(review.getId(), specification::withReview, pageable);
@@ -66,6 +78,20 @@ public class CommentService extends ApplicationService {
       throw new PolicyViolationError("You are not allowed to change visibility of comment #" + comment.getId());
     }
 
+    if (dto.getVisible() != null && comment.getMovie() != null) {
+      if (dto.getVisible().get()) {
+        if (!comment.isVisible()) {
+          // made it public
+          comment.getMovie().incrementCommentsCounter();
+        }
+      } else {
+        if (comment.isVisible()) {
+          // made it private
+          comment.getMovie().decrementCommentsCounter();
+        }
+      }
+    }
+
     mapper.update(dto, comment);
     if (currentUser().equals(comment.getUser())) {
       comment.setUpdatedAt(Instant.now());
@@ -80,12 +106,15 @@ public class CommentService extends ApplicationService {
     var comment = repository.findById(id);
     return comment.map(c -> {
       policy.delete(currentUser(), c);
+      if (c.isVisible() && c.getMovie() != null) {
+        c.getMovie().decrementCommentsCounter();
+      }
       repository.delete(c);
       return true;
     }).orElse(false);
   }
 
-  @Transactional
+  @Transactional(isolation = Isolation.REPEATABLE_READ)
   public CommentDto createSubject(CommentCreateDto dto, CrudEntity entity) {
     policy.create(currentUser());
 
@@ -103,6 +132,7 @@ public class CommentService extends ApplicationService {
       comment.setWatchList((WatchList) entity);
     }
     if (entity instanceof Movie) {
+      ((Movie) entity).incrementCommentsCounter();
       comment.setMovie((Movie) entity);
     }
 

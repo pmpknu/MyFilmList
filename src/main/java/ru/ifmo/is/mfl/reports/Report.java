@@ -43,9 +43,12 @@ public class Report extends CrudEntity {
   @Column(name = "resolved", nullable = false)
   private boolean resolved;
 
+  @Column(name = "resolved_at")
+  private Instant resolvedAt;
+
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "resolver_id")
-  private User resolver;
+  private User resolvedBy;
 
   @NotNull
   @Length(min = 1, max = 127)

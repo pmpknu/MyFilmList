@@ -65,6 +65,9 @@ out/
 ### VS Code ###
 .vscode/
 .code-workspace
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/extensions.json
 
 ### Log files ###
 jxl.log
