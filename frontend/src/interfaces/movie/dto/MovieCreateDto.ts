@@ -1,9 +1,9 @@
-import { DateTime } from "luxon";
+import { LocalDate } from "@/types/LocalDate";
 
 export interface MovieCreateDto {
   title: string;
   description?: string;
-  releaseDate?: DateTime
+  releaseDate?: LocalDate;
   duration?: number;
   categories?: string;
   tags?: string;

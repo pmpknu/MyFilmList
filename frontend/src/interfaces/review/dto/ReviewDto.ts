@@ -1,7 +1,7 @@
 import { CrudDto } from "@/interfaces/crud/dto/CrudDto";
 import { MovieDto } from "@/interfaces/movie/dto/MovieDto";
 import { UserDto } from "@/interfaces/user/dto/UserDto";
-import { DateTime } from "luxon";
+import { LocalDate } from "@/types/LocalDate";
 
 export interface ReviewDto extends CrudDto {
   user: UserDto;
@@ -9,6 +9,6 @@ export interface ReviewDto extends CrudDto {
   visible: boolean;
   text: string;
   rating: number; // 1-10
-  date: DateTime
+  date: LocalDate
   viewedCounter: number;
 }

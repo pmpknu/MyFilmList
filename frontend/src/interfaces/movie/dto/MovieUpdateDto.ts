@@ -1,10 +1,10 @@
 import { JsonNullable } from "@/types/JsonNullable";
-import { DateTime } from "luxon";
+import { LocalDate } from "@/types/LocalDate";
 
 export interface MovieUpdateDto {
   title: JsonNullable<string>;
   description?: JsonNullable<string>;
-  releaseDate?: JsonNullable<DateTime>;
+  releaseDate?: JsonNullable<LocalDate>;
   duration?: JsonNullable<number>;
   categories?: JsonNullable<string>;
   tags?: JsonNullable<string>;

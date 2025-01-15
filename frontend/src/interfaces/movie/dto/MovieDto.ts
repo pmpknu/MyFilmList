@@ -1,11 +1,11 @@
 import { CrudDto } from "@/interfaces/crud/dto/CrudDto";
-import { DateTime } from "luxon";
+import { LocalDate } from "@/types/LocalDate";
 
 export interface MovieDto extends CrudDto {
   title: string;
   description: string;
   poster: string;
-  releaseDate?: DateTime
+  releaseDate?: LocalDate;
   duration?: number;
   rating?: number;
   categories?: string;

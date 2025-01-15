@@ -1,6 +1,6 @@
+import { LocalDate } from '@/types/LocalDate';
 import { CrudDto } from '../../crud/dto/CrudDto';
 import { UserDto } from '../../user/dto/UserDto';
-import { DateTime } from 'luxon';
 
 export interface CommentDto extends CrudDto {
     user: UserDto;
@@ -9,5 +9,5 @@ export interface CommentDto extends CrudDto {
     movieId?: number;
     visible: boolean;
     text: string;
-    date: DateTime; 
+    date: LocalDate; 
   }

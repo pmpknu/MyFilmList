@@ -1,6 +1,6 @@
 import { CrudDto } from "@/interfaces/crud/dto/CrudDto";
 import { UserDto } from "@/interfaces/user/dto/UserDto";
-import { DateTime } from "luxon";
+import { LocalDate } from "@/types/LocalDate";
 
 export interface ReportDto extends CrudDto {
   user: UserDto;
@@ -9,5 +9,5 @@ export interface ReportDto extends CrudDto {
   resolved: boolean;
   issue: string;
   text: string;
-  date: DateTime;
+  date: LocalDate;
 }
