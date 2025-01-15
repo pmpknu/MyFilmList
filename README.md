@@ -201,11 +201,11 @@
 
 ## 🌐&ensp;Полезные ссылки <a name="useful-links"></a>
 
-| Ссылка                                                                         | Описание                                   |
-|--------------------------------------------------------------------------------|--------------------------------------------|
-| [github.com/maxbarsukov/MyFilmList](https://github.com/maxbarsukov/MyFilmList) | Репозиторий **MyFilmList**                 |
-| [mfl.maxbarsukov.ru](https://mfl.maxbarsukov.ru/)                              | Веб-приложение **MyFilmList**              |
-| [mfl.maxbarsukov.ru/docs](https://mfl.maxbarsukov.ru/swagger-ui/index.html)    | OpenApi 3.0 документация для открытого API |
+| Ссылка                                                                                       | Описание                                   |
+|----------------------------------------------------------------------------------------------|--------------------------------------------|
+| [github.com/maxbarsukov/MyFilmList](https://github.com/maxbarsukov/MyFilmList)               | Репозиторий **MyFilmList**                 |
+| [mfl.maxbarsukov.ru](https://mfl.maxbarsukov.ru/)                                            | Веб-приложение **MyFilmList**              |
+| [mfl.maxbarsukov.ru/swagger-ui/index.html](https://mfl.maxbarsukov.ru/swagger-ui/index.html) | OpenAPI 3.0 документация для открытого API |
 
 ## 🪪&ensp;Лицензия <a name="license"></a>
 
