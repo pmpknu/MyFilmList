@@ -32,7 +32,7 @@
 
 Не терпится узнать, как использовать API **MyFilmList**?
 
-- 🗂️ [**MyFilmList OpenAPI 3.0**](https://mfl.maxbarsukov.ru/docs/) 🗂️
+- 🗂️ [**MyFilmList OpenAPI 3.0**](https://mfl.maxbarsukov.ru/swagger-ui/index.html) 🗂️
 
 ---
 
@@ -144,8 +144,11 @@
 > [!WARNING]
 > Если архитектура вашей системы отличается от `x86-64`, вам, скорее всего,
 > понадобится пересобрать [`vendor/libJMagick.so`](./vendor/libJMagick.so).
+> \
+> Если вы, как и я, счастливый обладатель `aarch64`, то,
+> во имя избежания многочасовых страданий, вчитайтесь в [`jmagick/INSTALL#L112-L121`](https://github.com/techblue/jmagick/blob/master/INSTALL#L112-L121).
 
-Для этого следуйте инструкциям по сборке [`JMagick`](https://github.com/techblue/jmagick/blob/master/INSTALL).
+Для этого следуйте инструкциям по сборке [`JMagick`](https://github.com/techblue/jmagick/blob/master/INSTALL) (или повторите команды из [`jmagick_build.yml`](https://github.com/techblue/jmagick/blob/master/.github/workflows/jmagick_build.yml)).
 Полученный `.so` файл переименуйте в `libJMagick.so` и поместите в директорию [`vendor`](./vendor). 
 
 #### Локально
@@ -202,7 +205,7 @@
 |--------------------------------------------------------------------------------|--------------------------------------------|
 | [github.com/maxbarsukov/MyFilmList](https://github.com/maxbarsukov/MyFilmList) | Репозиторий **MyFilmList**                 |
 | [mfl.maxbarsukov.ru](https://mfl.maxbarsukov.ru/)                              | Веб-приложение **MyFilmList**              |
-| [mfl.maxbarsukov.ru/docs](https://mfl.maxbarsukov.ru/docs/)                    | OpenApi 3.0 документация для открытого API |
+| [mfl.maxbarsukov.ru/docs](https://mfl.maxbarsukov.ru/swagger-ui/index.html)    | OpenApi 3.0 документация для открытого API |
 
 ## 🪪&ensp;Лицензия <a name="license"></a>
 
