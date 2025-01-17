@@ -33,9 +33,11 @@ export function UserNav() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
-            <Avatar className='h-8 w-8'>
-              <AvatarImage src={user?.photo ?? ''} alt={user?.username ?? ''} />
-              <AvatarFallback>{user?.username?.[0]}</AvatarFallback>
+            <Avatar className='h-8 w-8 rounded-full'>
+              <AvatarImage src={user?.photo || ''} alt={user?.username} />
+              <AvatarFallback className='rounded-full'>
+                {user?.username.slice(0, 2)?.toUpperCase() || 'JD'}
+              </AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>

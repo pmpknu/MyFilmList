@@ -4,6 +4,9 @@ import { TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY } from '@/constants';
 import { RefreshDto } from '@/interfaces/refresh/dto/RefreshDto';
 import { AuthenticationDto } from '@/interfaces/auth/dto/AuthenticationDto';
 import AuthService from '../AuthService';
+import store from '@/store';
+import { addRequest } from '@/store/slices/request-slice';
+import { login } from '@/store/slices/auth-slice';
 
 const browserLang = navigator.language;
 const supportedLocales = ['en', 'ru'];
@@ -51,10 +54,13 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response) => {
+    const { dispatch } = store;
+    dispatch(addRequest(response.headers['x-response-uuid']));
     return response;
   },
   async (error) => {
     const originalConfig = error.config;
+    const dispatch = store.dispatch;
 
     // Access Token was expired
     // eslint-disable-next-line no-underscore-dangle
@@ -73,6 +79,7 @@ instance.interceptors.response.use(
           refreshToken
         });
         AuthService.setAuth(response.data);
+        dispatch(login(response.data));
 
         originalConfig.headers.Authorization = `Bearer ${response.data.accessToken}`;
 

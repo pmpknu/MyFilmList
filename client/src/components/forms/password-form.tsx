@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { UserFormValue } from '@/features/auth/components/user-auth-form';
 import { UseFormReturn } from 'react-hook-form';
 import { Button } from '../ui/button';
 
@@ -13,7 +12,7 @@ export default function PasswordForm({
   loading,
   forgetPassword
 }: {
-  form: UseFormReturn<UserFormValue>;
+  form: UseFormReturn<any>;
   loading: boolean;
   forgetPassword: boolean;
 }) {

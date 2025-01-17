@@ -6,6 +6,7 @@ export interface NavItem {
   url: string;
   disabled?: boolean;
   external?: boolean;
+  requiresAuth?: boolean;
   requiresGuest?: boolean;
   requiresRole?: Role;
   shortcut?: [string, string];

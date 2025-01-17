@@ -5,6 +5,7 @@ import { NavItem } from 'types';
 export const hasAccess = (item: NavItem, user: UserDto | null | undefined): boolean => {
   return (
     !(item.requiresGuest && user) &&
+    !(item.requiresAuth && !user) &&
     !(item.requiresRole && !user?.roles?.includes(item.requiresRole))
   );
 };
@@ -27,7 +28,7 @@ export const navItems: NavItem[] = [
     items: [
       {
         title: 'Профиль',
-        requiresRole: Role.ROLE_USER,
+        requiresAuth: true,
 
         url: '/users/me',
         icon: 'userPen',

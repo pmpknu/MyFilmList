@@ -61,9 +61,11 @@ export default function AppSidebar() {
     <Sidebar collapsible='icon'>
       <SidebarHeader>
         <div className='flex gap-2 py-2 text-sidebar-accent-foreground'>
-          <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
-            <company.logo className='size-4' />
-          </div>
+          <a href='/'>
+            <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
+              <company.logo className='size-4' />
+            </div>
+          </a>
           <div className='grid flex-1 text-left text-sm leading-tight'>
             <span className='truncate font-semibold'>{company.name}</span>
             <span className='truncate text-xs'>{company.plan}</span>
@@ -132,7 +134,7 @@ export default function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem className='px-4'>
             <div className='text-balance text-center text-xs text-muted-foreground [&_a]:underline-offset-4 hover:[&_a]:text-foreground hover:[&_a]:underline'>
-              <Link href='/terms-of-service'>Условия обслуживания</Link>
+              <Link href='/terms-of-service'>Пользовательское соглашение</Link>
             </div>
           </SidebarMenuItem>
           <SidebarMenuItem className={cn('px-4', user ? '' : 'pb-12')}>
@@ -148,9 +150,9 @@ export default function AppSidebar() {
                     size='lg'
                     className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
                   >
-                    <Avatar className='h-8 w-8 rounded-lg'>
+                    <Avatar className='h-8 w-8 rounded-full'>
                       <AvatarImage src={user.photo || ''} alt={user.username} />
-                      <AvatarFallback className='rounded-lg'>
+                      <AvatarFallback className='rounded-full'>
                         {user.username.slice(0, 2)?.toUpperCase() || 'JD'}
                       </AvatarFallback>
                     </Avatar>
@@ -169,9 +171,9 @@ export default function AppSidebar() {
                 >
                   <DropdownMenuLabel className='p-0 font-normal'>
                     <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                      <Avatar className='h-8 w-8 rounded-lg'>
+                      <Avatar className='h-8 w-8 rounded-full'>
                         <AvatarImage src={user.photo || ''} alt={user.username} />
-                        <AvatarFallback className='rounded-lg'>
+                        <AvatarFallback className='rounded-full'>
                           {user.username.slice(0, 2)?.toUpperCase() || 'JD'}
                         </AvatarFallback>
                       </Avatar>
