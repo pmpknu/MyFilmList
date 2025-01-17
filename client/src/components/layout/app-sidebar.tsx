@@ -36,6 +36,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import AuthService from '@/services/AuthService';
 import { logout } from '@/store/slices/auth-slice';
+import { cn } from '@/lib/utils';
 
 export const company = {
   name: 'MFL',
@@ -128,8 +129,18 @@ export default function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        {user && (
-          <SidebarMenu>
+        <SidebarMenu>
+          <SidebarMenuItem className='px-4'>
+            <div className='text-balance text-center text-xs text-muted-foreground [&_a]:underline-offset-4 hover:[&_a]:text-foreground hover:[&_a]:underline'>
+              <Link href='/terms-of-service'>Условия обслуживания</Link>
+            </div>
+          </SidebarMenuItem>
+          <SidebarMenuItem className={cn('px-4', user ? '' : 'pb-12')}>
+            <div className='text-balance text-center text-xs text-muted-foreground [&_a]:underline-offset-4 hover:[&_a]:text-foreground hover:[&_a]:underline'>
+              <Link href='/privacy'>Политика конфиденциальности</Link>
+            </div>
+          </SidebarMenuItem>
+          {user && (
             <SidebarMenuItem>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -193,8 +204,8 @@ export default function AppSidebar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </SidebarMenuItem>
-          </SidebarMenu>
-        )}
+          )}
+        </SidebarMenu>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

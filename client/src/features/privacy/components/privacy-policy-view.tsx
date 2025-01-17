@@ -6,12 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import PageContainer from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
 import { Separator } from '@/components/ui/separator';
-
-function LinkToSite({ link = 'https://mfl.maxbarsukov.ru' }: { link?: string }) {
-  return (
-    <a className='text-blue-600 dark:text-blue-500 hover:underline' href={link}>{link}</a>
-  );
-}
+import LinkToSite from '@/components/link-to-site';
 
 function PrivacyMail() {
   return (
