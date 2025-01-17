@@ -54,9 +54,7 @@ export default class ReviewService {
     size: number = 20,
     sort: string[] = []
   ): Promise<AxiosResponse<Paged<ReviewDto>>> {
-    return api.get<Paged<ReviewDto>>(
-      `/reviews${createCrudUri(page, size, sort)}`
-    );
+    return api.get<Paged<ReviewDto>>(`/reviews${createCrudUri(page, size, sort)}`);
   }
 
   /**

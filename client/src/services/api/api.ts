@@ -79,7 +79,8 @@ instance.interceptors.response.use(
         return instance.request(originalConfig);
       } catch (_error) {
         console.error(
-          `Token refresh failed!\ntoken: ${Storage.get(TOKEN_KEY)}\n refresh token: ${Storage.get(REFRESH_TOKEN_KEY)}\n`, _error
+          `Token refresh failed!\ntoken: ${Storage.get(TOKEN_KEY)}\n refresh token: ${Storage.get(REFRESH_TOKEN_KEY)}\n`,
+          _error
         );
         return Promise.reject(_error);
       }

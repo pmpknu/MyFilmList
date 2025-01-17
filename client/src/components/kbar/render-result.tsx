@@ -13,11 +13,7 @@ export default function RenderResults() {
             {item}
           </div>
         ) : (
-          <ResultItem
-            action={item}
-            active={active}
-            currentRootActionId={rootActionId ?? ''}
-          />
+          <ResultItem action={item} active={active} currentRootActionId={rootActionId ?? ''} />
         )
       }
     />

@@ -16,7 +16,7 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 
 export const metadata: Metadata = {
   ...defaultMetadata,
-  title: 'Главная | MyFilmList',
+  title: 'Главная | MyFilmList'
 };
 
 const lato = Lato({
@@ -25,11 +25,7 @@ const lato = Lato({
   display: 'swap'
 });
 
-export default async function RootLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   // Persisting the sidebar state in the cookie.
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';

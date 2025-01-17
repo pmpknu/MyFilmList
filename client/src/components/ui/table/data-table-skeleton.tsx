@@ -32,9 +32,7 @@ export function DataTableSkeleton({
                 ))
               : null}
           </div>
-          {showViewOptions ? (
-            <Skeleton className='ml-auto hidden h-7 w-[70px] lg:flex' />
-          ) : null}
+          {showViewOptions ? <Skeleton className='ml-auto hidden h-7 w-[70px] lg:flex' /> : null}
         </div>
       ) : null}
 

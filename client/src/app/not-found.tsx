@@ -12,21 +12,13 @@ export default function NotFound() {
       <span className='bg-gradient-to-b from-foreground to-transparent bg-clip-text text-[10rem] font-extrabold leading-none text-transparent'>
         404
       </span>
-      <h2 className='font-heading my-2 text-2xl font-bold'>
-        Чего-то не хватает
-      </h2>
-      <p>
-        Извините, страница, которую вы ищете, не существует или была перемещена.
-      </p>
+      <h2 className='font-heading my-2 text-2xl font-bold'>Чего-то не хватает</h2>
+      <p>Извините, страница, которую вы ищете, не существует или была перемещена.</p>
       <div className='mt-8 flex justify-center gap-2'>
         <Button onClick={() => router.back()} variant='default' size='lg'>
           Назад
         </Button>
-        <Button
-          onClick={() => router.push('/')}
-          variant='ghost'
-          size='lg'
-        >
+        <Button onClick={() => router.push('/')} variant='ghost' size='lg'>
           На главную страницу
         </Button>
       </div>

@@ -1,10 +1,6 @@
 'use client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger
-} from '@/components/ui/collapsible';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,14 +27,7 @@ import {
   useSidebar
 } from '@/components/ui/sidebar';
 import { navItems, hasAccess } from '@/constants/navigation';
-import {
-  BadgeCheck,
-  Bell,
-  ChevronRight,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut
-} from 'lucide-react';
+import { BadgeCheck, Bell, ChevronRight, ChevronsUpDown, CreditCard, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
@@ -85,67 +74,61 @@ export default function AppSidebar() {
           <SidebarGroupLabel>Overview</SidebarGroupLabel>
           <SidebarMenu>
             {navItems
-            .filter(item => hasAccess(item, user))
-            .map((item) => {
-              const Icon = item.icon ? Icons[item.icon] : Icons.logo;
-              const subItems = item?.items?.filter(item => hasAccess(item, user));
+              .filter((item) => hasAccess(item, user))
+              .map((item) => {
+                const Icon = item.icon ? Icons[item.icon] : Icons.logo;
+                const subItems = item?.items?.filter((item) => hasAccess(item, user));
 
-              return subItems && subItems?.length > 0 ? (
-                <Collapsible
-                  key={item.title}
-                  asChild
-                  defaultOpen={item.isActive}
-                  className='group/collapsible'
-                >
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton
-                        tooltip={item.title}
-                        isActive={pathname === item.url}
-                      >
-                        {item.icon && <Icon />}
-                        <span>{item.title}</span>
-                        <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {subItems?.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={pathname === subItem.url}
-                            >
-                              <Link href={subItem.url}>
-                                <span>{subItem.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
-              ) : (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
+                return subItems && subItems?.length > 0 ? (
+                  <Collapsible
+                    key={item.title}
                     asChild
-                    tooltip={item.title}
-                    isActive={pathname === item.url}
+                    defaultOpen={item.isActive}
+                    className='group/collapsible'
                   >
-                    <Link href={item.url}>
-                      <Icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              );
-            })}
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton tooltip={item.title} isActive={pathname === item.url}>
+                          {item.icon && <Icon />}
+                          <span>{item.title}</span>
+                          <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {subItems?.map((subItem) => (
+                            <SidebarMenuSubItem key={subItem.title}>
+                              <SidebarMenuSubButton asChild isActive={pathname === subItem.url}>
+                                <Link href={subItem.url}>
+                                  <span>{subItem.title}</span>
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+                ) : (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.title}
+                      isActive={pathname === item.url}
+                    >
+                      <Link href={item.url}>
+                        <Icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-        <SidebarFooter>
-        { user &&
+      <SidebarFooter>
+        {user && (
           <SidebarMenu>
             <SidebarMenuItem>
               <DropdownMenu>
@@ -155,21 +138,14 @@ export default function AppSidebar() {
                     className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
                   >
                     <Avatar className='h-8 w-8 rounded-lg'>
-                      <AvatarImage
-                        src={user.photo || ''}
-                        alt={user.username}
-                      />
+                      <AvatarImage src={user.photo || ''} alt={user.username} />
                       <AvatarFallback className='rounded-lg'>
                         {user.username.slice(0, 2)?.toUpperCase() || 'JD'}
                       </AvatarFallback>
                     </Avatar>
                     <div className='grid flex-1 text-left text-sm leading-tight'>
-                      <span className='truncate font-semibold'>
-                        {user.username}
-                      </span>
-                      <span className='truncate text-xs'>
-                        {user.email}
-                      </span>
+                      <span className='truncate font-semibold'>{user.username}</span>
+                      <span className='truncate text-xs'>{user.email}</span>
                     </div>
                     <ChevronsUpDown className='ml-auto size-4' />
                   </SidebarMenuButton>
@@ -183,23 +159,14 @@ export default function AppSidebar() {
                   <DropdownMenuLabel className='p-0 font-normal'>
                     <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                       <Avatar className='h-8 w-8 rounded-lg'>
-                        <AvatarImage
-                        src={user.photo || ''}
-                        alt={user.username}
-                        />
+                        <AvatarImage src={user.photo || ''} alt={user.username} />
                         <AvatarFallback className='rounded-lg'>
-                          {user.username.slice(0, 2)?.toUpperCase() ||
-                            'JD'}
+                          {user.username.slice(0, 2)?.toUpperCase() || 'JD'}
                         </AvatarFallback>
                       </Avatar>
                       <div className='grid flex-1 text-left text-sm leading-tight'>
-                        <span className='truncate font-semibold'>
-                          {user.username}
-                        </span>
-                        <span className='truncate text-xs'>
-                          {' '}
-                          {user.email}
-                        </span>
+                        <span className='truncate font-semibold'>{user.username}</span>
+                        <span className='truncate text-xs'> {user.email}</span>
                       </div>
                     </div>
                   </DropdownMenuLabel>
@@ -227,8 +194,8 @@ export default function AppSidebar() {
               </DropdownMenu>
             </SidebarMenuItem>
           </SidebarMenu>
-        }
-        </SidebarFooter>
+        )}
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

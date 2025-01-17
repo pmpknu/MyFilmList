@@ -3,10 +3,7 @@
 import { DataTableFilterBox } from '@/components/ui/table/data-table-filter-box';
 import { DataTableResetFilter } from '@/components/ui/table/data-table-reset-filter';
 import { DataTableSearch } from '@/components/ui/table/data-table-search';
-import {
-  CATEGORY_OPTIONS,
-  useProductTableFilters
-} from './use-product-table-filters';
+import { CATEGORY_OPTIONS, useProductTableFilters } from './use-product-table-filters';
 
 export default function ProductTableAction() {
   const {
@@ -33,10 +30,7 @@ export default function ProductTableAction() {
         setFilterValue={setCategoriesFilter}
         filterValue={categoriesFilter}
       />
-      <DataTableResetFilter
-        isFilterActive={isAnyFilterActive}
-        onReset={resetFilters}
-      />
+      <DataTableResetFilter isFilterActive={isAnyFilterActive} onReset={resetFilters} />
     </div>
   );
 }

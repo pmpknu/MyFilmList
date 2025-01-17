@@ -21,9 +21,7 @@ export default class MovieService {
     size: number = 20,
     sort: string[] = []
   ): Promise<AxiosResponse<Paged<MovieWithAdditionalInfoDto>>> {
-    return api.get<Paged<MovieWithAdditionalInfoDto>>(
-      `/movies${createCrudUri(page, size, sort)}`
-    );
+    return api.get<Paged<MovieWithAdditionalInfoDto>>(`/movies${createCrudUri(page, size, sort)}`);
   }
 
   /**
@@ -31,9 +29,7 @@ export default class MovieService {
    * @param {MovieCreateDto} movieData Data for creating the movie
    * @returns {Promise<AxiosResponse<MovieDto>>} Created movie data
    */
-  static async createMovie(
-    movieData: MovieCreateDto
-  ): Promise<AxiosResponse<MovieDto>> {
+  static async createMovie(movieData: MovieCreateDto): Promise<AxiosResponse<MovieDto>> {
     return api.post<MovieDto>('/movies', movieData);
   }
 
@@ -42,9 +38,7 @@ export default class MovieService {
    * @param {number} id Movie ID
    * @returns {Promise<AxiosResponse<MovieWithAdditionalInfoDto>>} Movie data
    */
-  static async getMovieById(
-    id: number
-  ): Promise<AxiosResponse<MovieWithAdditionalInfoDto>> {
+  static async getMovieById(id: number): Promise<AxiosResponse<MovieWithAdditionalInfoDto>> {
     return api.get<MovieWithAdditionalInfoDto>(`/movies/${id}`);
   }
 
@@ -76,10 +70,7 @@ export default class MovieService {
    * @param {FormData} formData Form data containing the poster
    * @returns {Promise<AxiosResponse<MovieDto>>} Updated movie data with poster
    */
-  static async uploadMoviePoster(
-    id: number,
-    formData: FormData
-  ): Promise<AxiosResponse<MovieDto>> {
+  static async uploadMoviePoster(id: number, formData: FormData): Promise<AxiosResponse<MovieDto>> {
     return api.post<MovieDto>(`/movies/${id}/poster`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'

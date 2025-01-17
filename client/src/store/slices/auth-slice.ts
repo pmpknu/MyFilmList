@@ -10,7 +10,7 @@ type UserState = {
 
 const initialState: UserState = {
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: false
 };
 
 const authSlice = createSlice({
@@ -30,8 +30,8 @@ const authSlice = createSlice({
     logout(state) {
       state.user = null;
       state.isAuthenticated = false;
-    },
-  },
+    }
+  }
 });
 
 export const { login, register, logout } = authSlice.actions;

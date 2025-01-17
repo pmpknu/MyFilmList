@@ -9,7 +9,7 @@ export interface RequestsState {
 }
 
 const initialState: RequestsState = {
-  uuids: Storage.isLocalStorageAvailable() ? Storage.get(REQUESTS_KEY) || [] : [],
+  uuids: Storage.isLocalStorageAvailable() ? Storage.get(REQUESTS_KEY) || [] : []
 };
 
 export const requestsSlice = createSlice({
@@ -17,9 +17,7 @@ export const requestsSlice = createSlice({
   initialState,
   reducers: {
     addRequest: (state, action: PayloadAction<string>) => {
-      const newUuid = action.payload.startsWith('[')
-      ? action.payload.slice(1, -1)
-      : action.payload;
+      const newUuid = action.payload.startsWith('[') ? action.payload.slice(1, -1) : action.payload;
 
       state.uuids.push(newUuid);
       if (state.uuids.length > REQUEST_UUIDS_HISTORY_LENGTH) {
@@ -27,8 +25,8 @@ export const requestsSlice = createSlice({
       }
 
       Storage.set(REQUESTS_KEY, state.uuids);
-    },
-  },
+    }
+  }
 });
 
 export const { addRequest } = requestsSlice.actions;

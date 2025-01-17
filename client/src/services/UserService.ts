@@ -29,9 +29,7 @@ export default class UserService {
    * @param {FormData} formData Form data containing the photo
    * @returns {Promise<AxiosResponse<UserDto>>} Updated user data
    */
-  static async uploadPhoto(
-    formData: FormData
-  ): Promise<AxiosResponse<UserDto>> {
+  static async uploadPhoto(formData: FormData): Promise<AxiosResponse<UserDto>> {
     return api.post<UserDto>('/users/photo', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -63,10 +61,7 @@ export default class UserService {
    * @param {UpdateUserDto} userData Updated user data
    * @returns {Promise<AxiosResponse<UserDto>>} Updated user data
    */
-  static async updateUser(
-    id: number,
-    userData: UserUpdateDto
-  ): Promise<AxiosResponse<UserDto>> {
+  static async updateUser(id: number, userData: UserUpdateDto): Promise<AxiosResponse<UserDto>> {
     return api.patch<UserDto>(`/users/${id}`, userData);
   }
 

@@ -7,28 +7,24 @@ import { useDispatch } from '@/hooks/use-redux';
 import AuthService from '@/services/AuthService';
 import { login, logout } from '@/store/slices/auth-slice';
 
-export default function SessionProvider({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function SessionProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const user = AuthService.getAuth().user;
 
     if (user) {
-      dispatch(login({ user }))
+      dispatch(login({ user }));
     }
     if (!user && AuthService.getAuth().accessToken) {
       AuthService.getCurrentUser()
-        .then(response => {
+        .then((response) => {
           AuthService.setAuth(response.data);
           dispatch(login({ user: response.data.user }));
         })
-        .catch(_error => {
+        .catch((_error) => {
           toast.error('Ошибка получения текущего пользователя.');
-          dispatch(logout())
+          dispatch(logout());
         });
     }
   }, []);

@@ -24,11 +24,5 @@ export default async function ProductListingPage({}: ProductListingPage) {
   const totalProducts = data.total_products;
   const products: Product[] = data.products;
 
-  return (
-    <ProductTable
-      columns={columns}
-      data={products}
-      totalItems={totalProducts}
-    />
-  );
+  return <ProductTable columns={columns} data={products} totalItems={totalProducts} />;
 }

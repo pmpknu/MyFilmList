@@ -24,13 +24,7 @@ import { UniqueIdentifier } from '@dnd-kit/core';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 
-export function ColumnActions({
-  title,
-  id
-}: {
-  title: string;
-  id: UniqueIdentifier;
-}) {
+export function ColumnActions({ title, id }: { title: string; id: UniqueIdentifier }) {
   const [open, setIsOpen] = React.useState(false);
   const [name, setName] = React.useState(title);
   const updateCol = useTaskStore((state) => state.updateCol);
@@ -77,10 +71,7 @@ export function ColumnActions({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem
-            onSelect={() => setShowDeleteDialog(true)}
-            className='text-red-600'
-          >
+          <DropdownMenuItem onSelect={() => setShowDeleteDialog(true)} className='text-red-600'>
             Delete Section
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -88,9 +79,7 @@ export function ColumnActions({
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you sure want to delete column?
-            </AlertDialogTitle>
+            <AlertDialogTitle>Are you sure want to delete column?</AlertDialogTitle>
             <AlertDialogDescription>
               NOTE: All tasks related to this category will also be deleted.
             </AlertDialogDescription>

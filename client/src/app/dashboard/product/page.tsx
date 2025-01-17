@@ -45,10 +45,7 @@ export default async function Page(props: pageProps) {
         </div>
         <Separator />
         <ProductTableAction />
-        <Suspense
-          key={key}
-          fallback={<DataTableSkeleton columnCount={5} rowCount={10} />}
-        >
+        <Suspense key={key} fallback={<DataTableSkeleton columnCount={5} rowCount={10} />}>
           <ProductListingPage />
         </Suspense>
       </div>

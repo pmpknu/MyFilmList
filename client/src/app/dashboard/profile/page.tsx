@@ -9,7 +9,7 @@ type pageProps = {
 
 export const metadata: Metadata = {
   ...defaultMetadata,
-  title: 'Профиль | MyFilmList',
+  title: 'Профиль | MyFilmList'
 };
 
 export default async function Page({ searchParams }: pageProps) {

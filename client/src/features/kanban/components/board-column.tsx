@@ -34,14 +34,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
     return tasks.map((task) => task.id);
   }, [tasks]);
 
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging
-  } = useSortable({
+  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
     id: column.id,
     data: {
       type: 'Column',
@@ -127,9 +120,7 @@ export function BoardContainer({ children }: { children: React.ReactNode }) {
           dragging: dndContext.active ? 'active' : 'default'
         })}
       >
-        <div className='flex flex-row items-start justify-center gap-4'>
-          {children}
-        </div>
+        <div className='flex flex-row items-start justify-center gap-4'>{children}</div>
       </div>
       <ScrollBar orientation='horizontal' />
     </ScrollArea>

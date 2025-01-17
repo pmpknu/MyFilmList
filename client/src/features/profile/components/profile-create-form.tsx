@@ -36,10 +36,7 @@ interface ProfileFormType {
   initialData: any | null;
   categories: any;
 }
-const ProfileCreateForm: React.FC<ProfileFormType> = ({
-  initialData,
-  categories
-}) => {
+const ProfileCreateForm: React.FC<ProfileFormType> = ({ initialData, categories }) => {
   const params = useParams();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -182,12 +179,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
       <div className='flex items-center justify-between'>
         <Heading title={title} description={description} />
         {initialData && (
-          <Button
-            disabled={loading}
-            variant='destructive'
-            size='sm'
-            onClick={() => setOpen(true)}
-          >
+          <Button disabled={loading} variant='destructive' size='sm' onClick={() => setOpen(true)}>
             <Trash className='h-4 w-4' />
           </Button>
         )}
@@ -209,9 +201,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
                   className='flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4'
                   aria-current='step'
                 >
-                  <span className='text-sm font-medium text-sky-600'>
-                    {step.id}
-                  </span>
+                  <span className='text-sm font-medium text-sky-600'>{step.id}</span>
                   <span className='text-sm font-medium'>{step.name}</span>
                 </div>
               ) : (
@@ -228,15 +218,10 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
       </div>
       <Separator />
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(processForm)}
-          className='w-full space-y-8'
-        >
+        <form onSubmit={form.handleSubmit(processForm)} className='w-full space-y-8'>
           <div
             className={cn(
-              currentStep === 1
-                ? 'w-full md:inline-block'
-                : 'gap-8 md:grid md:grid-cols-3'
+              currentStep === 1 ? 'w-full md:inline-block' : 'gap-8 md:grid md:grid-cols-3'
             )}
           >
             {currentStep === 0 && (
@@ -248,11 +233,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
                     <FormItem>
                       <FormLabel>First Name</FormLabel>
                       <FormControl>
-                        <Input
-                          disabled={loading}
-                          placeholder='John'
-                          {...field}
-                        />
+                        <Input disabled={loading} placeholder='John' {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -265,11 +246,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
                     <FormItem>
                       <FormLabel>Last Name</FormLabel>
                       <FormControl>
-                        <Input
-                          disabled={loading}
-                          placeholder='Doe'
-                          {...field}
-                        />
+                        <Input disabled={loading} placeholder='Doe' {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -282,11 +259,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input
-                          disabled={loading}
-                          placeholder='johndoe@gmail.com'
-                          {...field}
-                        />
+                        <Input disabled={loading} placeholder='johndoe@gmail.com' {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -357,10 +330,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue
-                              defaultValue={field.value}
-                              placeholder='Select a city'
-                            />
+                            <SelectValue defaultValue={field.value} placeholder='Select a city' />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -381,12 +351,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
             {currentStep === 1 && (
               <>
                 {fields?.map((field, index) => (
-                  <Accordion
-                    type='single'
-                    collapsible
-                    defaultValue='item-1'
-                    key={field.id}
-                  >
+                  <Accordion type='single' collapsible defaultValue='item-1' key={field.id}>
                     <AccordionItem value='item-1'>
                       <AccordionTrigger
                         className={cn(
@@ -423,11 +388,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
                               <FormItem>
                                 <FormLabel>Job title</FormLabel>
                                 <FormControl>
-                                  <Input
-                                    type='text'
-                                    disabled={loading}
-                                    {...field}
-                                  />
+                                  <Input type='text' disabled={loading} {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -440,11 +401,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
                               <FormItem>
                                 <FormLabel>Employer</FormLabel>
                                 <FormControl>
-                                  <Input
-                                    type='text'
-                                    disabled={loading}
-                                    {...field}
-                                  />
+                                  <Input type='text' disabled={loading} {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -457,11 +414,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
                               <FormItem>
                                 <FormLabel>Start date</FormLabel>
                                 <FormControl>
-                                  <Input
-                                    type='date'
-                                    disabled={loading}
-                                    {...field}
-                                  />
+                                  <Input type='date' disabled={loading} {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -474,11 +427,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
                               <FormItem>
                                 <FormLabel>End date</FormLabel>
                                 <FormControl>
-                                  <Input
-                                    type='date'
-                                    disabled={loading}
-                                    {...field}
-                                  />
+                                  <Input type='date' disabled={loading} {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -506,10 +455,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
                                   </FormControl>
                                   <SelectContent>
                                     {countries.map((country) => (
-                                      <SelectItem
-                                        key={country.id}
-                                        value={country.id}
-                                      >
+                                      <SelectItem key={country.id} value={country.id}>
                                         {country.name}
                                       </SelectItem>
                                     ))}
@@ -581,9 +527,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
             {currentStep === 2 && (
               <div>
                 <h1>Completed</h1>
-                <pre className='whitespace-pre-wrap'>
-                  {JSON.stringify(data)}
-                </pre>
+                <pre className='whitespace-pre-wrap'>{JSON.stringify(data)}</pre>
               </div>
             )}
           </div>
@@ -610,11 +554,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
               stroke='currentColor'
               className='h-6 w-6'
             >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M15.75 19.5L8.25 12l7.5-7.5'
-              />
+              <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
             </svg>
           </button>
           <button
@@ -631,11 +571,7 @@ const ProfileCreateForm: React.FC<ProfileFormType> = ({
               stroke='currentColor'
               className='h-6 w-6'
             >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M8.25 4.5l7.5 7.5-7.5 7.5'
-              />
+              <path strokeLinecap='round' strokeLinejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5' />
             </svg>
           </button>
         </div>

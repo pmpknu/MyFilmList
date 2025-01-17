@@ -5,7 +5,7 @@ import defaultMetadata from '@/constants/metadata';
 export const metadata: Metadata = {
   ...defaultMetadata,
   title: 'Вход в аккаунт | MyFilmList',
-  description: 'Страница входа для аутентификации.',
+  description: 'Страница входа для аутентификации.'
 };
 
 export default async function Page() {

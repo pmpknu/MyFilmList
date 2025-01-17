@@ -31,9 +31,7 @@ export default class MovieViewService {
    * @param {number} movieId Movie ID
    * @returns {Promise<AxiosResponse<MovieViewDto>>} Response confirming the view action
    */
-  static async markMovieAsViewed(
-    movieId: number
-  ): Promise<AxiosResponse<MovieViewDto>> {
+  static async markMovieAsViewed(movieId: number): Promise<AxiosResponse<MovieViewDto>> {
     return api.post<MovieViewDto>(`/movies/${movieId}/views`, {});
   }
 
@@ -42,9 +40,7 @@ export default class MovieViewService {
    * @param {number} movieId Movie ID
    * @returns {Promise<AxiosResponse<void>>} Response confirming the unview action
    */
-  static async unmarkMovieAsViewed(
-    movieId: number
-  ): Promise<AxiosResponse<void>> {
+  static async unmarkMovieAsViewed(movieId: number): Promise<AxiosResponse<void>> {
     return api.delete<void>(`/movies/${movieId}/views`);
   }
 

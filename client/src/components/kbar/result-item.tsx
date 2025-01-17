@@ -16,9 +16,7 @@ const ResultItem = React.forwardRef(
   ) => {
     const ancestors = React.useMemo(() => {
       if (!currentRootActionId) return action.ancestors;
-      const index = action.ancestors.findIndex(
-        (ancestor) => ancestor.id === currentRootActionId
-      );
+      const index = action.ancestors.findIndex((ancestor) => ancestor.id === currentRootActionId);
       return action.ancestors.slice(index + 1);
     }, [action.ancestors, currentRootActionId]);
 
@@ -47,9 +45,7 @@ const ResultItem = React.forwardRef(
               <span>{action.name}</span>
             </div>
             {action.subtitle && (
-              <span className='text-sm text-muted-foreground'>
-                {action.subtitle}
-              </span>
+              <span className='text-sm text-muted-foreground'>{action.subtitle}</span>
             )}
           </div>
         </div>

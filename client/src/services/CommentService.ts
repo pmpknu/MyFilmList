@@ -99,10 +99,7 @@ export default class CommentService {
     watchListId: number,
     commentData: CommentDto
   ): Promise<AxiosResponse<CommentDto>> {
-    return api.post<CommentDto>(
-      `/watchlists/${watchListId}/comments`,
-      commentData
-    );
+    return api.post<CommentDto>(`/watchlists/${watchListId}/comments`, commentData);
   }
 
   /**

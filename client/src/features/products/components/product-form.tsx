@@ -26,21 +26,13 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 const MAX_FILE_SIZE = 5000000;
-const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp'
-];
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
 const formSchema = z.object({
   image: z
     .any()
     .refine((files) => files?.length == 1, 'Image is required.')
-    .refine(
-      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-      `Max file size is 5MB.`
-    )
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
     .refine(
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
       '.jpg, .jpeg, .png and .webp files are accepted.'
@@ -81,9 +73,7 @@ export default function ProductForm({
   return (
     <Card className='mx-auto w-full'>
       <CardHeader>
-        <CardTitle className='text-left text-2xl font-bold'>
-          {pageTitle}
-        </CardTitle>
+        <CardTitle className='text-left text-2xl font-bold'>{pageTitle}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -148,9 +138,7 @@ export default function ProductForm({
                         <SelectItem value='electronics'>Electronics</SelectItem>
                         <SelectItem value='clothing'>Clothing</SelectItem>
                         <SelectItem value='home'>Home & Garden</SelectItem>
-                        <SelectItem value='sports'>
-                          Sports & Outdoors
-                        </SelectItem>
+                        <SelectItem value='sports'>Sports & Outdoors</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -164,12 +152,7 @@ export default function ProductForm({
                   <FormItem>
                     <FormLabel>Price</FormLabel>
                     <FormControl>
-                      <Input
-                        type='number'
-                        step='0.01'
-                        placeholder='Enter price'
-                        {...field}
-                      />
+                      <Input type='number' step='0.01' placeholder='Enter price' {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

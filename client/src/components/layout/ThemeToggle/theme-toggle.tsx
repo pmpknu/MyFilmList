@@ -22,15 +22,9 @@ export default function ThemeToggle({}: CompProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
-        <DropdownMenuItem onClick={() => setTheme('light')}>
-          Светлая тема
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
-          Темная тема
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
-          Тема системы
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('light')}>Светлая тема</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>Темная тема</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('system')}>Тема системы</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

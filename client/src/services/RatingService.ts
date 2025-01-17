@@ -46,9 +46,7 @@ export default class RatingService {
    * @param {number} movieId Movie ID
    * @returns {Promise<AxiosResponse<void>>} Response confirming the deletion
    */
-  static async deleteRatingForMovie(
-    movieId: number
-  ): Promise<AxiosResponse<void>> {
+  static async deleteRatingForMovie(movieId: number): Promise<AxiosResponse<void>> {
     return api.delete<void>(`/movies/${movieId}/ratings`);
   }
 

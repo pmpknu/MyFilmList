@@ -3,9 +3,11 @@ import { UserDto } from '@/interfaces/user/dto/UserDto';
 import { NavItem } from 'types';
 
 export const hasAccess = (item: NavItem, user: UserDto | null | undefined): boolean => {
-  return !(item.requiresGuest && user) &&
-    !(item.requiresRole && !user?.roles?.includes(item.requiresRole));
-}
+  return (
+    !(item.requiresGuest && user) &&
+    !(item.requiresRole && !user?.roles?.includes(item.requiresRole))
+  );
+};
 
 //Info: The following data is used for the sidebar navigation and Cmd K bar.
 export const navItems: NavItem[] = [

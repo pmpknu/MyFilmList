@@ -14,9 +14,7 @@ export default class AuthService {
    * @param {Credentials} credentials Username & Password
    * @returns {Promise<AxiosResponse<AuthenticationDto>>} User's data and token
    */
-  static async login(
-    credentials: SignInDto
-  ): Promise<AxiosResponse<AuthenticationDto>> {
+  static async login(credentials: SignInDto): Promise<AxiosResponse<AuthenticationDto>> {
     return api.post<AuthenticationDto>('/auth/sign-in', credentials);
   }
 
@@ -25,9 +23,7 @@ export default class AuthService {
    * @param {Credentials} credentials Username & Email & Password
    * @returns {Promise<AxiosResponse<AuthenticationDto>>} User's data and token
    */
-  static async register(
-    credentials: SignUpDto
-  ): Promise<AxiosResponse<AuthenticationDto>> {
+  static async register(credentials: SignUpDto): Promise<AxiosResponse<AuthenticationDto>> {
     return api.post<AuthenticationDto>('/auth/sign-up', credentials);
   }
 
@@ -54,7 +50,7 @@ export default class AuthService {
       tokenType: 'Bearer',
       user: Storage.get(USER_KEY),
       accessToken: Storage.get(TOKEN_KEY),
-      refreshToken: Storage.get(REFRESH_TOKEN_KEY),
+      refreshToken: Storage.get(REFRESH_TOKEN_KEY)
     } satisfies AuthenticationDto;
   }
 
@@ -73,10 +69,7 @@ export default class AuthService {
    * @param {string} newPassword New password
    * @returns {Promise<AxiosResponse<void>>}
    */
-  static async resetPassword(
-    token: string,
-    newPassword: string
-  ): Promise<AxiosResponse<void>> {
+  static async resetPassword(token: string, newPassword: string): Promise<AxiosResponse<void>> {
     return api.post<void>('/auth/reset-password', { token, newPassword });
   }
 
@@ -85,9 +78,7 @@ export default class AuthService {
    * @param {string} email User's email
    * @returns {Promise<AxiosResponse<void>>}
    */
-  static async requestPasswordReset(
-    email: string
-  ): Promise<AxiosResponse<void>> {
+  static async requestPasswordReset(email: string): Promise<AxiosResponse<void>> {
     return api.post<void>('/auth/request-password-reset', { email });
   }
 
@@ -96,9 +87,7 @@ export default class AuthService {
    * @param {string} refreshToken Refresh token
    * @returns {Promise<AxiosResponse<AuthenticationDto>>}
    */
-  static async refreshToken(
-    refreshToken: string
-  ): Promise<AxiosResponse<AuthenticationDto>> {
+  static async refreshToken(refreshToken: string): Promise<AxiosResponse<AuthenticationDto>> {
     return api.post<AuthenticationDto>('/auth/refresh', { refreshToken });
   }
 

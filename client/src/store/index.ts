@@ -5,8 +5,8 @@ import requestReducer from './slices/request-slice';
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    requests: requestReducer,
-  },
+    requests: requestReducer
+  }
 });
 
 export type AppStore = typeof store;

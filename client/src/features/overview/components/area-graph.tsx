@@ -42,15 +42,10 @@ export function AreaGraph() {
     <Card>
       <CardHeader>
         <CardTitle>Area Chart - Stacked</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription>
+        <CardDescription>Showing total visitors for the last 6 months</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer
-          config={chartConfig}
-          className='aspect-auto h-[310px] w-full'
-        >
+        <ChartContainer config={chartConfig} className='aspect-auto h-[310px] w-full'>
           <AreaChart
             accessibilityLayer
             data={chartData}
@@ -67,10 +62,7 @@ export function AreaGraph() {
               tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator='dot' />}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator='dot' />} />
             <Area
               dataKey='mobile'
               type='natural'
