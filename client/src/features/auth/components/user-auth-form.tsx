@@ -27,8 +27,17 @@ import * as z from 'zod';
 import PasswordForm from '@/components/forms/password-form';
 
 const formSchema = z.object({
-  username: z.string(),
-  password: z.string()
+  username: z
+    .string()
+    .min(3, { message: "Имя пользователя должно содержать от 3 до 63 символов" })
+    .max(63, { message: "Имя пользователя должно содержать от 3 до 63 символов" })
+    .nonempty({ message: "Имя пользователя не может быть пустым" }),
+
+  password: z
+    .string()
+    .min(6, { message: "Длина пароля должна быть от 6 до 127" })
+    .max(127, { message: "Длина пароля должна быть от 6 до 127" })
+    .nonempty({ message: "Пароль не может быть пустым" }),
 });
 
 export type UserFormValue = z.infer<typeof formSchema>;
@@ -115,7 +124,7 @@ export default function UserAuthForm({ className, ...props }: React.ComponentPro
                 </Button>
                 <div className='text-center text-sm'>
                   Нет аккаунта?{' '}
-                  <a href='#' className='underline underline-offset-4'>
+                  <a href='/auth/sign-up' className='underline underline-offset-4'>
                     Зарегистрируйтесь
                   </a>
                 </div>
@@ -144,7 +153,7 @@ export default function UserAuthForm({ className, ...props }: React.ComponentPro
       </Card>
       <div className='text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary'>
         Нажимая «Продолжить», вы соглашаетесь с нашими <a href='#'>Условиями обслуживания</a> и{' '}
-        <a href='#'>Политикой конфиденциальности</a>.
+        <a href='/privacy'>Политикой конфиденциальности</a>.
       </div>
     </div>
   );
