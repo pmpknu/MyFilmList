@@ -88,7 +88,7 @@ public class AuthenticationController {
 
   @Operation(summary = "Выйти из аккаунта", security = @SecurityRequirement(name = "bearerAuth"))
   @DeleteMapping("/sign-out")
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Void> signOut(@RequestParam(defaultValue = "false") boolean onAllDevices) {
     authenticationService.signOut(onAllDevices);
     return ResponseEntity.noContent().build();
