@@ -22,6 +22,8 @@
     --accent-foreground: 20 12% 32%;
     --destructive: 11 80% 22%;
     --destructive-foreground: 11 80% 82%;
+    --warning: 46 80% 18%;
+    --warning-foreground: 50 80% 82%;
     --ring: 248 25% 84%;
     --radius: 0.5rem;
     --chart-1: 248 25% 84%;
@@ -58,6 +60,8 @@
     --accent-foreground: 253 13% 74%;
     --destructive: 339.2 90.36% 51.18%;
     --destructive-foreground: 0 0% 100%;
+    --warning: 46 47% 60%;
+    --warning-foreground: 46 20% 8%;
     --ring: 253 91% 58%;
     --chart-1: 253 91% 58%;
     --chart-2: 253 13% 74%;

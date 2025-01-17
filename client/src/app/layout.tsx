@@ -13,6 +13,7 @@ import KBar from '@/components/kbar';
 import AppSidebar from '@/components/layout/app-sidebar';
 import Header from '@/components/layout/header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import ConfirmationReminder from '@/components/layout/confirmation-reminder';
 
 export const metadata: Metadata = {
   ...defaultMetadata,
@@ -42,6 +43,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <AppSidebar />
                 <SidebarInset>
                   <Header />
+                  <ConfirmationReminder />
                   {/* page main content */}
                   {children}
                   {/* page main content ends */}
