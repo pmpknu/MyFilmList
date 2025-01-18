@@ -6,7 +6,6 @@ import { REFRESH_TOKEN_KEY, TOKEN_KEY, USER_KEY } from '@/constants';
 import { AuthenticationDto } from '@/interfaces/auth/dto/AuthenticationDto';
 import { SignInDto } from '@/interfaces/auth/dto/SignInDto';
 import { SignUpDto } from '@/interfaces/auth/dto/SignUpDto';
-import { UserDto } from '@/interfaces/user/dto/UserDto';
 
 export default class AuthService {
   /**
@@ -96,16 +95,16 @@ export default class AuthService {
    * @param {string} token Confirmation token
    * @returns {Promise<AxiosResponse<void>>}
    */
-  static async confirmEmail(token: string): Promise<AxiosResponse<void>> {
-    return api.post<void>('/auth/confirm', { token });
+  static async confirmEmail(token: string): Promise<AxiosResponse<AuthenticationDto>> {
+    return api.post<AuthenticationDto>('/auth/confirm', { verificationToken: token });
   }
 
   /**
    * Resend confirmation email
    * @returns {Promise<AxiosResponse<void>>}
    */
-  static async resendConfirmation(): Promise<AxiosResponse<UserDto>> {
-    return instance.get<UserDto>('/auth/resend-confirmation');
+  static async resendConfirmation(): Promise<AxiosResponse<AuthenticationDto>> {
+    return instance.get<AuthenticationDto>('/auth/resend-confirmation');
   }
 
   /**

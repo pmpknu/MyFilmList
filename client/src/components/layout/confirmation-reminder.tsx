@@ -8,7 +8,6 @@ import { useSelector } from '@/hooks/use-redux';
 import { Role } from '@/interfaces/role/model/UserRole';
 import AuthService from '@/services/AuthService';
 import ApiError from '@/lib/utils/ApiError';
-import { cn } from '@/lib/utils';
 
 export default function ConfirmationReminder() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

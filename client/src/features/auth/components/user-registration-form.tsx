@@ -81,12 +81,11 @@ export default function UserRegistrationForm({ className, ...props }: React.Comp
   }, [router, isUserAuthenticated]);
 
   const onSubmit = async (data: UserRegistrationFormValue) => {
-    console.log('HERE!');
     startTransition(async () => {
       try {
         const response = await AuthService.register(data as SignUpDto);
         AuthService.setAuth(response.data);
-        dispatch(register({ user: response.data.user }));
+        dispatch(register(response.data));
 
         toast.success('Аккаунт успешно создан!');
         router.push(callbackUrl ?? '/');
