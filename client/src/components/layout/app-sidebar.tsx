@@ -1,6 +1,5 @@
 'use client';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,9 +25,13 @@ import {
   SidebarRail,
   useSidebar
 } from '@/components/ui/sidebar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { navItems, hasAccess } from '@/constants/navigation';
 import { BadgeCheck, Bell, ChevronRight, ChevronsUpDown, CreditCard, LogOut } from 'lucide-react';
 import Link from 'next/link';
+import { toast } from 'sonner';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { Icons } from '../icons';
@@ -37,6 +40,7 @@ import { RootState } from '@/store';
 import AuthService from '@/services/AuthService';
 import { logout } from '@/store/slices/auth-slice';
 import { cn } from '@/lib/utils';
+import SignOutDialog from '@/features/auth/components/sign-out-dialog';
 
 export const company = {
   name: 'MFL',
@@ -51,10 +55,11 @@ export default function AppSidebar() {
 
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const handleSignOut = async () => {
-    await AuthService.signOut();
+  const handleSubmit = async (onAllDevices: boolean) => {
+    await AuthService.signOut(onAllDevices);
     AuthService.forgetAuth();
     dispatch(logout());
+    toast.success('Вы успешно вышли из аккаунта!');
   };
 
   return (
@@ -148,33 +153,13 @@ export default function AppSidebar() {
           )}
           {user && (
             <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton
-                    size='lg'
-                    className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
-                  >
-                    <Avatar className='h-8 w-8 rounded-full'>
-                      <AvatarImage src={user.photo || ''} alt={user.username} />
-                      <AvatarFallback className='rounded-full'>
-                        {user.username.slice(0, 2)?.toUpperCase() || 'JD'}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className='grid flex-1 text-left text-sm leading-tight'>
-                      <span className='truncate font-semibold'>{user.username}</span>
-                      <span className='truncate text-xs'>{user.email}</span>
-                    </div>
-                    <ChevronsUpDown className='ml-auto size-4' />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
-                  side='bottom'
-                  align='end'
-                  sideOffset={4}
-                >
-                  <DropdownMenuLabel className='p-0 font-normal'>
-                    <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+              <AlertDialog>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarMenuButton
+                      size='lg'
+                      className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+                    >
                       <Avatar className='h-8 w-8 rounded-full'>
                         <AvatarImage src={user.photo || ''} alt={user.username} />
                         <AvatarFallback className='rounded-full'>
@@ -183,32 +168,59 @@ export default function AppSidebar() {
                       </Avatar>
                       <div className='grid flex-1 text-left text-sm leading-tight'>
                         <span className='truncate font-semibold'>{user.username}</span>
-                        <span className='truncate text-xs'> {user.email}</span>
+                        <span className='truncate text-xs'>{user.email}</span>
                       </div>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <BadgeCheck />
-                      Account
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <CreditCard />
-                      Billing
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Bell />
-                      Notifications
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => handleSignOut()}>
-                    <LogOut />
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                      <ChevronsUpDown className='ml-auto size-4' />
+                    </SidebarMenuButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
+                    side='bottom'
+                    align='end'
+                    sideOffset={4}
+                  >
+                    <DropdownMenuLabel className='p-0 font-normal'>
+                      <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+                        <Avatar className='h-8 w-8 rounded-full'>
+                          <AvatarImage src={user.photo || ''} alt={user.username} />
+                          <AvatarFallback className='rounded-full'>
+                            {user.username.slice(0, 2)?.toUpperCase() || 'JD'}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className='grid flex-1 text-left text-sm leading-tight'>
+                          <span className='truncate font-semibold'>{user.username}</span>
+                          <span className='truncate text-xs'> {user.email}</span>
+                        </div>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem>
+                        <BadgeCheck />
+                        Account
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <CreditCard />
+                        Billing
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Bell />
+                        Notifications
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+
+                    <DropdownMenuSeparator />
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem>
+                        <LogOut />
+                        Log out
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <SignOutDialog user={user} handleSubmit={handleSubmit} />
+              </AlertDialog>
             </SidebarMenuItem>
           )}
         </SidebarMenu>

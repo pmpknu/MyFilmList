@@ -81,9 +81,7 @@ export default function ResetPasswordForm({ className, ...props }: React.Compone
         toast.success('Пароль успешно изменен.', {
           description: 'Данные для входа в аккаунт успешно изменены.'
         });
-        setTimeout(() => {
-          router.push('/auth/sign-in');
-        }, 3000);
+        router.push('/auth/sign-in');
       } catch (error) {
         const axiosError = error as AxiosError;
 
