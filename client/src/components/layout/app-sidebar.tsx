@@ -29,7 +29,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { authenticatedItems, guestItems, navItems } from '@/constants/navigation';
-import { BadgeCheck, Bell, ChevronRight, ChevronsUpDown, LogOut } from 'lucide-react';
+import { ChevronRight, ChevronsUpDown, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { usePathname, useRouter } from 'next/navigation';
@@ -64,11 +64,13 @@ export default function AppSidebar() {
   }, []);
 
   const handleSubmit = async (onAllDevices: boolean) => {
-    await AuthService.signOut(onAllDevices);
-    AuthService.forgetAuth();
-    dispatch(logout());
-    toast.success('Вы успешно вышли из аккаунта!');
     router.push('/');
+    toast.success('Вы успешно вышли из аккаунта!');
+    setTimeout(async () => {
+      await AuthService.signOut(onAllDevices);
+      AuthService.forgetAuth();
+      dispatch(logout());
+    }, 500);
   };
 
   return (

@@ -5,8 +5,22 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
+import { ShieldAlert, UserCheck } from 'lucide-react';
 import { UserDto } from '@/interfaces/user/dto/UserDto';
 import { getAvatarSvg } from './avatar/generator';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter
+} from '@/components/ui/card';
+import PageContainer from '@/components/layout/page-container';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Role } from '@/interfaces/role/model/UserRole';
 
 export default function UserView({
   user,
@@ -21,25 +35,121 @@ export default function UserView({
   canDelete?: boolean;
   canManageRoles?: boolean;
 }) {
+  const isAdmin = user.roles.includes(Role.ROLE_ADMIN);
+  const isModerator =
+    user.roles.includes(Role.ROLE_MODERATOR) && !user.roles.includes(Role.ROLE_ADMIN);
+
+  const userPosts = [
+    { id: 1, title: 'My first post', content: 'This is the content of the first post.' },
+    { id: 2, title: 'My second post', content: 'This is the content of the second post.' }
+  ];
+
+  const roleBadges = {
+    ROLE_USER: 'border-muted',
+    ROLE_MODERATOR: 'border-primary bg-primary/10',
+    ROLE_ADMIN: 'border-destructive bg-destructive/10'
+  };
+
+  const roleClasses = isAdmin
+    ? 'border-destructive bg-destructive/10'
+    : isModerator
+      ? 'border-primary bg-primary/10'
+      : 'border-muted';
+
   return (
-    <div className='flex items-center rounded-lg bg-white p-6 shadow-md'>
-      <div className='flex-shrink-0'>
-        {user?.photo ? (
-          <Image
-            src={user?.photo}
-            alt={`${user?.username}'s photo`}
-            width={100}
-            height={100}
-            className='rounded-full'
-          />
-        ) : (
-          <div dangerouslySetInnerHTML={{ __html: getAvatarSvg(user?.username).toString() }}></div>
-        )}
+    <PageContainer>
+      <div className='container mx-auto max-w-5xl p-4'>
+        <Card className={`mb-6 border ${roleClasses}`}>
+          <div className='flex flex-col md:flex-row md:items-stretch'>
+            <div className='relative mx-auto flex-shrink-0 md:mx-0 md:w-1/3 md:overflow-hidden md:rounded-l-lg'>
+              <div className='mt-4 flex h-32 w-32 items-center justify-center rounded-full bg-muted md:mt-0 md:aspect-square md:h-auto md:w-full md:rounded-none'>
+                <Image
+                  src={user?.photo ?? getAvatarSvg(user?.username).toDataUri()}
+                  alt={`${user.username}'s avatar`}
+                  fill
+                  className='object-cover'
+                />
+              </div>
+            </div>
+
+            <CardContent className='flex w-full flex-col items-center p-6 md:w-2/3 md:items-start'>
+              <CardTitle className='flex items-center gap-x-2 text-4xl font-bold'>
+                {isAdmin && <ShieldAlert className='h-8 w-8 text-destructive' />}
+                {isModerator && <UserCheck className='h-8 w-8 text-primary' />}
+                {user.username}
+              </CardTitle>
+              <p className='mt-2 text-lg text-muted-foreground'>
+                <a
+                  className={`${isAdmin ? 'text-destructive' : 'text-blue-600'} hover:underline dark:${isAdmin ? 'text-destructive' : 'text-blue-500'}`}
+                  href={`mailto:${user.email}`}
+                >
+                  {user.email}
+                </a>
+              </p>
+
+              <Separator className='my-4' />
+              {user.bio && (
+                <div className='mt-4'>
+                  <h3 className='text-lg font-semibold'>О себе:</h3>
+                  <p className='mt-2 text-muted-foreground'>{user.bio}</p>
+                </div>
+              )}
+
+              <div className='mt-4'>
+                <div className='flex items-center gap-2'>
+                  <h3 className='text-lg font-semibold'>Уровни доступа:</h3>
+                  <div className='flex flex-wrap gap-2'>
+                    {user.roles.length > 0 ? (
+                      [...user.roles]
+                        .sort((a, b) => {
+                          const rolePriority: Record<string, number> = {
+                            ROLE_USER: 1,
+                            ROLE_MODERATOR: 2,
+                            ROLE_ADMIN: 3
+                          };
+                          return (rolePriority[a] || 99) - (rolePriority[b] || 99);
+                        })
+                        .map((role, index) => (
+                          <Badge
+                            key={index}
+                            variant='secondary'
+                            className={`border text-sm ${roleBadges[role]}`}
+                          >
+                            {role.replace('ROLE_', '').toLowerCase()}
+                          </Badge>
+                        ))
+                    ) : (
+                      <p className='text-muted-foreground'>Нет уровней доступа</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </div>
+        </Card>
+
+        <Separator className='my-6' />
+
+        <div>
+          <h2 className='mb-4 text-2xl font-semibold'>Последние посты</h2>
+          <div className='space-y-4'>
+            {userPosts.length > 0 ? (
+              userPosts.map((post) => (
+                <Card key={post.id} className='border'>
+                  <CardHeader>
+                    <CardTitle className='text-lg font-bold'>{post.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className='text-sm text-muted-foreground'>{post.content}</p>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <p className='text-muted-foreground'>No posts available</p>
+            )}
+          </div>
+        </div>
       </div>
-      <div className='ml-4'>
-        <h2 className='text-xl font-bold'>{user?.username}</h2>
-        <p className='text-gray-600'>{user?.email}</p>
-      </div>
-    </div>
+    </PageContainer>
   );
 }

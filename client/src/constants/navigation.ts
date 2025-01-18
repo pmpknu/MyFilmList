@@ -27,17 +27,11 @@ export const navItems: NavItem[] = [
 export const authenticatedOnlyItems: NavItem[] = [
   {
     title: 'Учётная запись',
-    url: '#',
+    url: '/auth/me',
     icon: 'user',
+    shortcut: ['m', 'm'],
     isActive: true,
-    items: [
-      {
-        title: 'Профиль',
-        url: '/auth/me',
-        icon: 'userPen',
-        shortcut: ['m', 'm']
-      }
-    ]
+    items: []
   }
 ];
 
