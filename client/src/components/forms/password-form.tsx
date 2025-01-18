@@ -28,7 +28,10 @@ export default function PasswordForm({
             <div className='flex items-center'>
               <FormLabel className='font-semibold'>Пароль</FormLabel>
               {forgetPassword && (
-                <a href='#' className='ml-auto text-sm underline-offset-2 hover:underline'>
+                <a
+                  href='/auth/request-password-reset'
+                  className='ml-auto text-sm underline-offset-2 hover:underline'
+                >
                   Забыли пароль?
                 </a>
               )}

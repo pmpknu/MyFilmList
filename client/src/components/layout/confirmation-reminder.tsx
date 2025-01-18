@@ -8,6 +8,7 @@ import { useSelector } from '@/hooks/use-redux';
 import { Role } from '@/interfaces/role/model/UserRole';
 import AuthService from '@/services/AuthService';
 import ApiError from '@/lib/utils/ApiError';
+import { extractSeconds } from '@/lib/utils/error-handling';
 
 export default function ConfirmationReminder() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -15,12 +16,6 @@ export default function ConfirmationReminder() {
 
   const [isEnabled, setEnabled] = useState<boolean>(true);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
-
-  const extractSeconds = (input: string): number | null => {
-    const regex = /(\d+)\s*seconds/;
-    const match = input.match(regex);
-    return match ? parseInt(match[1], 10) : null;
-  };
 
   useEffect(() => {
     if (timeLeft === 0) {

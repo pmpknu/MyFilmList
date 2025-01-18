@@ -69,7 +69,10 @@ export default class AuthService {
    * @returns {Promise<AxiosResponse<void>>}
    */
   static async resetPassword(token: string, newPassword: string): Promise<AxiosResponse<void>> {
-    return api.post<void>('/auth/reset-password', { token, newPassword });
+    return api.post<void>('/auth/reset-password', {
+      passwordResetToken: token,
+      password: newPassword
+    });
   }
 
   /**
