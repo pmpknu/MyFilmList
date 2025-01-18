@@ -19,7 +19,7 @@ import { RootState } from '@/store';
 import { login } from '@/store/slices/auth-slice';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
@@ -48,6 +48,7 @@ export default function UserAuthForm({ className, ...props }: React.ComponentPro
   const router = useRouter();
 
   const isUserAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const [requestSent, setRequestSent] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
@@ -62,16 +63,18 @@ export default function UserAuthForm({ className, ...props }: React.ComponentPro
   });
 
   useEffect(() => {
-    if (isUserAuthenticated) {
+    if (isUserAuthenticated && !requestSent) {
       router.push(callbackUrl ?? '/');
       toast.error('Вы уже вошли в аккаунт.');
     }
-  }, [router, isUserAuthenticated]);
+  }, [router, isUserAuthenticated, requestSent]);
 
   const onSubmit = async (data: UserFormValue) => {
     startTransition(async () => {
       try {
         const response = await AuthService.login(data as SignInDto);
+        setRequestSent(true);
+
         AuthService.setAuth(response.data);
         dispatch(login({ user: response.data.user }));
 

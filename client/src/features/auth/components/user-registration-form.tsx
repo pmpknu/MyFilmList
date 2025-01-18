@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
@@ -59,6 +59,7 @@ export default function UserRegistrationForm({ className, ...props }: React.Comp
   const router = useRouter();
 
   const isUserAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const [requestSent, setRequestSent] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
@@ -74,16 +75,18 @@ export default function UserRegistrationForm({ className, ...props }: React.Comp
   });
 
   useEffect(() => {
-    if (isUserAuthenticated) {
+    if (isUserAuthenticated && !requestSent) {
       router.push(callbackUrl ?? '/');
       toast.error('Вы уже вошли в аккаунт.');
     }
-  }, [router, isUserAuthenticated]);
+  }, [router, isUserAuthenticated, requestSent]);
 
   const onSubmit = async (data: UserRegistrationFormValue) => {
     startTransition(async () => {
       try {
         const response = await AuthService.register(data as SignUpDto);
+        setRequestSent(true);
+
         AuthService.setAuth(response.data);
         dispatch(register(response.data));
 

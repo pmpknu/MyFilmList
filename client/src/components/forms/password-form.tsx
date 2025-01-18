@@ -10,23 +10,27 @@ import { Button } from '../ui/button';
 export default function PasswordForm({
   form,
   loading,
-  forgetPassword
+  forgetPassword,
+  name = 'password',
+  title = 'Пароль'
 }: {
   form: UseFormReturn<any>;
   loading: boolean;
   forgetPassword: boolean;
+  name?: string;
+  title?: string;
 }) {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
 
   return (
     <FormField
       control={form.control}
-      name='password'
+      name={name}
       render={({ field }) => (
         <FormItem>
           <div className='grid gap-2'>
             <div className='flex items-center'>
-              <FormLabel className='font-semibold'>Пароль</FormLabel>
+              <FormLabel className='font-semibold'>{title}</FormLabel>
               {forgetPassword && (
                 <a
                   href='/auth/request-password-reset'

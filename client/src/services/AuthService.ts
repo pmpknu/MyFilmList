@@ -66,10 +66,13 @@ export default class AuthService {
    * Reset password
    * @param {string} token Reset token
    * @param {string} newPassword New password
-   * @returns {Promise<AxiosResponse<void>>}
+   * @returns {Promise<AxiosResponse<AuthenticationDto>>}
    */
-  static async resetPassword(token: string, newPassword: string): Promise<AxiosResponse<void>> {
-    return api.post<void>('/auth/reset-password', {
+  static async resetPassword(
+    token: string,
+    newPassword: string
+  ): Promise<AxiosResponse<AuthenticationDto>> {
+    return api.post<AuthenticationDto>('/auth/reset-password', {
       passwordResetToken: token,
       password: newPassword
     });
@@ -96,7 +99,7 @@ export default class AuthService {
   /**
    * Confirm email
    * @param {string} token Confirmation token
-   * @returns {Promise<AxiosResponse<void>>}
+   * @returns {Promise<AxiosResponse<AuthenticationDto>>}
    */
   static async confirmEmail(token: string): Promise<AxiosResponse<AuthenticationDto>> {
     return api.post<AuthenticationDto>('/auth/confirm', { verificationToken: token });
@@ -104,7 +107,7 @@ export default class AuthService {
 
   /**
    * Resend confirmation email
-   * @returns {Promise<AxiosResponse<void>>}
+   * @returns {Promise<AxiosResponse<AuthenticationDto>>}
    */
   static async resendConfirmation(): Promise<AxiosResponse<AuthenticationDto>> {
     return instance.get<AuthenticationDto>('/auth/resend-confirmation');
