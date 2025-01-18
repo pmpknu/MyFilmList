@@ -28,12 +28,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { authenticatedItems, guestItems } from '@/constants/navigation';
+import { authenticatedItems, guestItems, navItems } from '@/constants/navigation';
 import { BadgeCheck, Bell, ChevronRight, ChevronsUpDown, CreditCard, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { usePathname } from 'next/navigation';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icons } from '../icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
@@ -54,6 +54,12 @@ export default function AppSidebar() {
   const { state, isMobile } = useSidebar();
 
   const user = useSelector((state: RootState) => state.auth.user);
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSubmit = async (onAllDevices: boolean) => {
     await AuthService.signOut(onAllDevices);
@@ -81,7 +87,7 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Overview</SidebarGroupLabel>
           <SidebarMenu>
-            {(user ? authenticatedItems : guestItems).map((item) => {
+            {(!mounted ? navItems : user ? authenticatedItems : guestItems).map((item) => {
               const Icon = item.icon ? Icons[item.icon] : Icons.logo;
               const subItems = item?.items;
 
@@ -187,27 +193,12 @@ export default function AppSidebar() {
                         </div>
                       </div>
                     </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem>
-                        <BadgeCheck />
-                        Account
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <CreditCard />
-                        Billing
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Bell />
-                        Notifications
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
 
                     <DropdownMenuSeparator />
                     <AlertDialogTrigger asChild>
                       <DropdownMenuItem>
-                        <LogOut />
-                        Log out
+                        <LogOut className='mr-4 h-4 w-4 text-gray-500' />
+                        Выйти
                       </DropdownMenuItem>
                     </AlertDialogTrigger>
                   </DropdownMenuContent>

@@ -14,6 +14,13 @@ export const navItems: NavItem[] = [
     shortcut: ['f', 'f'],
     isActive: false,
     items: []
+  },
+  {
+    title: 'Учётная запись',
+    url: '#',
+    icon: 'user',
+    isActive: true,
+    items: []
   }
 ];
 
