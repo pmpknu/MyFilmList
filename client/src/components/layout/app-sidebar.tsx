@@ -132,16 +132,20 @@ export default function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem className='px-4'>
-            <div className='text-balance text-center text-xs text-muted-foreground [&_a]:underline-offset-4 hover:[&_a]:text-foreground hover:[&_a]:underline'>
-              <Link href='/terms-of-service'>Пользовательское соглашение</Link>
-            </div>
-          </SidebarMenuItem>
-          <SidebarMenuItem className={cn('px-4', user ? '' : 'pb-12')}>
-            <div className='text-balance text-center text-xs text-muted-foreground [&_a]:underline-offset-4 hover:[&_a]:text-foreground hover:[&_a]:underline'>
-              <Link href='/privacy'>Политика конфиденциальности</Link>
-            </div>
-          </SidebarMenuItem>
+          {state === 'expanded' && (
+            <>
+              <SidebarMenuItem className='px-4'>
+                <div className='truncate text-center text-xs text-muted-foreground [&_a]:underline-offset-4 hover:[&_a]:text-foreground hover:[&_a]:underline'>
+                  <Link href='/terms-of-service'>Пользовательское соглашение</Link>
+                </div>
+              </SidebarMenuItem>
+              <SidebarMenuItem className={cn('px-4', user ? '' : 'pb-12')}>
+                <div className='truncate text-center text-xs text-muted-foreground [&_a]:underline-offset-4 hover:[&_a]:text-foreground hover:[&_a]:underline'>
+                  <Link href='/privacy'>Политика конфиденциальности</Link>
+                </div>
+              </SidebarMenuItem>
+            </>
+          )}
           {user && (
             <SidebarMenuItem>
               <DropdownMenu>
