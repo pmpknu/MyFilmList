@@ -3,7 +3,12 @@ import { z } from "zod";
 export const formSchema = z.object({
   title: z.string().min(1).max(255).nonempty("У фильма должно быть название"),
   description: z.string().optional(),
-  releaseDate: z.date().optional(),
+  releaseDate: z.string()
+    .refine((value) => {
+      const regex = /^\d{4}-\d{2}-\d{2}$/;
+      return regex.test(value);
+    }, { message: "Invalid date format, expected YYYY-ММ-DD", })
+    .optional(),
   duration: z.number().int().positive("Если продолжительность неизвестна, оставьте поле пустым").optional(),
   categories: z.string().max(127).optional(),
   tags: z.string().max(127).optional(),

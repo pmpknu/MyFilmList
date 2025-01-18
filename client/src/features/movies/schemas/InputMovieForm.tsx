@@ -1,97 +1,72 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-import { Button } from '@/components/ui/button';
-import { useForm } from 'react-hook-form';
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { cn } from '@/lib/utils';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { TagManager } from "./TagManager";
-import { MovieCreateDto } from '@/interfaces/movie/dto/MovieCreateDto';
-import { MovieUpdateDto } from '@/interfaces/movie/dto/MovieUpdateDto';
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Calendar } from "@/components/ui/calendar";
-import { InputMovieInfoProps } from 'types/InputMovieInfoProps';
+import { Card, CardContent } from "@/components/ui/card";
+import { TagManager } from "./TagManager";
 import { formSchema, MovieFormValue } from "./MovieSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-const InputMovieInfo = <T extends MovieCreateDto | MovieUpdateDto>({
+interface InputMovieInfoProps<T> {
+  onSubmit: (data: T) => void;
+  initialData?: Partial<MovieFormValue>;
+}
+
+const InputMovieInfo = <T extends MovieFormValue>({
   onSubmit,
   initialData,
 }: InputMovieInfoProps<T>) => {
-  const [isFilm, setIsFilm] = useState(false);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [releaseDate, setReleaseDate] = useState<Date>();
-  const [duration, setDuration] = useState<number | undefined>();
-  const [categories, setCategories] = useState<string[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
-  const [productionCountry, setProductionCountry] = useState<string[]>([]);
-  const [genres, setGenres] = useState<string[]>([]);
-  const [actors, setActors] = useState<string[]>([]);
-  const [director, setDirector] = useState<string[]>([]);
-  const [seasons, setSeasons] = useState(0);
-  const [series, setSeries] = useState(0);
-
   const form = useForm<MovieFormValue>({
     resolver: zodResolver(formSchema),
-   });
+    defaultValues: {
+      ...initialData,
+    },
+  });
 
-  const doif = (condition: any, callback: (param: any) => void) => {
-    if (condition) callback(condition);
-  };
+  const [isFilm, setIsFilm] = React.useState(form.watch("seasons") === undefined);
 
   useEffect(() => {
     if (initialData) {
-      doif(initialData.title, setTitle);
-      doif(initialData.description, setDescription);
-      doif(initialData.releaseDate, setReleaseDate);
-      doif(initialData.duration, setDuration);
-      doif(initialData.categories?.split(","), setCategories);
-      doif(initialData.tags?.split(","), setTags);
-      doif(initialData.productionCountry?.split(","), setProductionCountry);
-      doif(initialData.genres?.split(","), setGenres);
-      doif(initialData.actors?.split(","), setActors);
-      doif(initialData.director?.split(","), setDirector);
-      doif(initialData.seasons, setSeasons);
-      doif(initialData.series, setSeries);
-      doif(initialData.seasons === undefined, setIsFilm);
+      form.reset({
+        ...initialData,
+      });
     }
-  }, [initialData]);
+  }, [initialData, form]);
+
+  const handleSubmit = (data: MovieFormValue) => {
+    const formattedData: MovieFormValue = {
+      ...data,
+    };
+
+    onSubmit(formattedData as T);
+  };
+
+  const handleSplitItems = (initialItems: string | null | undefined) => {
+    if (!initialItems) return [];
+    return initialItems?.split(',');
+  }
+
+  const hadnleJoinItems = (items: string[]) => items.join(',');
 
   const handleToggle = (checked: boolean) => {
     setIsFilm(checked);
     if (checked) {
-      setSeasons(0);
-      setSeries(0);
+      form.setValue("seasons", undefined);
+      form.setValue("series", undefined);
     }
-  };
-
-  const handleSubmit = () => {
-    const data = {
-      title,
-      description,
-      releaseDate,
-      duration,
-      categories: categories.join(","),
-      tags: tags.join(","),
-      productionCountry: productionCountry.join(","),
-      genres: genres.join(","),
-      actors: actors.join(","),
-      director: director.join(","),
-      seasons: isFilm ? undefined : seasons,
-      series: isFilm ? undefined : series,
-    } as T;
-
-    onSubmit(data);
   };
 
   return (
@@ -106,79 +81,96 @@ const InputMovieInfo = <T extends MovieCreateDto | MovieUpdateDto>({
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Movie Title"
-                      required
-                      {...field}
-                    />
+                    <Input placeholder="Movie Title" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
+              control={form.control}
               name="description"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Description"
-                    />
+                    <Textarea placeholder="Description" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
+              control={form.control}
               name="releaseDate"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Release Date</FormLabel>
                   <FormControl>
                     <Calendar
-                      selected={releaseDate}
-                      onSelect={setReleaseDate}
-                      mode="single"
-                    />
+                      selected={field.value ? new Date(field.value) : undefined}
+                      onSelect={ (val) => {
+                        if (val) {
+                          const year = val?.getFullYear();
+                          const month = (val?.getMonth() + 1).toString().padStart(2, '0');
+                          const day = val?.getDate().toString().padStart(2, '0');
+                          const formattedDate = `${year}-${month}-${day}`;
+                          field.onChange(formattedDate);
+                        }
+
+                      }}
+                      mode="single" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
+              control={form.control}
               name="duration"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Duration</FormLabel>
                   <FormControl>
                     <Input
-                      type="number"
-                      value={duration?.toString() || ""}
-                      onChange={(e) => setDuration(Number(e.target.value))}
                       placeholder="Duration in minutes"
-                    />
+                      onChange={(e) => form.setValue("duration", Number(e.target.value))}
+                      type="number" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <TagManager
-              initialItems={categories}
-              onItemsChange={setCategories}
+              initialItems={handleSplitItems(form.watch("categories"))}
+              onItemsChange={(items) => form.setValue("categories", hadnleJoinItems(items))}
               label="Categories"
             />
-            <TagManager initialItems={tags} onItemsChange={setTags} label="Tags" />
             <TagManager
-              initialItems={productionCountry}
-              onItemsChange={setProductionCountry}
+              initialItems={handleSplitItems(form.watch("tags"))}
+              onItemsChange={(items) => form.setValue("tags", hadnleJoinItems(items))}
+              label="Tags"
+            />
+            <TagManager
+              initialItems={handleSplitItems(form.watch("productionCountry"))}
+              onItemsChange={(items) => form.setValue("productionCountry", hadnleJoinItems(items))}
               label="Production Country"
             />
-            <TagManager initialItems={genres} onItemsChange={setGenres} label="Genres" />
-            <TagManager initialItems={actors} onItemsChange={setActors} label="Actors" />
-            <TagManager initialItems={director} onItemsChange={setDirector} label="Director" />
+            <TagManager
+              initialItems={handleSplitItems(form.watch("genres"))}
+              onItemsChange={(items) => form.setValue("genres", hadnleJoinItems(items))}
+              label="Genres"
+            />
+            <TagManager
+              initialItems={handleSplitItems(form.watch("actors"))}
+              onItemsChange={(items) => form.setValue("actors", hadnleJoinItems(items))}
+              label="Actors"
+            />
+            <TagManager
+              initialItems={handleSplitItems(form.watch("director"))}
+              onItemsChange={(items) => form.setValue("director", hadnleJoinItems(items))}
+              label="Director"
+            />
             <FormField
               name="isFilm"
               render={() => (
@@ -192,34 +184,26 @@ const InputMovieInfo = <T extends MovieCreateDto | MovieUpdateDto>({
             {!isFilm && (
               <>
                 <FormField
+                  control={form.control}
                   name="seasons"
-                  render={() => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Seasons</FormLabel>
                       <FormControl>
-                        <Input
-                          type="number"
-                          value={seasons.toString()}
-                          onChange={(e) => setSeasons(Number(e.target.value))}
-                          placeholder="Number of seasons"
-                        />
+                        <Input placeholder="Number of seasons" onChange={(e) => form.setValue("seasons", Number(e.target.value))} type="number" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
+                  control={form.control}
                   name="series"
-                  render={() => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Series</FormLabel>
                       <FormControl>
-                        <Input
-                          type="number"
-                          value={series.toString()}
-                          onChange={(e) => setSeries(Number(e.target.value))}
-                          placeholder="Number of series"
-                        />
+                        <Input placeholder="Number of series" onChange={(e) => form.setValue("series", Number(e.target.value))} type="number" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

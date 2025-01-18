@@ -1,7 +1,7 @@
 export interface MovieCreateDto {
   title: string;
   description?: string;
-  releaseDate?: Date;
+  releaseDate?: string; // ISO 8601
   duration?: number;
   categories?: string;
   tags?: string;
