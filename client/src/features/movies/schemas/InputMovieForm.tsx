@@ -32,6 +32,7 @@ const InputMovieInfo = <T extends MovieFormValue>({
   const form = useForm<MovieFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      title: "",
       ...initialData,
     },
   });
@@ -134,8 +135,10 @@ const InputMovieInfo = <T extends MovieFormValue>({
                   <FormControl>
                     <Input
                       placeholder="Duration in minutes"
+                      {...field}
                       onChange={(e) => form.setValue("duration", Number(e.target.value))}
-                      type="number" />
+                      value={field.value || ''}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -175,7 +178,6 @@ const InputMovieInfo = <T extends MovieFormValue>({
               name="isFilm"
               render={() => (
                 <FormItem>
-                  <FormLabel>Type</FormLabel>
                   <Switch checked={isFilm} onCheckedChange={handleToggle} />
                   {isFilm ? "Film" : "Series"}
                 </FormItem>
@@ -190,7 +192,13 @@ const InputMovieInfo = <T extends MovieFormValue>({
                     <FormItem>
                       <FormLabel>Seasons</FormLabel>
                       <FormControl>
-                        <Input placeholder="Number of seasons" onChange={(e) => form.setValue("seasons", Number(e.target.value))} type="number" />
+                        <Input 
+                          type="number"
+                          placeholder="Number of seasons"
+                          {...field}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          value={field.value || ''} // Ensure value is never undefined
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -203,7 +211,13 @@ const InputMovieInfo = <T extends MovieFormValue>({
                     <FormItem>
                       <FormLabel>Series</FormLabel>
                       <FormControl>
-                        <Input placeholder="Number of series" onChange={(e) => form.setValue("series", Number(e.target.value))} type="number" />
+                        <Input 
+                          type="number"
+                          placeholder="Number of series"
+                          {...field}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          value={field.value || ''}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
