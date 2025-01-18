@@ -29,7 +29,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { authenticatedItems, guestItems, navItems } from '@/constants/navigation';
-import { BadgeCheck, Bell, ChevronRight, ChevronsUpDown, CreditCard, LogOut } from 'lucide-react';
+import { BadgeCheck, Bell, ChevronRight, ChevronsUpDown, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { usePathname } from 'next/navigation';
@@ -41,6 +41,7 @@ import AuthService from '@/services/AuthService';
 import { logout } from '@/store/slices/auth-slice';
 import { cn } from '@/lib/utils';
 import SignOutDialog from '@/features/auth/components/sign-out-dialog';
+import { getAvatarSvg } from '@/features/users/components/avatar/generator';
 
 export const company = {
   name: 'MFL',
@@ -161,11 +162,9 @@ export default function AppSidebar() {
                       className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
                     >
                       <Avatar className='h-8 w-8 rounded-full'>
-                        <AvatarImage src={user.photo || ''} alt={user.username} />
-                        <AvatarFallback className='rounded-full'>
-                          {user.username.slice(0, 2)?.toUpperCase() || 'JD'}
-                        </AvatarFallback>
-                      </Avatar>
+                        <AvatarImage src={user.photo} alt={user.username} />
+                        <AvatarFallback className='rounded-full' dangerouslySetInnerHTML={{ __html: getAvatarSvg(user.username).toString() }}/>
+                        </Avatar>
                       <div className='grid flex-1 text-left text-sm leading-tight'>
                         <span className='truncate font-semibold'>{user.username}</span>
                         <span className='truncate text-xs'>{user.email}</span>
@@ -182,10 +181,8 @@ export default function AppSidebar() {
                     <DropdownMenuLabel className='p-0 font-normal'>
                       <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                         <Avatar className='h-8 w-8 rounded-full'>
-                          <AvatarImage src={user.photo || ''} alt={user.username} />
-                          <AvatarFallback className='rounded-full'>
-                            {user.username.slice(0, 2)?.toUpperCase() || 'JD'}
-                          </AvatarFallback>
+                          <AvatarImage src={user.photo} alt={user.username} />
+                          <AvatarFallback className='rounded-full' dangerouslySetInnerHTML={{ __html: getAvatarSvg(user.username).toString() }}/>
                         </Avatar>
                         <div className='grid flex-1 text-left text-sm leading-tight'>
                           <span className='truncate font-semibold'>{user.username}</span>
