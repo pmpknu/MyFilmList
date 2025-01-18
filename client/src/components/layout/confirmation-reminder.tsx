@@ -9,6 +9,7 @@ import { Role } from '@/interfaces/role/model/UserRole';
 import AuthService from '@/services/AuthService';
 import ApiError from '@/lib/utils/ApiError';
 import { extractSeconds } from '@/lib/utils/error-handling';
+import { description } from '@/features/overview/components/bar-graph';
 
 export default function ConfirmationReminder() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -45,14 +46,14 @@ export default function ConfirmationReminder() {
             setEnabled(() => true);
           }, secondsLeft * 1000);
 
-          toast.error(
-            `Время между отправками подтверждений должно составлять не менее 1 минуты. Пожалуйста, попробуйте через ${secondsLeft} секунд.`
-          );
+          toast.error(`Пожалуйста, попробуйте через ${secondsLeft} секунд.`, {
+            description: 'Время между отправками подтверждений должно составлять не менее 1 минуты'
+          });
         } else {
-          toast.error(`Ошибка при повторной отправки подтверждения: ${err.message}.`);
+          toast.error('Ошибка при повторной отправке подтверждения.', { description: err.message });
         }
       } else {
-        toast.error('Ошибка при повторной отправки подтверждения.');
+        toast.error('Ошибка при повторной отправке подтверждения.');
       }
     });
   };

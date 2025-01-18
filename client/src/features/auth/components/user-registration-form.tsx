@@ -96,7 +96,7 @@ export default function UserRegistrationForm({ className, ...props }: React.Comp
         const axiosError = error as AxiosError;
         if (axiosError.response) {
           const err = axiosError.response.data as ApiError;
-          toast.error(`Ошибка создания аккаунта: ${err.message}.`);
+          toast.error('Ошибка создания аккаунта', { description: err.message });
         } else {
           toast.error(`Ошибка создания аккаунта.`);
         }

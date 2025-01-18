@@ -83,7 +83,7 @@ export default function ConfirmViewPage() {
 
   useEffect(() => {
     if (!token) {
-      toast.error('Ошибка подтверждения. Токен не обнаружен.');
+      toast.error('Ошибка подтверждения.', { description: 'Токен не обнаружен.' });
       setTimeout(() => {
         router.push('/');
       }, 3000);
@@ -127,9 +127,9 @@ export default function ConfirmViewPage() {
 
           const axiosError = error as AxiosError;
           if (axiosError.response) {
-            toast.error(
-              'Токен подтверждения истёк или не найден. Попробуйте подтвердить аккаунт еще раз.'
-            );
+            toast.error('Токен подтверждения истёк или не найден.', {
+              description: 'Попробуйте подтвердить аккаунт еще раз.'
+            });
           } else {
             toast.error('Ошибка подтверждения.');
           }

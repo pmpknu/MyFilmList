@@ -81,7 +81,7 @@ export default function UserAuthForm({ className, ...props }: React.ComponentPro
         toast.success('Вход в аккаунт прошел успешно!');
         router.push(callbackUrl ?? '/');
       } catch (error) {
-        toast.error('Ошибка входа. Пожалуйста, проверьте ваши учетные данные.');
+        toast.error('Ошибка входа', { description: 'Пожалуйста, проверьте ваши учетные данные.' });
       }
     });
   };

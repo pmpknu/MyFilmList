@@ -106,7 +106,7 @@ export default function RequestPasswordResetForm({
 
               toast.error(`Пожалуйста, попробуйте через ${secondsLeft} секунд.`, {
                 description:
-                  'Время между отправками подтверждений должно составлять не менее 1 минуты.'
+                  'Время между отправками запросов на изменение пароля должно составлять не менее 1 минуты.'
               });
             } else {
               toast.error('Произошла ошибка.', { description: err.message });
