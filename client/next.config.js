@@ -5,7 +5,8 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'mfl.maxbarsukov.ru',
-        port: '80'
+        port: '',
+        pathname: '/storage/mfl/**'
       }
     ]
   },
