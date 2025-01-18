@@ -1,14 +1,10 @@
 import { Icons } from '@/components/icons';
-import { Role } from '@/interfaces/role/model/UserRole';
 
 export interface NavItem {
   title: string;
   url: string;
   disabled?: boolean;
   external?: boolean;
-  requiresAuth?: boolean;
-  requiresGuest?: boolean;
-  requiresRole?: Role;
   shortcut?: [string, string];
   icon?: keyof typeof Icons;
   label?: string;

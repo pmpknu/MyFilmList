@@ -1,5 +1,5 @@
 'use client';
-import { hasAccess, navItems } from '@/constants/navigation';
+import { authenticatedItems, guestItems } from '@/constants/navigation';
 import { KBarAnimator, KBarPortal, KBarPositioner, KBarProvider, KBarSearch } from 'kbar';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
@@ -19,8 +19,7 @@ export default function KBar({ children }: { children: React.ReactNode }) {
   // These action are for the navigation
   const actions = useMemo(
     () =>
-      navItems
-        .filter((item) => hasAccess(item, user))
+      (user ? authenticatedItems : guestItems)
         .flatMap((navItem) => {
           // Only include base action if the navItem has a real URL and is not just a container
           const baseAction =
@@ -39,7 +38,6 @@ export default function KBar({ children }: { children: React.ReactNode }) {
           // Map child items into actions
           const childActions =
             navItem.items
-              ?.filter((item) => hasAccess(item, user))
               ?.map((childItem) => ({
                 id: `${childItem.title.toLowerCase()}Action`,
                 name: childItem.title,

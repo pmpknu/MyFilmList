@@ -28,7 +28,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { navItems, hasAccess } from '@/constants/navigation';
+import { authenticatedItems, guestItems } from '@/constants/navigation';
 import { BadgeCheck, Bell, ChevronRight, ChevronsUpDown, CreditCard, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -81,11 +81,10 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Overview</SidebarGroupLabel>
           <SidebarMenu>
-            {navItems
-              .filter((item) => hasAccess(item, user))
+            {(user ? authenticatedItems : guestItems)
               .map((item) => {
                 const Icon = item.icon ? Icons[item.icon] : Icons.logo;
-                const subItems = item?.items?.filter((item) => hasAccess(item, user));
+                const subItems = item?.items;
 
                 return subItems && subItems?.length > 0 ? (
                   <Collapsible
