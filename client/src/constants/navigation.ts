@@ -1,7 +1,7 @@
 import { NavItem } from 'types';
 
 export function merge(a: NavItem[], b: NavItem[], prop: keyof NavItem) {
-  var reduced = a.filter(aItem => !b.find(bItem => aItem[prop] === bItem[prop]))
+  var reduced = a.filter((aItem) => !b.find((bItem) => aItem[prop] === bItem[prop]));
   return reduced.concat(b);
 }
 
@@ -29,7 +29,7 @@ export const authenticatedOnlyItems: NavItem[] = [
         url: '/users/me',
         icon: 'userPen',
         shortcut: ['m', 'm']
-      },
+      }
     ]
   }
 ];
