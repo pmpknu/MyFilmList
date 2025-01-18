@@ -33,7 +33,7 @@ export const authenticatedOnlyItems: NavItem[] = [
     items: [
       {
         title: 'Профиль',
-        url: '/users/me',
+        url: '/auth/me',
         icon: 'userPen',
         shortcut: ['m', 'm']
       }

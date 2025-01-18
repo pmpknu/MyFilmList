@@ -32,7 +32,7 @@ import { authenticatedItems, guestItems, navItems } from '@/constants/navigation
 import { BadgeCheck, Bell, ChevronRight, ChevronsUpDown, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Icons } from '../icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -50,6 +50,7 @@ export const company = {
 };
 
 export default function AppSidebar() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const pathname = usePathname();
   const { state, isMobile } = useSidebar();
@@ -67,6 +68,7 @@ export default function AppSidebar() {
     AuthService.forgetAuth();
     dispatch(logout());
     toast.success('Вы успешно вышли из аккаунта!');
+    router.push('/');
   };
 
   return (
@@ -163,8 +165,13 @@ export default function AppSidebar() {
                     >
                       <Avatar className='h-8 w-8 rounded-full'>
                         <AvatarImage src={user.photo} alt={user.username} />
-                        <AvatarFallback className='rounded-full' dangerouslySetInnerHTML={{ __html: getAvatarSvg(user.username).toString() }}/>
-                        </Avatar>
+                        <AvatarFallback
+                          className='rounded-full'
+                          dangerouslySetInnerHTML={{
+                            __html: getAvatarSvg(user.username).toString()
+                          }}
+                        />
+                      </Avatar>
                       <div className='grid flex-1 text-left text-sm leading-tight'>
                         <span className='truncate font-semibold'>{user.username}</span>
                         <span className='truncate text-xs'>{user.email}</span>
@@ -179,16 +186,23 @@ export default function AppSidebar() {
                     sideOffset={4}
                   >
                     <DropdownMenuLabel className='p-0 font-normal'>
-                      <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                        <Avatar className='h-8 w-8 rounded-full'>
-                          <AvatarImage src={user.photo} alt={user.username} />
-                          <AvatarFallback className='rounded-full' dangerouslySetInnerHTML={{ __html: getAvatarSvg(user.username).toString() }}/>
-                        </Avatar>
-                        <div className='grid flex-1 text-left text-sm leading-tight'>
-                          <span className='truncate font-semibold'>{user.username}</span>
-                          <span className='truncate text-xs'> {user.email}</span>
+                      <a href='/auth/me'>
+                        <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+                          <Avatar className='h-8 w-8 rounded-full'>
+                            <AvatarImage src={user.photo} alt={user.username} />
+                            <AvatarFallback
+                              className='rounded-full'
+                              dangerouslySetInnerHTML={{
+                                __html: getAvatarSvg(user.username).toString()
+                              }}
+                            />
+                          </Avatar>
+                          <div className='grid flex-1 text-left text-sm leading-tight'>
+                            <span className='truncate font-semibold'>{user.username}</span>
+                            <span className='truncate text-xs'> {user.email}</span>
+                          </div>
                         </div>
-                      </div>
+                      </a>
                     </DropdownMenuLabel>
 
                     <DropdownMenuSeparator />
