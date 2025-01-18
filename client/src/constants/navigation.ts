@@ -49,5 +49,21 @@ export const navItems: NavItem[] = [
         icon: 'register'
       }
     ]
+  },
+  {
+    title: 'Фильмы',
+    url: '#',
+    icon: 'pizza',
+    isActive: true,
+    items: [
+      {
+        title: 'Создать фильм',
+        requiresAuth: true,
+        requiresRole: Role.ROLE_ADMIN,
+        url: '/movies/create',
+        icon: 'add',
+        shortcut: ['c', 'c']
+      },
+    ]
   }
 ];
