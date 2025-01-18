@@ -22,6 +22,34 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Role } from '@/interfaces/role/model/UserRole';
 
+export function UserBio({ bio, className }: { bio: string | undefined; className: String }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleToggle = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
+  return (
+    <>
+      {bio && (
+        <div className='mt-2 grid grid-cols-[max-content_1fr] items-start gap-x-4'>
+          <p className='text-md font-semibold'>О себе:</p>
+          <div className='max-w-sm text-muted-foreground'>
+            <p className={`transition-all ${isExpanded ? 'line-clamp-none' : 'line-clamp-3'}`}>
+              {bio}
+            </p>
+            {bio.split(' ').length > 20 && (
+              <button onClick={handleToggle} className={`${className} hover:underline`}>
+                {isExpanded ? 'Скрыть' : 'Показать полностью'}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 export default function UserView({
   user,
   currentUser = false,
@@ -72,7 +100,7 @@ export default function UserView({
               </div>
             </div>
 
-            <CardContent className='flex w-full flex-col items-center p-6 md:w-2/3 md:items-start'>
+            <CardContent className='flex w-full flex-col items-center p-6 pl-12 md:w-2/3 md:items-start'>
               <CardTitle className='flex items-center gap-x-2 text-4xl font-bold'>
                 {isAdmin && <ShieldAlert className='h-8 w-8 text-destructive' />}
                 {isModerator && <UserCheck className='h-8 w-8 text-primary' />}
@@ -88,16 +116,9 @@ export default function UserView({
               </p>
 
               <Separator className='my-4' />
-              {user.bio && (
-                <div className='mt-4'>
-                  <h3 className='text-lg font-semibold'>О себе:</h3>
-                  <p className='mt-2 text-muted-foreground'>{user.bio}</p>
-                </div>
-              )}
-
               <div className='mt-4'>
                 <div className='flex items-center gap-2'>
-                  <h3 className='text-lg font-semibold'>Уровни доступа:</h3>
+                  <p className='text-md font-semibold'>Уровни доступа:</p>
                   <div className='flex flex-wrap gap-2'>
                     {user.roles.length > 0 ? (
                       [...user.roles]
@@ -123,6 +144,11 @@ export default function UserView({
                     )}
                   </div>
                 </div>
+
+                <UserBio
+                  bio={user.bio}
+                  className={isAdmin ? 'text-destructive' : 'text-blue-600'}
+                />
               </div>
             </CardContent>
           </div>
