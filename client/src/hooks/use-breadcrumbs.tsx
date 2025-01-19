@@ -15,6 +15,10 @@ export type BreadcrumbItem = {
 
 // This allows to add custom title as well
 const routeMapping: Record<string, BreadcrumbItem[]> = {
+  // Special pages
+  '/privacy': [{ title: 'Политика конфиденциальности', link: '/privacy' }],
+  '/terms-of-service': [{ title: 'Пользовательское соглашение', link: '/terms-of-service' }],
+
   // Authentication
   '/auth': [{ title: 'Учётная запись', link: '/auth' }],
   '/auth/me': [
@@ -55,7 +59,6 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
     { title: 'Dashboard', link: '/dashboard' },
     { title: 'Product', link: '/dashboard/product' }
   ]
-  // Add more custom mappings as needed
 };
 
 // Function to fetch user data based on ID

@@ -1,4 +1,5 @@
 'use client';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,11 +8,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
+
+import { useRouter } from 'next/navigation';
 import { isAdmin, isExactlyModerator } from '@/features/users/rbac';
 import { useBreadcrumbs, BreadcrumbItem as BreadcrumbType } from '@/hooks/use-breadcrumbs';
 import { UserDto } from '@/interfaces/user/dto/UserDto';
-import { Slash } from 'lucide-react';
-import { Fragment } from 'react';
+import { ChevronLeft, Slash } from 'lucide-react';
+import { usePageTrackerStore } from 'react-page-tracker';
+import { Fragment, useEffect } from 'react';
 
 const UserBreadcrumb = ({ user, title }: { user: UserDto; title: string }) => {
   return (
@@ -24,8 +28,13 @@ const UserBreadcrumb = ({ user, title }: { user: UserDto; title: string }) => {
 };
 
 export function Breadcrumbs() {
+  const router = useRouter();
   const items = useBreadcrumbs();
+  const isFirstPage = usePageTrackerStore((state) => state.isFirstPage);
+
   if (items.length === 0) return null;
+
+  const canGoBack = window.history?.length && window.history.length > 1;
 
   const itemContent = (item: BreadcrumbType) => {
     console.log(item);
@@ -39,6 +48,18 @@ export function Breadcrumbs() {
   return (
     <Breadcrumb>
       <BreadcrumbList>
+        {/* Добавляем кнопку "Назад" */}
+        <BreadcrumbItem>
+          <button
+            disabled={!canGoBack}
+            className={`flex items-center gap-2 text-muted-foreground ${canGoBack ? 'hover:text-foreground' : 'cursor-default'}`}
+            onClick={() => isFirstPage ? router.push('/') : router.back()}
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span className='sr-only'>Назад</span>
+          </button>
+        </BreadcrumbItem>
+
         {items.map((item, index) => (
           <Fragment key={item.title}>
             {index !== items.length - 1 && (
