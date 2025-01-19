@@ -65,6 +65,9 @@ export const guestOnlyItems: NavItem[] = [
       }
     ]
   },
+];
+
+export const adminOnlyItems: NavItem[] = [
   {
     title: 'Фильмы',
     url: '#',
@@ -73,19 +76,35 @@ export const guestOnlyItems: NavItem[] = [
     items: [
       {
         title: 'Создать фильм',
-        requiresAuth: true,
-        requiresRole: Role.ROLE_ADMIN,
         url: '/movies/create',
         icon: 'add',
-        shortcut: ['c', 'c']
+        shortcut: ['c', 'm']
       },
       {
         title: 'Обновить фильм',
-        requiresAuth: true,
-        requiresRole: Role.ROLE_ADMIN,
         url: '/movies/update',
         icon: 'post',
-        shortcut: ['u', 'u']
+        shortcut: ['u', 'm']
+      }
+    ]
+  },
+  {
+    title: 'Коллекции',
+    url: '#',
+    icon: 'media',
+    isActive: true,
+    items: [
+      {
+        title: 'Создать коллекцию',
+        url: '/watchlists/create',
+        icon: 'add',
+        shortcut: ['c', 'w']
+      },
+      {
+        title: 'Обновить коллекцию',
+        url: '/watchlists/update',
+        icon: 'post',
+        shortcut: ['u', 'w']
       }
     ]
   }
@@ -93,3 +112,4 @@ export const guestOnlyItems: NavItem[] = [
 
 export const guestItems: NavItem[] = merge(navItems, guestOnlyItems, 'title');
 export const authenticatedItems: NavItem[] = merge(navItems, authenticatedOnlyItems, 'title');
+export const adminItems: NavItem[] = merge(authenticatedItems, adminOnlyItems, 'title');

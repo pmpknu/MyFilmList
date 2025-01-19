@@ -1,11 +1,12 @@
 'use client';
-import { authenticatedItems, guestItems } from '@/constants/navigation';
+import { adminItems, authenticatedItems, guestItems } from '@/constants/navigation';
 import { KBarAnimator, KBarPortal, KBarPositioner, KBarProvider, KBarSearch } from 'kbar';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import RenderResults from './render-result';
 import useThemeSwitching from './use-theme-switching';
 import { useSelector } from '@/hooks/use-redux';
+import { Role } from '@/interfaces/role/model/UserRole';
 
 export default function KBar({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function KBar({ children }: { children: React.ReactNode }) {
   // These action are for the navigation
   const actions = useMemo(
     () =>
-      (user ? authenticatedItems : guestItems).flatMap((navItem) => {
+      (user ? ( user.roles.includes(Role.ROLE_ADMIN) ? adminItems : authenticatedItems ) : guestItems).flatMap((navItem) => {
         // Only include base action if the navItem has a real URL and is not just a container
         const baseAction =
           navItem.url !== '#'
