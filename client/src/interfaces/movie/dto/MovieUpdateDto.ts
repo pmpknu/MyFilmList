@@ -3,7 +3,7 @@ import { JsonNullable } from 'types/json-nullable';
 export interface MovieUpdateDto {
   title: JsonNullable<string>;
   description?: JsonNullable<string>;
-  releaseDate?: JsonNullable<Date>;
+  releaseDate?: JsonNullable<string>;
   duration?: JsonNullable<number>;
   categories?: JsonNullable<string>;
   tags?: JsonNullable<string>;
