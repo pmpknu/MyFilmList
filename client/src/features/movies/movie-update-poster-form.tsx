@@ -4,7 +4,14 @@ import { useParams, useRouter } from 'next/navigation';
 import { FileUploader } from '@/components/file-uploader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -31,7 +38,10 @@ interface MoviePosterUpdateFormProps {
   pageTitle: string;
 }
 
-export default function MoviePosterUpdateForm({ initialData, pageTitle }: MoviePosterUpdateFormProps) {
+export default function MoviePosterUpdateForm({
+  initialData,
+  pageTitle
+}: MoviePosterUpdateFormProps) {
   const router = useRouter();
   const { id } = useParams();
 
@@ -65,16 +75,16 @@ export default function MoviePosterUpdateForm({ initialData, pageTitle }: MovieP
   }
 
   return (
-    <Card className="mx-auto w-full">
+    <Card className='mx-auto w-full'>
       <CardHeader>
-        <CardTitle className="text-left text-2xl font-bold">{pageTitle}</CardTitle>
+        <CardTitle className='text-left text-2xl font-bold'>{pageTitle}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
             <FormField
               control={form.control}
-              name="image"
+              name='image'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Постер фильма</FormLabel>
@@ -90,9 +100,11 @@ export default function MoviePosterUpdateForm({ initialData, pageTitle }: MovieP
                 </FormItem>
               )}
             />
-            <div className="flex justify-between">
-              <Button type="submit">Обновить постер</Button>
-              <Button variant="secondary" onClick={handleSkip}>Пропустить</Button>
+            <div className='flex justify-between'>
+              <Button type='submit'>Обновить постер</Button>
+              <Button variant='secondary' onClick={handleSkip}>
+                Пропустить
+              </Button>
             </div>
           </form>
         </Form>

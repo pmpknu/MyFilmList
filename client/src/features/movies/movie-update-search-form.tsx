@@ -17,7 +17,7 @@ export default function MoviesUpdateSearchForm() {
   const router = useRouter();
   const isUserAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const isUserAdmin = useSelector(
-    (state: RootState) => !!(state.auth.user?.roles.includes(Role.ROLE_ADMIN))
+    (state: RootState) => !!state.auth.user?.roles.includes(Role.ROLE_ADMIN)
   );
 
   const [movies, setMovies] = useState<MovieWithAdditionalInfoDto[]>([]);
@@ -43,11 +43,11 @@ export default function MoviesUpdateSearchForm() {
           {
             filterKey: 'title',
             operation: 'cn',
-            value: query,
-          },
-        ],
+            value: query
+          }
+        ]
       };
-      
+
       const response = await MovieService.searchMovies(searchParams);
       const pagedResponse = response.data as Paged<MovieWithAdditionalInfoDto>;
       setMovies(pagedResponse.content);
@@ -77,20 +77,16 @@ export default function MoviesUpdateSearchForm() {
 
   return (
     <>
-    <Input
-        type="search"
-        placeholder="Поиск фильмов..."
+      <Input
+        type='search'
+        placeholder='Поиск фильмов...'
         value={searchQuery}
         onChange={(e) => handleSearchChange(e.target.value)}
-        className="mb-4"
+        className='mb-4'
       />
-    <div className="container mx-auto p-4">
-      <MovieGrid
-        loading={loading}
-        movies={movies}
-        onClick={handleMovieClick}
-      />
-    </div>
+      <div className='container mx-auto p-4'>
+        <MovieGrid loading={loading} movies={movies} onClick={handleMovieClick} />
+      </div>
     </>
   );
 }

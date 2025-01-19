@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useEffect, useState } from 'react';
 import FeedService from '@/services/FeedService';
 import { MovieGrid } from '@/features/movies/schemas/MovieGrid';
@@ -33,7 +33,7 @@ export const FeedMovieForm: React.FC = () => {
   };
 
   return (
-    <div className="feed-movie-form">
+    <div className='feed-movie-form'>
       {movies.length === 0 ? (
         <p>No recommended movies found</p>
       ) : (

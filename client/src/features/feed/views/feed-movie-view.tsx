@@ -1,4 +1,4 @@
-import { FeedMovieForm } from "../forms/feed-movie-form";
+import { FeedMovieForm } from '../forms/feed-movie-form';
 
 export default function FeedMovieView() {
   return (

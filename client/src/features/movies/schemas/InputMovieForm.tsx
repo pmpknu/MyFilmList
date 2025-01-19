@@ -1,26 +1,26 @@
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent } from "@/components/ui/card";
-import { TagManager } from "./TagManager";
-import { formSchema, MovieFormValue } from "./MovieSchema";
-import { MovieCreateDto } from "@/interfaces/movie/dto/MovieCreateDto";
-import { MovieUpdateDto } from "@/interfaces/movie/dto/MovieUpdateDto";
+  FormMessage
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { Calendar } from '@/components/ui/calendar';
+import { Card, CardContent } from '@/components/ui/card';
+import { TagManager } from './TagManager';
+import { formSchema, MovieFormValue } from './MovieSchema';
+import { MovieCreateDto } from '@/interfaces/movie/dto/MovieCreateDto';
+import { MovieUpdateDto } from '@/interfaces/movie/dto/MovieUpdateDto';
 
 interface InputMovieInfoProps<T extends MovieCreateDto | MovieUpdateDto> {
   onSubmit: (data: T) => void;
@@ -29,7 +29,7 @@ interface InputMovieInfoProps<T extends MovieCreateDto | MovieUpdateDto> {
 
 const InputMovieInfo = <T extends MovieFormValue>({
   onSubmit,
-  initialData,
+  initialData
 }: InputMovieInfoProps<T>) => {
   const preprocessInitialData = (data: Partial<T> | undefined) => {
     if (!data) return {};
@@ -39,34 +39,34 @@ const InputMovieInfo = <T extends MovieFormValue>({
       return acc;
     }, {} as Partial<T>);
     return {
-      ...processedData,
+      ...processedData
     };
-  }
+  };
 
   const form = useForm<MovieFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
+      title: '',
       releaseDate: undefined,
       duration: undefined,
-      ...preprocessInitialData(initialData),
-    },
+      ...preprocessInitialData(initialData)
+    }
   });
 
-  const [isFilm, setIsFilm] = React.useState(form.watch("seasons") === undefined);
+  const [isFilm, setIsFilm] = React.useState(form.watch('seasons') === undefined);
 
   useEffect(() => {
     if (initialData) {
-      console.log("RESETING FORM by data: ", preprocessInitialData(initialData));
+      console.log('RESETING FORM by data: ', preprocessInitialData(initialData));
       form.reset({
-        ...preprocessInitialData(initialData),
+        ...preprocessInitialData(initialData)
       });
     }
   }, [initialData, form]);
 
   const handleSubmit = (data: MovieFormValue) => {
     const formattedData: MovieFormValue = {
-      ...data,
+      ...data
     };
 
     onSubmit(formattedData as T);
@@ -75,15 +75,15 @@ const InputMovieInfo = <T extends MovieFormValue>({
   const handleSplitItems = (initialItems: string | null | undefined) => {
     if (!initialItems) return [];
     return initialItems?.split(',');
-  }
+  };
 
   const hadnleJoinItems = (items: string[]) => items.join(',');
 
   const handleToggle = (checked: boolean) => {
     setIsFilm(checked);
     if (checked) {
-      form.setValue("seasons", undefined);
-      form.setValue("series", undefined);
+      form.setValue('seasons', undefined);
+      form.setValue('series', undefined);
     }
   };
 
@@ -91,15 +91,15 @@ const InputMovieInfo = <T extends MovieFormValue>({
     <Card>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-6">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col gap-6'>
             <FormField
               control={form.control}
-              name="title"
+              name='title'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Movie Title" {...field} />
+                    <Input placeholder='Movie Title' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -107,16 +107,12 @@ const InputMovieInfo = <T extends MovieFormValue>({
             />
             <FormField
               control={form.control}
-              name="description"
+              name='description'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Description"
-                      {...field}
-                      value={field.value || ''}
-                    />
+                    <Textarea placeholder='Description' {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -124,7 +120,7 @@ const InputMovieInfo = <T extends MovieFormValue>({
             />
             <FormField
               control={form.control}
-              name="releaseDate"
+              name='releaseDate'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Release Date</FormLabel>
@@ -132,7 +128,7 @@ const InputMovieInfo = <T extends MovieFormValue>({
                     <Calendar
                       {...field}
                       selected={field.value ? new Date(field.value) : undefined}
-                      onSelect={ (val) => {
+                      onSelect={(val) => {
                         if (val) {
                           const year = val?.getFullYear();
                           const month = (val?.getMonth() + 1).toString().padStart(2, '0');
@@ -143,7 +139,8 @@ const InputMovieInfo = <T extends MovieFormValue>({
                           field.onChange(undefined);
                         }
                       }}
-                      mode="single" />
+                      mode='single'
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -151,15 +148,20 @@ const InputMovieInfo = <T extends MovieFormValue>({
             />
             <FormField
               control={form.control}
-              name="duration"
+              name='duration'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Duration</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Duration in minutes"
+                      placeholder='Duration in minutes'
                       {...field}
-                      onChange={(e) => form.setValue("duration", e.target.value ? Number(e.target.value) : undefined)}
+                      onChange={(e) =>
+                        form.setValue(
+                          'duration',
+                          e.target.value ? Number(e.target.value) : undefined
+                        )
+                      }
                       value={field.value || ''}
                     />
                   </FormControl>
@@ -168,41 +170,41 @@ const InputMovieInfo = <T extends MovieFormValue>({
               )}
             />
             <TagManager
-              initialItems={handleSplitItems(form.watch("categories"))}
-              onItemsChange={(items) => form.setValue("categories", hadnleJoinItems(items))}
-              label="Categories"
+              initialItems={handleSplitItems(form.watch('categories'))}
+              onItemsChange={(items) => form.setValue('categories', hadnleJoinItems(items))}
+              label='Categories'
             />
             <TagManager
-              initialItems={handleSplitItems(form.watch("tags"))}
-              onItemsChange={(items) => form.setValue("tags", hadnleJoinItems(items))}
-              label="Tags"
+              initialItems={handleSplitItems(form.watch('tags'))}
+              onItemsChange={(items) => form.setValue('tags', hadnleJoinItems(items))}
+              label='Tags'
             />
             <TagManager
-              initialItems={handleSplitItems(form.watch("productionCountry"))}
-              onItemsChange={(items) => form.setValue("productionCountry", hadnleJoinItems(items))}
-              label="Production Country"
+              initialItems={handleSplitItems(form.watch('productionCountry'))}
+              onItemsChange={(items) => form.setValue('productionCountry', hadnleJoinItems(items))}
+              label='Production Country'
             />
             <TagManager
-              initialItems={handleSplitItems(form.watch("genres"))}
-              onItemsChange={(items) => form.setValue("genres", hadnleJoinItems(items))}
-              label="Genres"
+              initialItems={handleSplitItems(form.watch('genres'))}
+              onItemsChange={(items) => form.setValue('genres', hadnleJoinItems(items))}
+              label='Genres'
             />
             <TagManager
-              initialItems={handleSplitItems(form.watch("actors"))}
-              onItemsChange={(items) => form.setValue("actors", hadnleJoinItems(items))}
-              label="Actors"
+              initialItems={handleSplitItems(form.watch('actors'))}
+              onItemsChange={(items) => form.setValue('actors', hadnleJoinItems(items))}
+              label='Actors'
             />
             <TagManager
-              initialItems={handleSplitItems(form.watch("director"))}
-              onItemsChange={(items) => form.setValue("director", hadnleJoinItems(items))}
-              label="Director"
+              initialItems={handleSplitItems(form.watch('director'))}
+              onItemsChange={(items) => form.setValue('director', hadnleJoinItems(items))}
+              label='Director'
             />
             <FormField
-              name="isFilm"
+              name='isFilm'
               render={() => (
                 <FormItem>
                   <Switch checked={isFilm} onCheckedChange={handleToggle} />
-                  {isFilm ? "Film" : "Series"}
+                  {isFilm ? 'Film' : 'Series'}
                 </FormItem>
               )}
             />
@@ -210,14 +212,14 @@ const InputMovieInfo = <T extends MovieFormValue>({
               <>
                 <FormField
                   control={form.control}
-                  name="seasons"
+                  name='seasons'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Seasons</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="number"
-                          placeholder="Number of seasons"
+                        <Input
+                          type='number'
+                          placeholder='Number of seasons'
                           {...field}
                           onChange={(e) => field.onChange(Number(e.target.value))}
                           value={field.value || ''} // Ensure value is never undefined
@@ -229,14 +231,14 @@ const InputMovieInfo = <T extends MovieFormValue>({
                 />
                 <FormField
                   control={form.control}
-                  name="series"
+                  name='series'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Series</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="number"
-                          placeholder="Number of series"
+                        <Input
+                          type='number'
+                          placeholder='Number of series'
                           {...field}
                           onChange={(e) => field.onChange(Number(e.target.value))}
                           value={field.value || ''}
@@ -248,7 +250,7 @@ const InputMovieInfo = <T extends MovieFormValue>({
                 />
               </>
             )}
-            <Button type="submit">Submit</Button>
+            <Button type='submit'>Submit</Button>
           </form>
         </Form>
       </CardContent>

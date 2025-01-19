@@ -9,14 +9,7 @@ const nextConfig = {
       }
     ]
   },
-  transpilePackages: ['geist'],
-  images: {
-    remotePatterns: [
-      {
-        hostname: 'mfl.maxbarsukov.ru',
-      }
-    ],
-},
+  transpilePackages: ['geist']
 };
 
 module.exports = nextConfig;

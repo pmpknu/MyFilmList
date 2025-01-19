@@ -18,7 +18,7 @@ export default function MoviePosterUpdateViewPage() {
 
   const isUserAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const isUserAdmin = useSelector(
-    (state: RootState) => !!(state.auth.user?.roles.includes(Role.ROLE_ADMIN))
+    (state: RootState) => !!state.auth.user?.roles.includes(Role.ROLE_ADMIN)
   );
 
   useEffect(() => {
@@ -51,12 +51,12 @@ export default function MoviePosterUpdateViewPage() {
   }, [id]);
 
   if (!movie && !loading) {
-    return <div className="text-center">Фильм не найден</div>;
+    return <div className='text-center'>Фильм не найден</div>;
   }
 
   return (
-    <MoviePosterUpdateForm 
-      initialData={movie} 
+    <MoviePosterUpdateForm
+      initialData={movie}
       pageTitle={`Обновление постера фильма "${movie?.title}"`}
     />
   );

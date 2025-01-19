@@ -71,7 +71,7 @@ export const navItems: NavItem[] = [
         url: '/movies/update',
         icon: 'post',
         shortcut: ['u', 'u']
-      },
+      }
     ]
   }
 ];
