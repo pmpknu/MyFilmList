@@ -5,7 +5,16 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { MoreVertical, Edit, ShieldAlert, Trash, UserCheck } from 'lucide-react';
+import {
+  MoreVertical,
+  Edit,
+  ShieldAlert,
+  Trash,
+  UserCheck,
+  Share,
+  ClipboardCopy,
+  XCircle
+} from 'lucide-react';
 import { UserDto } from '@/interfaces/user/dto/UserDto';
 import { getAvatarSvg } from './avatar/generator';
 import {
@@ -92,7 +101,25 @@ export default function UserView({
     // TODO
   };
 
-  const hoverBg = (user: UserDto) =>
+  const handleDeactivateAccount = () => {
+    toast.success('Аккаунт успешно отключен.');
+    // TODO
+  };
+
+  const handleShare = () => {
+    toast.success('Вы успешно поделились.');
+    // TODO
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`https://mfl.maxbarsukov.ru/users/${user.id}`);
+    toast.info('Ссылка скопирована в буфер обмена', {
+      description: 'Теперь вы можете вставить её в любом месте, где это необходимо.',
+      duration: 1500
+    });
+  };
+
+  const hoverBg = () =>
     isAdmin
       ? 'hover:border-destructive hover:bg-destructive/20'
       : isModerator
@@ -116,7 +143,7 @@ export default function UserView({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'ring-destructive/40' : 'ring-ring-blue-300'} ${hoverBg(user)}`}
+                    className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'ring-destructive/40' : 'ring-ring-blue-300'} ${hoverBg()}`}
                   >
                     <MoreVertical className='h-5 w-5' />
                   </button>
@@ -138,6 +165,22 @@ export default function UserView({
                       Удалить
                     </DropdownMenuItem>
                   )}
+                  {canManageRoles && (
+                    <DropdownMenuItem onClick={handleDeactivateAccount}>
+                      <XCircle className='mr-2 h-4 w-4 text-red-400' />
+                      Деактивировать аккаунт
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem onClick={handleShare}>
+                    <Share className='mr-2 h-4 w-4' />
+                    Поделиться
+                  </DropdownMenuItem>
+
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleCopyLink}>
+                    <ClipboardCopy className='mr-2 h-4 w-4' />
+                    Скопировать
+                  </DropdownMenuItem>
                   {/* TODO another actions */}
                 </DropdownMenuContent>
               </DropdownMenu>
