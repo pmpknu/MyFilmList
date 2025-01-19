@@ -27,8 +27,8 @@ export function MovieGrid({ loading, movies, onClick }: MovieGridProps) {
                 title={movie.title}
                 releaseDate={movie.releaseDate}
                 onClick={() => onClick(movie.id)}
-                width={300}
-                height={400}
+                width={225}
+                height={500}
                 aspectRatio='portrait'
               />
             ))}

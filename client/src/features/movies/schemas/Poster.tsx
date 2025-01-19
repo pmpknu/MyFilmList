@@ -43,9 +43,12 @@ const Poster: React.FC<MoviePosterProps> = ({
     <div className={cn("space-y-3", className)} {...props}>
       <ContextMenu>
         <ContextMenuTrigger>
-        <Card className={cn(`h-[${height}px] w-[${width}px]`, "col-span-12 sm:col-span-4 max-w-xs rounded-lg overflow-hidden")}>
+        <Card className={
+            cn(`h-[${height}px] w-[${width}px]`,
+            "col-span-12 sm:col-span-4 rounded-lg overflow-hidden")
+        }>
+          <div className="overflow-hidden rounded-lg">
           {posterUrl ? (
-            <div className="overflow-hidden rounded-lg">
               <Image
                 src={posterUrl}
                 alt={title}
@@ -56,15 +59,17 @@ const Poster: React.FC<MoviePosterProps> = ({
                   aspectRatio === "portrait" ? "aspect-[3/4]" : aspectRatio === "square" ? "aspect-square" : ""
                 )}
               />
-            </div>
-          ) : (
-            <div
-              className="w-full h-full bg-gray-300 flex items-center justify-center"
-              style={{ height, width }}
-            >
-              <span className="text-white text-center">{title}</span>
-            </div>
-          )}
+            ) : (
+              <div 
+                className={cn(
+                  "flex items-center justify-center w-full h-full bg-gray-300",
+                  aspectRatio === "portrait" ? "aspect-[3/4]" : aspectRatio === "square" ? "aspect-square" : ""
+                )}
+              >
+                <span className="text-center text-lg text-gray-600">{title}</span>
+              </div>
+            )}
+          </div>
         </Card>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-40">
