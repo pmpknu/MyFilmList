@@ -27,9 +27,9 @@ export default function SignOutDialog({
   const handleClick = () => setChecked(!checked);
 
   return (
-    <AlertDialogContent>
+    <AlertDialogContent aria-labelledby="sign-out-dialog-title">
       <AlertDialogHeader>
-        <AlertDialogTitle>Вы уверены, что хотите выйти из учетной записи?</AlertDialogTitle>
+        <AlertDialogTitle id="sign-out-dialog-title">Вы уверены, что хотите выйти из учетной записи?</AlertDialogTitle>
         <AlertDialogDescription>
           Обязательно возвращайтесь,{' '}
           <a
