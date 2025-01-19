@@ -82,6 +82,7 @@ export default function UserView({
   canManageRoles?: boolean;
 }) {
   const { isMobile } = useSidebar();
+  const [copySuccess, setCopySuccess] = useState(false);
 
   const userPosts = [
     { id: 1, title: 'My first post', content: 'This is the content of the first post.' },
@@ -106,16 +107,36 @@ export default function UserView({
     // TODO
   };
 
-  const handleShare = () => {
-    toast.success('Вы успешно поделились.');
-    // TODO
+  const usersUrl = `${window.location.origin}/users/${user.id}`;
+
+  const handleShare = async (e: React.UIEvent<HTMLDivElement>) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Пользователь @${user.username}`,
+          text: `Посмотрите профиль @${user.username} на MyFilmList!`,
+          url: usersUrl
+        });
+      } catch (error) {
+        console.error('Web Share API error: ', error);
+        toast.error('Ошибка при использовании Web Share API');
+      }
+    } else {
+      handleCopyLink();
+    }
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(`https://mfl.maxbarsukov.ru/users/${user.id}`);
+  const handleCopyLink = (e?: React.UIEvent<HTMLDivElement>) => {
+    e?.preventDefault();
     toast.info('Ссылка скопирована в буфер обмена', {
       description: 'Теперь вы можете вставить её в любом месте, где это необходимо.',
       duration: 1500
+    });
+    navigator.clipboard.writeText(usersUrl).then(() => {
+      setCopySuccess(true);
+      if (!copySuccess) {
+        setTimeout(() => setCopySuccess(false), 2000);
+      }
     });
   };
 
@@ -156,32 +177,40 @@ export default function UserView({
                         <Edit className='mr-2 h-4 w-4 text-blue-600' />
                         Изменить
                       </DropdownMenuItem>
-                      {canDelete ? <DropdownMenuSeparator /> : null}
+                      {canDelete && <DropdownMenuSeparator />}
                     </>
                   )}
                   {canDelete && (
-                    <DropdownMenuItem onClick={handleDelete}>
-                      <Trash className='mr-2 h-4 w-4 text-red-600' />
-                      Удалить
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={handleDelete}>
+                        <Trash className='mr-2 h-4 w-4 text-red-600' />
+                        Удалить
+                      </DropdownMenuItem>
+                      {canManageRoles && <DropdownMenuSeparator />}
+                    </>
                   )}
                   {canManageRoles && (
-                    <DropdownMenuItem onClick={handleDeactivateAccount}>
-                      <XCircle className='mr-2 h-4 w-4 text-red-400' />
-                      Деактивировать аккаунт
+                    <>
+                      <DropdownMenuItem onClick={handleDeactivateAccount}>
+                        <XCircle className='mr-2 h-4 w-4 text-red-400' />
+                        Деактивировать аккаунт
+                      </DropdownMenuItem>
+                      {'share' in navigator && <DropdownMenuSeparator />}
+                    </>
+                  )}
+
+                  {'share' in navigator && (
+                    <DropdownMenuItem onClick={handleShare}>
+                      <Share className='mr-2 h-4 w-4' />
+                      Поделиться
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem onClick={handleShare}>
-                    <Share className='mr-2 h-4 w-4' />
-                    Поделиться
-                  </DropdownMenuItem>
 
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleCopyLink}>
                     <ClipboardCopy className='mr-2 h-4 w-4' />
-                    Скопировать
+                    {copySuccess ? 'Cкопировано!' : 'Скопировать'}
                   </DropdownMenuItem>
-                  {/* TODO another actions */}
                 </DropdownMenuContent>
               </DropdownMenu>
             </AlertDialog>
