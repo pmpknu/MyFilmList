@@ -12,7 +12,8 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuItem
+  DropdownMenuItem,
+  DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
 import {
   Card,
@@ -103,7 +104,7 @@ export default function UserView({
       <div className='container mx-auto max-w-5xl p-4'>
         <Card className={`relative mb-6 border ${roleClasses(user)}`}>
           <div className='absolute right-4 top-4 flex items-center gap-2'>
-            {canEdit && (
+            {!isMobile && canEdit && (
               <button
                 onClick={handleEdit}
                 className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'text-destructive ring-destructive/40 hover:bg-destructive/10 hover:bg-opacity-30' : 'text-blue-600 hover:bg-blue-600 hover:bg-opacity-30 focus:ring-blue-300'}`}
@@ -111,29 +112,36 @@ export default function UserView({
                 <Edit className='h-5 w-5' />
               </button>
             )}
+            <AlertDialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'ring-destructive/40' : 'ring-ring-blue-300'} ${hoverBg(user)}`}
+                  >
+                    <MoreVertical className='h-5 w-5' />
+                  </button>
+                </DropdownMenuTrigger>
 
-            {(canDelete || !canEdit) && (
-              <AlertDialog>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button
-                      className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'ring-destructive/40' : 'ring-ring-blue-300'} ${hoverBg(user)}`}
-                    >
-                      <MoreVertical className='h-5 w-5' />
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align='end' className='w-40'>
-                    {canDelete && (
-                      <DropdownMenuItem onClick={handleDelete}>
-                        <Trash className='mr-2 h-4 w-4 text-red-600' />
-                        Удалить
+                <DropdownMenuContent align='end' className='w-40'>
+                  {isMobile && canEdit && (
+                    <>
+                      <DropdownMenuItem onClick={handleEdit}>
+                        <Edit className='mr-2 h-4 w-4 text-blue-600' />
+                        Изменить
                       </DropdownMenuItem>
-                    )}
-                    {/* TODO another actions */}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </AlertDialog>
-            )}
+                      {canDelete ? <DropdownMenuSeparator /> : null}
+                    </>
+                  )}
+                  {canDelete && (
+                    <DropdownMenuItem onClick={handleDelete}>
+                      <Trash className='mr-2 h-4 w-4 text-red-600' />
+                      Удалить
+                    </DropdownMenuItem>
+                  )}
+                  {/* TODO another actions */}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </AlertDialog>
           </div>
 
           <div className='flex flex-col md:flex-row md:items-stretch'>
