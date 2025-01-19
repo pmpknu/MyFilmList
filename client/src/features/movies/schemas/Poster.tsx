@@ -1,36 +1,107 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
-import { cn } from "@/lib/utils"
+import { PlusCircle } from "lucide-react";
 
-export interface MoviePosterProps {
+import { cn } from "@/lib/utils";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+
+export interface MoviePosterProps extends React.HTMLAttributes<HTMLDivElement> {
   posterUrl: string | undefined;
   title: string;
   aspectRatio?: "portrait" | "square";
-  onClick?: () => void;
+  width?: number;
+  height?: number;
+  description?: string;
+  onAddToLibrary?: () => void;
+  onPlayNext?: () => void;
+  onPlayLater?: () => void;
 }
 
-const Poster: React.FC<MoviePosterProps> = ({ posterUrl, title, aspectRatio = "portrait", onClick}) => {
+const Poster: React.FC<MoviePosterProps> = ({
+  posterUrl,
+  title,
+  aspectRatio = "portrait",
+  width,
+  height,
+  description,
+  className,
+  onAddToLibrary,
+  onPlayNext,
+  onPlayLater,
+  ...props
+}) => {
   return (
-    <Card className="col-span-12 sm:col-span-4 h-[300px] max-w-xs" onClick={onClick}>
-      {posterUrl && (
-      <div className="overflow-hidden rounded-md">
-        <Image
-          src={posterUrl}
-          alt="Card background"
-          fill
-          className={cn(
-            "h-auto w-auto object-cover transition-all hover:scale-105",
-            aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
-          )}
-
-        />
+    <div className={cn("space-y-3", className)} {...props}>
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <div className="overflow-hidden rounded-md">
+            {posterUrl && (
+              <Image
+                src={posterUrl}
+                alt={title}
+                width={width}
+                height={height}
+                className={cn(
+                  "h-auto w-auto object-cover transition-all hover:scale-105",
+                  aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
+                )}
+              />
+            )}
+          </div>
+        </ContextMenuTrigger>
+        <ContextMenuContent className="w-40">
+          <ContextMenuItem onClick={onAddToLibrary}>Add to Library</ContextMenuItem>
+          <ContextMenuSub>
+            <ContextMenuSubTrigger>Add to Playlist</ContextMenuSubTrigger>
+            <ContextMenuSubContent className="w-48">
+              <ContextMenuItem>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                New Playlist
+              </ContextMenuItem>
+              <ContextMenuSeparator />
+              {/* Example hardcoded playlists, replace with dynamic content if needed */}
+              {["Favorites", "Watch Later", "Comedy"].map((playlist) => (
+                <ContextMenuItem key={playlist}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    className="mr-2 h-4 w-4"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M21 15V6M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM12 12H3M16 6H3M12 18H3" />
+                  </svg>
+                  {playlist}
+                </ContextMenuItem>
+              ))}
+            </ContextMenuSubContent>
+          </ContextMenuSub>
+          <ContextMenuSeparator />
+          <ContextMenuItem onClick={onPlayNext}>Play Next</ContextMenuItem>
+          <ContextMenuItem onClick={onPlayLater}>Play Later</ContextMenuItem>
+          <ContextMenuItem>Create Station</ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenuItem>Like</ContextMenuItem>
+          <ContextMenuItem>Share</ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+      <div className="space-y-1 text-sm">
+        <h3 className="font-medium leading-none">{title}</h3>
+        {description && <p className="text-xs text-muted-foreground">{description}</p>}
       </div>
-      )}
-      <CardFooter className="flex-col !items-start">
-      <h4 className="text-red font-medium text-large">{title}</h4>
-      </CardFooter>
-    </Card>
-  )
-}
+    </div>
+  );
+};
 
 export default Poster;

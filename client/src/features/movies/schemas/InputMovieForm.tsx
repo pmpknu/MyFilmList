@@ -31,11 +31,25 @@ const InputMovieInfo = <T extends MovieFormValue>({
   onSubmit,
   initialData,
 }: InputMovieInfoProps<T>) => {
+  const preprocessInitialData = (data: Partial<T> | undefined) => {
+    if (!data) return {};
+    const processedData = Object.entries(data).reduce((acc, [key, value]) => {
+      if (value === null) acc[key as keyof T] = undefined;
+      else acc[key as keyof T] = value;
+      return acc;
+    }, {} as Partial<T>);
+    return {
+      ...processedData,
+    };
+  }
+
   const form = useForm<MovieFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      ...initialData,
+      releaseDate: undefined,
+      duration: undefined,
+      ...preprocessInitialData(initialData),
     },
   });
 
@@ -43,8 +57,9 @@ const InputMovieInfo = <T extends MovieFormValue>({
 
   useEffect(() => {
     if (initialData) {
+      console.log("RESETING FORM by data: ", preprocessInitialData(initialData));
       form.reset({
-        ...initialData,
+        ...preprocessInitialData(initialData),
       });
     }
   }, [initialData, form]);
@@ -97,7 +112,11 @@ const InputMovieInfo = <T extends MovieFormValue>({
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Description" {...field} />
+                    <Textarea
+                      placeholder="Description"
+                      {...field}
+                      value={field.value || ''}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,6 +130,7 @@ const InputMovieInfo = <T extends MovieFormValue>({
                   <FormLabel>Release Date</FormLabel>
                   <FormControl>
                     <Calendar
+                      {...field}
                       selected={field.value ? new Date(field.value) : undefined}
                       onSelect={ (val) => {
                         if (val) {
@@ -119,8 +139,9 @@ const InputMovieInfo = <T extends MovieFormValue>({
                           const day = val?.getDate().toString().padStart(2, '0');
                           const formattedDate = `${year}-${month}-${day}`;
                           field.onChange(formattedDate);
+                        } else {
+                          field.onChange(undefined);
                         }
-
                       }}
                       mode="single" />
                   </FormControl>
@@ -138,7 +159,7 @@ const InputMovieInfo = <T extends MovieFormValue>({
                     <Input
                       placeholder="Duration in minutes"
                       {...field}
-                      onChange={(e) => form.setValue("duration", Number(e.target.value))}
+                      onChange={(e) => form.setValue("duration", e.target.value ? Number(e.target.value) : undefined)}
                       value={field.value || ''}
                     />
                   </FormControl>
