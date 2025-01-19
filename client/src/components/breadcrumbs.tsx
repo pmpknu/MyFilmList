@@ -55,9 +55,9 @@ export function Breadcrumbs() {
           <button
             disabled={!canGoBack}
             className={`flex items-center gap-2 text-muted-foreground ${canGoBack ? 'hover:text-foreground' : 'cursor-default'}`}
-            onClick={() => isFirstPage ? router.push('/') : router.back()}
+            onClick={() => (isFirstPage ? router.push('/') : router.back())}
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className='h-4 w-4' />
             <span className='sr-only'>Назад</span>
           </button>
         </BreadcrumbItem>

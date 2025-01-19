@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { notFound, useParams, useRouter } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { toast } from 'sonner';
 
 import UserView from './user-view';
@@ -12,7 +12,6 @@ import { useSelector } from '@/hooks/use-redux';
 import { isAdmin, isModerator } from '../rbac';
 
 export default function UserViewPage() {
-  const router = useRouter();
   const params = useParams<{ id: string }>();
   const currentUser = useSelector((state) => state.auth.user);
 

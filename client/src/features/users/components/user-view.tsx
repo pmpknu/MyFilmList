@@ -17,11 +17,11 @@ import {
   CardFooter
 } from '@/components/ui/card';
 import PageContainer from '@/components/layout/page-container';
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { isAdmin as isUserAdmin, isExactlyModerator as isUserModerator } from '../rbac';
 import { roleBadges, roleClasses } from '../rbac/colors';
+import { useSidebar } from '@/components/ui/sidebar';
 
 export function UserBio({ bio, className }: { bio: string | undefined; className: String }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -64,6 +64,8 @@ export default function UserView({
   canDelete?: boolean;
   canManageRoles?: boolean;
 }) {
+  const { isMobile } = useSidebar();
+
   const userPosts = [
     { id: 1, title: 'My first post', content: 'This is the content of the first post.' },
     { id: 2, title: 'My second post', content: 'This is the content of the second post.' }
@@ -77,18 +79,34 @@ export default function UserView({
       <div className='container mx-auto max-w-5xl p-4'>
         <Card className={`mb-6 border ${roleClasses(user)}`}>
           <div className='flex flex-col md:flex-row md:items-stretch'>
-            <div className='relative mx-auto flex-shrink-0 md:mx-0 md:w-1/3 md:overflow-hidden md:rounded-l-lg'>
-              <div className='mt-4 flex h-32 w-32 items-center justify-center rounded-full bg-muted md:mt-0 md:aspect-square md:h-auto md:w-full md:rounded-none'>
-                <Image
-                  src={user?.photo ?? getAvatarSvg(user?.username).toDataUri()}
-                  alt={`${user.username}'s avatar`}
-                  fill
-                  className='object-cover'
-                />
+            {!isMobile ? (
+              <div className='relative mx-auto flex-shrink-0 md:mx-0 md:w-1/3 md:overflow-hidden md:rounded-l-lg'>
+                <div className='mt-4 flex h-32 w-32 items-center justify-center rounded-full bg-muted md:mt-0 md:aspect-square md:h-auto md:w-full md:rounded-none'>
+                  <Image
+                    src={user?.photo ?? getAvatarSvg(user?.username).toDataUri()}
+                    alt={`${user.username}'s avatar`}
+                    fill
+                    className='object-cover'
+                  />
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className='flex flex-col items-center justify-center text-center'>
+                <div className='mt-6 flex h-48 w-48 items-center justify-center overflow-hidden rounded-full bg-muted'>
+                  <Image
+                    src={user?.photo ?? getAvatarSvg(user?.username).toDataUri()}
+                    alt={`${user.username}'s avatar`}
+                    width={220}
+                    height={220}
+                    className='rounded-full object-cover'
+                  />
+                </div>
+              </div>
+            )}
 
-            <CardContent className='flex w-full flex-col items-center p-6 pl-12 md:w-2/3 md:items-start'>
+            <CardContent
+              className={`flex w-full flex-col items-center p-6 md:w-2/3 md:items-start ${isMobile ? '' : 'pl-12'}`}
+            >
               <CardTitle className='flex items-center gap-x-2 text-4xl font-bold'>
                 {isAdmin && <ShieldAlert className='h-8 w-8 text-destructive' />}
                 {isModerator && <UserCheck className='h-8 w-8 text-primary' />}
