@@ -15,7 +15,7 @@ import { useBreadcrumbs, BreadcrumbItem as BreadcrumbType } from '@/hooks/use-br
 import { UserDto } from '@/interfaces/user/dto/UserDto';
 import { ChevronLeft, Slash } from 'lucide-react';
 import { usePageTrackerStore } from 'react-page-tracker';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 const UserBreadcrumb = ({ user, title }: { user: UserDto; title: string }) => {
   return (
@@ -31,10 +31,13 @@ export function Breadcrumbs() {
   const router = useRouter();
   const items = useBreadcrumbs();
   const isFirstPage = usePageTrackerStore((state) => state.isFirstPage);
+  const [canGoBack, setCanGoBack] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    setCanGoBack(!!window.history?.length && window.history.length > 1);
+  }, []);
 
   if (items.length === 0) return null;
-
-  const canGoBack = window.history?.length && window.history.length > 1;
 
   const itemContent = (item: BreadcrumbType) => {
     console.log(item);
@@ -48,7 +51,6 @@ export function Breadcrumbs() {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {/* Добавляем кнопку "Назад" */}
         <BreadcrumbItem>
           <button
             disabled={!canGoBack}
