@@ -76,22 +76,21 @@ export default function MoviesUpdateSearchForm() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Редактирование фильмов</h1>
-      
-      <Input
+    <>
+    <Input
         type="search"
         placeholder="Поиск фильмов..."
         value={searchQuery}
         onChange={(e) => handleSearchChange(e.target.value)}
         className="mb-4"
       />
-
+    <div className="container mx-auto p-4">
       <MovieGrid
         loading={loading}
         movies={movies}
         onClick={handleMovieClick}
       />
     </div>
+    </>
   );
 }
