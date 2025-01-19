@@ -16,6 +16,15 @@ export const navItems: NavItem[] = [
     items: []
   },
   {
+    title: 'Пользователи',
+    url: '/users',
+    icon: 'users',
+    shortcut: ['u', 'u'],
+    isActive: false,
+    items: [],
+    pathPattern: /^\/users\/\d+$/
+  },
+  {
     title: 'Учётная запись',
     url: '#',
     icon: 'user',

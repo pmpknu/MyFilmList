@@ -42,6 +42,7 @@ import { logout } from '@/store/slices/auth-slice';
 import { cn } from '@/lib/utils';
 import SignOutDialog from '@/features/auth/components/sign-out-dialog';
 import { getAvatarSvg } from '@/features/users/components/avatar/generator';
+import { NavItem } from 'types';
 
 export const company = {
   name: 'MFL',
@@ -73,6 +74,9 @@ export default function AppSidebar() {
     }, 500);
   };
 
+  const checkPathname = (item: NavItem) =>
+    pathname === item.url || (item.pathPattern ? item.pathPattern.test(pathname) : false);
+
   return (
     <Sidebar collapsible='icon'>
       <SidebarHeader>
@@ -90,7 +94,7 @@ export default function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className='overflow-x-hidden'>
         <SidebarGroup>
-          <SidebarGroupLabel>Overview</SidebarGroupLabel>
+          <SidebarGroupLabel>Обзор</SidebarGroupLabel>
           <SidebarMenu>
             {(!mounted ? navItems : user ? authenticatedItems : guestItems).map((item) => {
               const Icon = item.icon ? Icons[item.icon] : Icons.logo;
@@ -105,7 +109,7 @@ export default function AppSidebar() {
                 >
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
-                      <SidebarMenuButton tooltip={item.title} isActive={pathname === item.url}>
+                      <SidebarMenuButton tooltip={item.title} isActive={checkPathname(item)}>
                         {item.icon && <Icon />}
                         <span>{item.title}</span>
                         <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
@@ -115,7 +119,7 @@ export default function AppSidebar() {
                       <SidebarMenuSub>
                         {subItems?.map((subItem) => (
                           <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild isActive={pathname === subItem.url}>
+                            <SidebarMenuSubButton asChild isActive={checkPathname(subItem)}>
                               <Link href={subItem.url}>
                                 <span>{subItem.title}</span>
                               </Link>
@@ -128,7 +132,7 @@ export default function AppSidebar() {
                 </Collapsible>
               ) : (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title} isActive={pathname === item.url}>
+                  <SidebarMenuButton asChild tooltip={item.title} isActive={checkPathname(item)}>
                     <Link href={item.url}>
                       <Icon />
                       <span>{item.title}</span>
