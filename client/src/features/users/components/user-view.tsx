@@ -5,9 +5,15 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { ShieldAlert, UserCheck } from 'lucide-react';
+import { MoreVertical, Edit, ShieldAlert, Trash, UserCheck } from 'lucide-react';
 import { UserDto } from '@/interfaces/user/dto/UserDto';
 import { getAvatarSvg } from './avatar/generator';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from '@/components/ui/dropdown-menu';
 import {
   Card,
   CardHeader,
@@ -22,6 +28,7 @@ import { Badge } from '@/components/ui/badge';
 import { isAdmin as isUserAdmin, isExactlyModerator as isUserModerator } from '../rbac';
 import { roleBadges, roleClasses } from '../rbac/colors';
 import { useSidebar } from '@/components/ui/sidebar';
+import { AlertDialog } from '@/components/ui/alert-dialog';
 
 export function UserBio({ bio, className }: { bio: string | undefined; className: String }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -74,10 +81,61 @@ export default function UserView({
   const isAdmin = isUserAdmin(user);
   const isModerator = isUserModerator(user);
 
+  const handleEdit = () => {
+    toast.success('Редактирование пользователя');
+    // TODO
+  };
+
+  const handleDelete = () => {
+    toast.success('Пользователь удален');
+    // TODO
+  };
+
+  const hoverBg = (user: UserDto) =>
+    isAdmin
+      ? 'hover:border-destructive hover:bg-destructive/20'
+      : isModerator
+        ? 'hover:border-primary hover:bg-primary/30'
+        : 'hover:border-muted hover:bg-muted/50';
+
   return (
     <PageContainer>
       <div className='container mx-auto max-w-5xl p-4'>
-        <Card className={`mb-6 border ${roleClasses(user)}`}>
+        <Card className={`relative mb-6 border ${roleClasses(user)}`}>
+          <div className='absolute right-4 top-4 flex items-center gap-2'>
+            {canEdit && (
+              <button
+                onClick={handleEdit}
+                className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'text-destructive ring-destructive/40 hover:bg-destructive/10 hover:bg-opacity-30' : 'text-blue-600 hover:bg-blue-600 hover:bg-opacity-30 focus:ring-blue-300'}`}
+              >
+                <Edit className='h-5 w-5' />
+              </button>
+            )}
+
+            {(canDelete || !canEdit) && (
+              <AlertDialog>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'ring-destructive/40' : 'ring-ring-blue-300'} ${hoverBg(user)}`}
+                    >
+                      <MoreVertical className='h-5 w-5' />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align='end' className='w-40'>
+                    {canDelete && (
+                      <DropdownMenuItem onClick={handleDelete}>
+                        <Trash className='mr-2 h-4 w-4 text-red-600' />
+                        Удалить
+                      </DropdownMenuItem>
+                    )}
+                    {/* TODO another actions */}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </AlertDialog>
+            )}
+          </div>
+
           <div className='flex flex-col md:flex-row md:items-stretch'>
             {!isMobile ? (
               <div className='relative mx-auto flex-shrink-0 md:mx-0 md:w-1/3 md:overflow-hidden md:rounded-l-lg'>

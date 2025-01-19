@@ -40,7 +40,6 @@ export function Breadcrumbs() {
   if (items.length === 0) return null;
 
   const itemContent = (item: BreadcrumbType) => {
-    console.log(item);
     return item?.options?.user ? (
       <UserBreadcrumb title={item.title} user={item?.options?.user} />
     ) : (
