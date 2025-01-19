@@ -4,7 +4,7 @@ export interface MovieDto extends CrudDto {
   title: string;
   description: string;
   poster: string;
-  releaseDate?: Date;
+  releaseDate?: string;
   duration?: number;
   rating?: number;
   categories?: string;

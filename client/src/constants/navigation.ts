@@ -64,6 +64,30 @@ export const guestOnlyItems: NavItem[] = [
         icon: 'register'
       }
     ]
+  },
+  {
+    title: 'Фильмы',
+    url: '#',
+    icon: 'pizza',
+    isActive: true,
+    items: [
+      {
+        title: 'Создать фильм',
+        requiresAuth: true,
+        requiresRole: Role.ROLE_ADMIN,
+        url: '/movies/create',
+        icon: 'add',
+        shortcut: ['c', 'c']
+      },
+      {
+        title: 'Обновить фильм',
+        requiresAuth: true,
+        requiresRole: Role.ROLE_ADMIN,
+        url: '/movies/update',
+        icon: 'post',
+        shortcut: ['u', 'u']
+      }
+    ]
   }
 ];
 

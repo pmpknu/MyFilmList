@@ -1,11 +1,6 @@
-interface SearchCriteria {
-  filterKey: string;
-  operation: string;
-  value: any;
-  dataOption: string;
-}
+import { SearchCriteria } from './SearchCriteria';
 
 export interface SearchDto {
+  dataOption: 'all' | 'any';
   searchCriteriaList: SearchCriteria[];
-  dataOption: string;
 }
