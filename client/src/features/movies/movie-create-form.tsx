@@ -43,9 +43,12 @@ export default function MovieCreateForm({ className, ...props }: React.Component
     MovieService.createMovie(data)
       .then((response) => {
         setMovie(response.data);
+        router.push(`/movies/update/${movie?.id}/poster`);
+        toast.success("Фильм успешно создан");
       })
       .catch((error) => {
         console.error("Failed to create movie", error);
+        toast.error("Не удалось создать фильм");
       });
   };
 

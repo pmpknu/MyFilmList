@@ -66,10 +66,12 @@ export default function MovieUpdateForm({ className, ...props }: React.Component
     MovieService.updateMovie(movieId, data)
       .then((response) => {
         setMovie(response.data);
-        router.push(`/movie/${movieId}`);
+        router.push(`/movies/update/${movieId}/poster`);
+        toast.success("Фильм успешно обновлен");
       })
       .catch((error) => {
         console.error("Failed to create movie", error);
+        toast.error("Не удалось обновить фильм");
       });
   };
 
