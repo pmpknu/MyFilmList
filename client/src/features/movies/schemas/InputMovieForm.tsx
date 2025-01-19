@@ -19,10 +19,12 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { TagManager } from "./TagManager";
 import { formSchema, MovieFormValue } from "./MovieSchema";
+import { MovieCreateDto } from "@/interfaces/movie/dto/MovieCreateDto";
+import { MovieUpdateDto } from "@/interfaces/movie/dto/MovieUpdateDto";
 
-interface InputMovieInfoProps<T> {
+interface InputMovieInfoProps<T extends MovieCreateDto | MovieUpdateDto> {
   onSubmit: (data: T) => void;
-  initialData?: Partial<MovieFormValue>;
+  initialData?: Partial<T>;
 }
 
 const InputMovieInfo = <T extends MovieFormValue>({

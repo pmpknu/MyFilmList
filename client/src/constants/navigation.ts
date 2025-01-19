@@ -64,6 +64,14 @@ export const navItems: NavItem[] = [
         icon: 'add',
         shortcut: ['c', 'c']
       },
+      {
+        title: 'Обновить фильм',
+        requiresAuth: true,
+        requiresRole: Role.ROLE_ADMIN,
+        url: '/movies/update',
+        icon: 'post',
+        shortcut: ['u', 'u']
+      },
     ]
   }
 ];
