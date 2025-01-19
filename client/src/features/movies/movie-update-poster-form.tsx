@@ -57,6 +57,13 @@ export default function MoviePosterUpdateForm({ initialData, pageTitle }: MovieP
     }
   }
 
+  function handleSkip() {
+    if (!id) return;
+    const movieId = parseInt(String(id));
+    if (!movieId) return;
+    router.push(`/movies/${movieId}`);
+  }
+
   return (
     <Card className="mx-auto w-full">
       <CardHeader>
@@ -83,7 +90,10 @@ export default function MoviePosterUpdateForm({ initialData, pageTitle }: MovieP
                 </FormItem>
               )}
             />
-            <Button type="submit">Обновить постер</Button>
+            <div className="flex justify-between">
+              <Button type="submit">Обновить постер</Button>
+              <Button variant="secondary" onClick={handleSkip}>Пропустить</Button>
+            </div>
           </form>
         </Form>
       </CardContent>

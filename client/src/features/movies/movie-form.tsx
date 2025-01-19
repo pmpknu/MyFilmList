@@ -60,6 +60,7 @@ const MovieForm = () => {
   if (!movie) return <div className="text-center">No movie found</div>;
 
   return (
+  <ScrollArea className="h-[66vh] rounded-md border">
     <Card className="max-w-4xl mx-auto m-4">
       <CardTitle className="ml-4 mt-4">
         <h2 className="text-2xl font-bold">{movie.title}</h2>
@@ -68,9 +69,10 @@ const MovieForm = () => {
         <MoviePoster
             posterUrl={movie.poster}
             title={movie.title}
-            width={400}
-            height={800}
+            width={300}
+            height={400}
             showTitle={false}
+            aspectRatio='portrait'
         />
         <div className="space-y-2">
           {movie.releaseDate && (
@@ -95,7 +97,6 @@ const MovieForm = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[33vh] rounded-md border">
           <div className="space-y-4">
             {movie.description && (
               <div>
@@ -129,9 +130,9 @@ const MovieForm = () => {
               </>
             )}
           </div>
-        </ScrollArea>
       </CardContent>
     </Card>
+  </ScrollArea>
   );
 };
 
