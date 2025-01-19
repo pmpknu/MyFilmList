@@ -7,13 +7,34 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { useBreadcrumbs } from '@/hooks/use-breadcrumbs';
+import { isAdmin, isExactlyModerator } from '@/features/users/rbac';
+import { useBreadcrumbs, BreadcrumbItem as BreadcrumbType } from '@/hooks/use-breadcrumbs';
+import { UserDto } from '@/interfaces/user/dto/UserDto';
 import { Slash } from 'lucide-react';
 import { Fragment } from 'react';
+
+const UserBreadcrumb = ({ user, title }: { user: UserDto; title: string }) => {
+  return (
+    <span
+      className={`font-bold ${isAdmin(user) ? 'text-destructive' : isExactlyModerator(user) ? 'text-blue-600' : ''} dark:${isAdmin(user) ? 'text-destructive' : isExactlyModerator(user) ? 'text-blue-500' : ''}`}
+    >
+      {title}
+    </span>
+  );
+};
 
 export function Breadcrumbs() {
   const items = useBreadcrumbs();
   if (items.length === 0) return null;
+
+  const itemContent = (item: BreadcrumbType) => {
+    console.log(item);
+    return item?.options?.user ? (
+      <UserBreadcrumb title={item.title} user={item?.options?.user} />
+    ) : (
+      item.title
+    );
+  };
 
   return (
     <Breadcrumb>
@@ -22,7 +43,13 @@ export function Breadcrumbs() {
           <Fragment key={item.title}>
             {index !== items.length - 1 && (
               <BreadcrumbItem className='hidden md:block'>
-                <BreadcrumbLink href={item.link}>{item.title}</BreadcrumbLink>
+                {item.link === '#' ? (
+                  <BreadcrumbLink className='cursor-default hover:text-muted-foreground'>
+                    {item.title}
+                  </BreadcrumbLink>
+                ) : (
+                  <BreadcrumbLink href={item.link}>{item.title}</BreadcrumbLink>
+                )}
               </BreadcrumbItem>
             )}
             {index < items.length - 1 && (
@@ -30,7 +57,7 @@ export function Breadcrumbs() {
                 <Slash />
               </BreadcrumbSeparator>
             )}
-            {index === items.length - 1 && <BreadcrumbPage>{item.title}</BreadcrumbPage>}
+            {index === items.length - 1 && <BreadcrumbPage>{itemContent(item)}</BreadcrumbPage>}
           </Fragment>
         ))}
       </BreadcrumbList>

@@ -1,15 +1,51 @@
 'use client';
 
+import { UserDto } from '@/interfaces/user/dto/UserDto';
+import UserService from '@/services/UserService';
 import { usePathname } from 'next/navigation';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-type BreadcrumbItem = {
+export type BreadcrumbItem = {
   title: string;
   link: string;
+  options?: {
+    user?: UserDto;
+  };
 };
 
 // This allows to add custom title as well
 const routeMapping: Record<string, BreadcrumbItem[]> = {
+  // Authentication
+  '/auth': [{ title: 'Учётная запись', link: '/auth' }],
+  '/auth/me': [
+    { title: 'Учётная запись', link: '#' },
+    { title: 'Профиль', link: '/auth/me' }
+  ],
+  '/auth/sign-in': [
+    { title: 'Учётная запись', link: '#' },
+    { title: 'Вход', link: '/auth/sign-in' }
+  ],
+  '/auth/sign-up': [
+    { title: 'Учётная запись', link: '#' },
+    { title: 'Создание', link: '/auth/sign-up' }
+  ],
+  '/auth/confirm': [
+    { title: 'Учётная запись', link: '#' },
+    { title: 'Подтверждение', link: '/auth/confirm' }
+  ],
+  '/auth/request-password-reset': [
+    { title: 'Учётная запись', link: '#' },
+    { title: 'Восстановление доступа', link: '/auth/request-password-reset' }
+  ],
+  '/auth/reset-password': [
+    { title: 'Учётная запись', link: '#' },
+    { title: 'Изменение пароля', link: '/auth/reset-password' }
+  ],
+
+  // Users
+  '/users': [{ title: 'Пользователи', link: '/users' }],
+
+  // Stuff
   '/dashboard': [{ title: 'Dashboard', link: '/dashboard' }],
   '/dashboard/employee': [
     { title: 'Dashboard', link: '/dashboard' },
@@ -22,10 +58,50 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
   // Add more custom mappings as needed
 };
 
+// Function to fetch user data based on ID
+async function fetchUser(userId: string): Promise<UserDto | null> {
+  try {
+    const response = await UserService.getUserById(parseInt(userId, 10));
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
+function getUserName(user: UserDto | null): string {
+  if (user?.username) {
+    return `@${user.username}`;
+  }
+  return 'Пользователь не найден';
+}
+
 export function useBreadcrumbs() {
   const pathname = usePathname();
+  const [user, setUser] = useState<UserDto | null | undefined>(undefined);
+
+  useEffect(() => {
+    const loadUserName = async () => {
+      if (pathname.startsWith('/users/')) {
+        const userId = pathname.split('/')[2];
+        setUser(await fetchUser(userId));
+      }
+    };
+    loadUserName();
+  }, [pathname]);
 
   const breadcrumbs = useMemo(() => {
+    // Custom breadcrumbs for users
+    if (pathname.startsWith('/users/')) {
+      return [
+        { title: 'Пользователи', link: '/users' },
+        {
+          title: user !== undefined ? getUserName(user) : 'Загрузка...',
+          link: pathname,
+          options: user ? { user: user } : undefined
+        }
+      ];
+    }
+
     // Check if we have a custom mapping for this exact path
     if (routeMapping[pathname]) {
       return routeMapping[pathname];
@@ -40,7 +116,7 @@ export function useBreadcrumbs() {
         link: path
       };
     });
-  }, [pathname]);
+  }, [pathname, user]);
 
   return breadcrumbs;
 }
