@@ -12,6 +12,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { Card } from "@/components/ui/card";
 
 export interface MoviePosterProps extends React.HTMLAttributes<HTMLDivElement> {
   posterUrl: string | undefined;
@@ -28,7 +29,7 @@ export interface MoviePosterProps extends React.HTMLAttributes<HTMLDivElement> {
 const Poster: React.FC<MoviePosterProps> = ({
   posterUrl,
   title,
-  aspectRatio = "portrait",
+  aspectRatio,
   width,
   height,
   description,
@@ -42,20 +43,22 @@ const Poster: React.FC<MoviePosterProps> = ({
     <div className={cn("space-y-3", className)} {...props}>
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="overflow-hidden rounded-md">
-            {posterUrl && (
+        <Card className={cn(`h-[${height}px] w-[${width}px]`, "col-span-12 sm:col-span-4 max-w-xs rounded-lg overflow-hidden")}>
+          {posterUrl && (
+            <div className="overflow-hidden rounded-lg">
               <Image
-                src={posterUrl}
-                alt={title}
-                width={width}
-                height={height}
-                className={cn(
-                  "h-auto w-auto object-cover transition-all hover:scale-105",
-                  aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
-                )}
+              src={posterUrl}
+              alt={title}
+              width={width}
+              height={height}
+              className={cn(
+                "z-0 w-full h-full object-cover transition-all hover:scale-105",
+                aspectRatio === "portrait" ? "aspect-[3/4]" : aspectRatio === "square" ? "aspect-square" : ""
+              )}
               />
-            )}
-          </div>
+            </div>
+          )}
+        </Card>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-40">
           <ContextMenuItem onClick={onAddToLibrary}>Add to Library</ContextMenuItem>
