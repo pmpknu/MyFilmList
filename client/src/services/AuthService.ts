@@ -66,7 +66,7 @@ export default class AuthService {
    * Reset password
    * @param {string} token Reset token
    * @param {string} newPassword New password
-   * @returns {Promise<AxiosResponse<AuthenticationDto>>}
+   * @returns {Promise<AxiosResponse<AuthenticationDto>>} User's data and token
    */
   static async resetPassword(
     token: string,
@@ -90,7 +90,7 @@ export default class AuthService {
   /**
    * Refresh access token
    * @param {string} refreshToken Refresh token
-   * @returns {Promise<AxiosResponse<AuthenticationDto>>}
+   * @returns {Promise<AxiosResponse<AuthenticationDto>>} User's data and token
    */
   static async refreshToken(refreshToken: string): Promise<AxiosResponse<AuthenticationDto>> {
     return api.post<AuthenticationDto>('/auth/refresh', { refreshToken });
@@ -99,7 +99,7 @@ export default class AuthService {
   /**
    * Confirm email
    * @param {string} token Confirmation token
-   * @returns {Promise<AxiosResponse<AuthenticationDto>>}
+   * @returns {Promise<AxiosResponse<AuthenticationDto>>} User's data and token
    */
   static async confirmEmail(token: string): Promise<AxiosResponse<AuthenticationDto>> {
     return api.post<AuthenticationDto>('/auth/confirm', { verificationToken: token });
@@ -107,7 +107,7 @@ export default class AuthService {
 
   /**
    * Resend confirmation email
-   * @returns {Promise<AxiosResponse<AuthenticationDto>>}
+   * @returns {Promise<AxiosResponse<AuthenticationDto>>} User's data and token
    */
   static async resendConfirmation(): Promise<AxiosResponse<AuthenticationDto>> {
     return instance.get<AuthenticationDto>('/auth/resend-confirmation');
@@ -117,13 +117,13 @@ export default class AuthService {
    * Sign out user
    * @returns {Promise<AxiosResponse<void>>}
    */
-  static async signOut(): Promise<AxiosResponse<void>> {
-    return instance.delete<void>(`/auth/sign-out`);
+  static async signOut(onAllDevices: boolean = false): Promise<AxiosResponse<void>> {
+    return instance.delete<void>(`/auth/sign-out?onAllDevices=${onAllDevices}`);
   }
 
   /**
    * Get current user
-   * @returns {Promise<AxiosResponse<AuthenticationDto>>} Current user's data
+   * @returns {Promise<AxiosResponse<AuthenticationDto>>} Current user's data and token
    */
   static async getCurrentUser(): Promise<AxiosResponse<AuthenticationDto>> {
     return instance.get<AuthenticationDto>('/auth/me');

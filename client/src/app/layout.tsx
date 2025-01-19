@@ -3,6 +3,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Lato } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import { cookies } from 'next/headers';
+import { PageTracker } from 'react-page-tracker';
 
 import './globals.css';
 
@@ -32,9 +33,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
 
   return (
-    <html lang='en' className={`${lato.className}`} suppressHydrationWarning>
+    <html lang='ru' className={`${lato.className}`} suppressHydrationWarning>
       <body className={'overflow-hidden'}>
         <NextTopLoader showSpinner={false} />
+        <PageTracker />
         <NuqsAdapter>
           <Providers>
             <Toaster />

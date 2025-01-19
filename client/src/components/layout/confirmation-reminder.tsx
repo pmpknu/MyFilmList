@@ -9,7 +9,6 @@ import { Role } from '@/interfaces/role/model/UserRole';
 import AuthService from '@/services/AuthService';
 import ApiError from '@/lib/utils/ApiError';
 import { extractSeconds } from '@/lib/utils/error-handling';
-import { description } from '@/features/overview/components/bar-graph';
 
 export default function ConfirmationReminder() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
