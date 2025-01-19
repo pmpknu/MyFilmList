@@ -20,7 +20,7 @@ export interface MoviePosterProps extends React.HTMLAttributes<HTMLDivElement> {
   aspectRatio?: "portrait" | "square";
   width?: number;
   height?: number;
-  description?: string;
+  releaseDate?: string;
   onAddToLibrary?: () => void;
   onPlayNext?: () => void;
   onPlayLater?: () => void;
@@ -32,7 +32,7 @@ const Poster: React.FC<MoviePosterProps> = ({
   aspectRatio,
   width,
   height,
-  description,
+  releaseDate,
   className,
   onAddToLibrary,
   onPlayNext,
@@ -44,18 +44,25 @@ const Poster: React.FC<MoviePosterProps> = ({
       <ContextMenu>
         <ContextMenuTrigger>
         <Card className={cn(`h-[${height}px] w-[${width}px]`, "col-span-12 sm:col-span-4 max-w-xs rounded-lg overflow-hidden")}>
-          {posterUrl && (
+          {posterUrl ? (
             <div className="overflow-hidden rounded-lg">
               <Image
-              src={posterUrl}
-              alt={title}
-              width={width}
-              height={height}
-              className={cn(
-                "z-0 w-full h-full object-cover transition-all hover:scale-105",
-                aspectRatio === "portrait" ? "aspect-[3/4]" : aspectRatio === "square" ? "aspect-square" : ""
-              )}
+                src={posterUrl}
+                alt={title}
+                width={width}
+                height={height}
+                className={cn(
+                  "z-0 w-full h-full object-cover transition-all hover:scale-105",
+                  aspectRatio === "portrait" ? "aspect-[3/4]" : aspectRatio === "square" ? "aspect-square" : ""
+                )}
               />
+            </div>
+          ) : (
+            <div
+              className="w-full h-full bg-gray-300 flex items-center justify-center"
+              style={{ height, width }}
+            >
+              <span className="text-white text-center">{title}</span>
             </div>
           )}
         </Card>
@@ -101,7 +108,7 @@ const Poster: React.FC<MoviePosterProps> = ({
       </ContextMenu>
       <div className="space-y-1 text-sm">
         <h3 className="font-medium leading-none">{title}</h3>
-        {description && <p className="text-xs text-muted-foreground">{description}</p>}
+        {releaseDate && <p className="text-xs text-muted-foreground">{releaseDate.split('-')[0]}</p>}
       </div>
     </div>
   );
