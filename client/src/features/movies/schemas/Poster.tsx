@@ -62,7 +62,7 @@ const Poster: React.FC<MoviePosterProps> = ({
             ) : (
               <div 
                 className={cn(
-                  "flex items-center justify-center w-full h-full bg-gray-300",
+                  "flex items-center justify-center w-full h-full bg-gray-300 hover:scale-105",
                   aspectRatio === "portrait" ? "aspect-[3/4]" : aspectRatio === "square" ? "aspect-square" : ""
                 )}
               >
