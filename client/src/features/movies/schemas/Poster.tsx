@@ -21,6 +21,7 @@ export interface MoviePosterProps extends React.HTMLAttributes<HTMLDivElement> {
   width?: number;
   height?: number;
   releaseDate?: string;
+  showTitle?: boolean;
   onAddToLibrary?: () => void;
   onPlayNext?: () => void;
   onPlayLater?: () => void;
@@ -34,6 +35,7 @@ const Poster: React.FC<MoviePosterProps> = ({
   height,
   releaseDate,
   className,
+  showTitle = true,
   onAddToLibrary,
   onPlayNext,
   onPlayLater,
@@ -111,10 +113,11 @@ const Poster: React.FC<MoviePosterProps> = ({
           <ContextMenuItem>Share</ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
-      <div className="space-y-1 text-sm">
+      {showTitle && (<div className="space-y-1 text-sm">
         <h3 className="font-medium leading-none">{title}</h3>
         {releaseDate && <p className="text-xs text-muted-foreground">{releaseDate.split('-')[0]}</p>}
       </div>
+      )}
     </div>
   );
 };
