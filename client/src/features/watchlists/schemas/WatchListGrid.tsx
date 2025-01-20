@@ -10,7 +10,7 @@ interface WatchlistGridProps {
   onClick: (id: number) => void;
 }
 
-export function WatchlistGrid({ loading, watchlists, onClick }: WatchlistGridProps) {
+export function WatchListGrid({ loading, watchlists, onClick }: WatchlistGridProps) {
   return (
     <>
       {loading ? (
@@ -27,7 +27,7 @@ export function WatchlistGrid({ loading, watchlists, onClick }: WatchlistGridPro
                 title={watchlist.name}
                 onClick={() => onClick(watchlist.id)}
                 width={225}
-                height={500}
+                height={225}
                 aspectRatio='square'
               />
             ))}
