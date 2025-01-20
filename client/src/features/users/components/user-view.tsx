@@ -177,40 +177,43 @@ export default function UserView({
                         <Edit className='mr-2 h-4 w-4 text-blue-600' />
                         Изменить
                       </DropdownMenuItem>
-                      {canDelete && <DropdownMenuSeparator />}
+                      <DropdownMenuSeparator />
                     </>
                   )}
-                  {canDelete && (
-                    <>
-                      <DropdownMenuItem onClick={handleDelete}>
-                        <Trash className='mr-2 h-4 w-4 text-red-600' />
-                        Удалить
-                      </DropdownMenuItem>
-                      {canManageRoles && <DropdownMenuSeparator />}
-                    </>
-                  )}
-                  {canManageRoles && (
+                  {!currentUser && canManageRoles && (
                     <>
                       <DropdownMenuItem onClick={handleDeactivateAccount}>
                         <XCircle className='mr-2 h-4 w-4 text-red-400' />
-                        Деактивировать аккаунт
+                        Деактивировать
                       </DropdownMenuItem>
-                      {'share' in navigator && <DropdownMenuSeparator />}
+                      <DropdownMenuSeparator />
                     </>
                   )}
 
                   {'share' in navigator && (
-                    <DropdownMenuItem onClick={handleShare}>
-                      <Share className='mr-2 h-4 w-4' />
-                      Поделиться
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={handleShare}>
+                        <Share className='mr-2 h-4 w-4' />
+                        Поделиться
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                    </>
                   )}
 
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleCopyLink}>
                     <ClipboardCopy className='mr-2 h-4 w-4' />
                     {copySuccess ? 'Cкопировано!' : 'Скопировать'}
                   </DropdownMenuItem>
+
+                  {canDelete && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleDelete}>
+                        <Trash className='mr-2 h-4 w-4 text-red-600' />
+                        Удалить
+                      </DropdownMenuItem>
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </AlertDialog>
