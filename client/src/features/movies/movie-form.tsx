@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import MovieCommentsView from '../comments/components/movies-comments-view';
 
 const MovieForm = () => {
   const { id } = useParams();
@@ -127,6 +128,7 @@ const MovieForm = () => {
           </div>
         </CardContent>
       </Card>
+      <MovieCommentsView movieId={movie.id} />
     </ScrollArea>
   );
 };

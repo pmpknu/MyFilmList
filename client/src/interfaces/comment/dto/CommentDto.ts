@@ -8,5 +8,5 @@ export interface CommentDto extends CrudDto {
   movieId?: number;
   visible: boolean;
   text: string;
-  date: Date;
+  date: string; // ISO date string
 }
