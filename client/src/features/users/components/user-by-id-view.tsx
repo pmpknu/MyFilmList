@@ -102,10 +102,10 @@ export default function UserViewPage() {
   };
 
   const targetUserRoles: Role[] = user.roles;
-  const { canAdd: canAddRoles, canDelete: canDeleteRoles } = getRoleActions(
-    currentUserRole,
-    targetUserRoles
-  );
+  const { canAdd: canAddRoles, canDelete: canDeleteRoles } =
+    isCurrentUser || isAdmin(user)
+      ? { canAdd: [], canDelete: [] }
+      : getRoleActions(currentUserRole, targetUserRoles);
   const canDelete =
     isCurrentUser ||
     (!!currentUser &&

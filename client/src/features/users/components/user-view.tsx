@@ -36,7 +36,7 @@ import PageContainer from '@/components/layout/page-container';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { isAdmin as isUserAdmin, isExactlyModerator as isUserModerator } from '../rbac';
-import { roleBadges, roleClasses } from '../rbac/colors';
+import { hoverBg, roleBadges, roleClasses } from '../rbac/colors';
 import { useSidebar } from '@/components/ui/sidebar';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import DeleteUserDialog from './delete-user-dialog';
@@ -96,6 +96,9 @@ export default function UserView({
   const dispatch = useDispatch();
   const { theme } = useTheme();
 
+  const [isAdmin, setIsAdmin] = useState(isUserAdmin(user));
+  const [isModerator, setIsModerator] = useState(isUserModerator(user));
+
   const [copySuccess, setCopySuccess] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [userRoles, setUserRoles] = useState<Role[]>(user.roles);
@@ -105,8 +108,10 @@ export default function UserView({
     { id: 2, title: 'My second post', content: 'This is the content of the second post.' }
   ];
 
-  const isAdmin = isUserAdmin(user);
-  const isModerator = isUserModerator(user);
+  useEffect(() => {
+    setIsAdmin(() => isUserAdmin({ ...user, roles: userRoles }));
+    setIsModerator(() => isUserAdmin({ ...user, roles: userRoles }));
+  }, [userRoles]);
 
   const handleRolesUpdate = (updatedRoles: Role[]) => {
     setUserRoles(updatedRoles);
@@ -180,17 +185,10 @@ export default function UserView({
     });
   };
 
-  const hoverBg = () =>
-    isAdmin
-      ? 'hover:border-destructive hover:bg-destructive/20'
-      : isModerator
-        ? 'hover:border-primary hover:bg-primary/30'
-        : 'hover:border-muted hover:bg-muted/50';
-
   return (
     <PageContainer>
       <div className='container mx-auto max-w-5xl p-4'>
-        <Card className={`relative mb-6 border ${roleClasses(user)}`}>
+        <Card className={`relative mb-6 border ${roleClasses({ ...user, roles: userRoles })}`}>
           <div className='absolute right-4 top-4 flex items-center gap-2'>
             {!isMobile && canEdit && (
               <button
@@ -204,7 +202,7 @@ export default function UserView({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'ring-destructive/40' : 'ring-blue-300'} ${hoverBg()}`}
+                    className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'ring-destructive/40' : 'ring-blue-300'} ${hoverBg({ ...user, roles: userRoles })}`}
                   >
                     <MoreVertical className='h-5 w-5' />
                   </button>
@@ -313,20 +311,15 @@ export default function UserView({
               </p>
 
               <Separator className='my-4' />
-              <div className='mt-4'>
-                <UserRoles
-                  userId={user.id}
-                  roles={userRoles}
-                  canAddRoles={canAddRoles}
-                  canDeleteRoles={canDeleteRoles}
-                  onRolesUpdate={handleRolesUpdate}
-                />
+              <UserRoles
+                user={{ ...user, roles: userRoles }}
+                roles={userRoles}
+                canAddRoles={canAddRoles}
+                canDeleteRoles={canDeleteRoles}
+                onRolesUpdate={handleRolesUpdate}
+              />
 
-                <UserBio
-                  bio={user.bio}
-                  className={isAdmin ? 'text-destructive' : 'text-blue-600'}
-                />
-              </div>
+              <UserBio bio={user.bio} className={isAdmin ? 'text-destructive' : 'text-blue-600'} />
             </CardContent>
           </div>
         </Card>

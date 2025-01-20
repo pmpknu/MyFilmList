@@ -6,12 +6,14 @@ import { Role } from '@/interfaces/role/model/UserRole';
 import { Badge } from '@/components/ui/badge';
 import { LoadingSpinner } from '@/components/spinner';
 import UserRoleService from '@/services/UserRoleService';
-import { roleBadges } from '../rbac/colors';
+import { hoverBg, roleBadges } from '../rbac/colors';
 import { X as Delete, Plus } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { isAdmin } from '../rbac';
+import { UserDto } from '@/interfaces/user/dto/UserDto';
 
 interface UserRolesProps {
-  userId: number;
+  user: UserDto;
   roles: Role[];
   canAddRoles: Role[];
   canDeleteRoles: Role[];
@@ -23,7 +25,7 @@ function capitalize(s: string) {
 }
 
 export const UserRoles: React.FC<UserRolesProps> = ({
-  userId,
+  user,
   roles: initialRoles,
   canAddRoles: initialCanAddRoles,
   canDeleteRoles: initialCanDeleteRoles,
@@ -58,9 +60,10 @@ export const UserRoles: React.FC<UserRolesProps> = ({
     setRoles((prev) => [...prev, role]);
     setCanAddRoles((prev) => prev.filter((r) => r !== role));
     setCanDeleteRoles((prev) => [...prev, role]);
+    onRolesUpdate([...roles, role]);
 
     try {
-      await UserRoleService.addRoleToUser(userId, { role });
+      await UserRoleService.addRoleToUser(user.id, { role });
       toast.success(`Роль ${capitalize(role.replace('ROLE_', ''))} добавлена`, {
         description: 'Вы успешно изменили права доступа пользователя.'
       });
@@ -81,7 +84,7 @@ export const UserRoles: React.FC<UserRolesProps> = ({
     setLoadingRoles((prev) => ({ ...prev, [role]: true }));
 
     try {
-      await UserRoleService.removeRoleFromUser(userId, { role });
+      await UserRoleService.removeRoleFromUser(user.id, { role });
       toast.success(`Роль ${capitalize(role.replace('ROLE_', ''))} удалена`, {
         description: 'Вы успешно изменили права доступа пользователя.'
       });
@@ -119,15 +122,15 @@ export const UserRoles: React.FC<UserRolesProps> = ({
     <div>
       <div className='flex items-center gap-2'>
         <p className='text-md font-semibold'>Уровни доступа:</p>
-        <div className='flex flex-wrap gap-2'>
-          {sortedRoles.length > 0 ? (
-            sortedRoles.map((role, index) => (
+        {sortedRoles.length > 0 ? (
+          <div className='flex flex-wrap gap-2'>
+            {sortedRoles.map((role, index) => (
               <Badge
                 key={index}
                 variant='secondary'
                 className={`relative flex items-center gap-2 border text-sm ${roleBadges[role]} ${
                   !loadingRoles[role] && canDeleteRoles.includes(role)
-                    ? 'group hover:bg-red-500 hover:text-white'
+                    ? 'group hover:border-red-500 hover:bg-red-500 hover:text-white'
                     : ''
                 }`}
                 onClick={() =>
@@ -151,31 +154,33 @@ export const UserRoles: React.FC<UserRolesProps> = ({
                   </span>
                 )}
               </Badge>
-            ))
-          ) : (
-            <p className='text-muted-foreground'>Нет уровней доступа</p>
-          )}
-          {availableRolesToAdd.length > 0 && (
+            ))}
+          </div>
+        ) : (
+          <p className='text-muted-foreground'>Нет уровней доступа</p>
+        )}
+        {availableRolesToAdd.length > 0 && (
+          <div className='flex flex-wrap gap-2'>
             <div className='relative' ref={dropdownRef}>
-              <Badge
-                variant='secondary'
-                className='flex items-center gap-2 border text-sm hover:bg-green-500 hover:text-white'
+              <div
+                className={`flex inline-flex items-center gap-2 rounded-full bg-transparent px-2.5 py-2 text-sm focus:outline-none focus:ring-2 ${isAdmin(user) ? 'ring-destructive/40' : 'ring-blue-300'} ${hoverBg(user)} hover:border-none`}
                 onClick={() => setIsDropdownOpen((prev) => !prev)}
               >
-                <Plus className='h-4 w-4' />
-              </Badge>
+                <Plus className='relative flex w-4 cursor-pointer text-primary-foreground' />
+              </div>
               {isDropdownOpen && (
-                <div className='absolute left-0 z-10 mt-2 w-40 rounded-md border bg-white p-2 shadow-md dark:bg-gray-800'>
+                <div className='absolute left-0 z-10 mt-2 w-40 rounded-md border bg-muted/25 p-2 shadow-md'>
                   {sortRoles(availableRolesToAdd).map((role) => (
                     <div key={role}>
-                      {role !== sortRoles(availableRolesToAdd)[0] && <Separator className='py-1' />}
+                      {role !== sortRoles(availableRolesToAdd)[0] && (
+                        <Separator className='bg-muted/25 py-1' />
+                      )}
                       <Badge
                         key={role}
                         variant='secondary'
-                        className={`relative flex cursor-pointer items-center gap-2 border text-sm ${roleBadges[role]} hover:bg-blue-500 hover:text-white`}
+                        className={`relative flex cursor-pointer items-center gap-2 border text-sm ${roleBadges[role]}`}
                         onClick={() => {
                           handleAddRole(role);
-                          // setIsDropdownOpen(false);
                         }}
                       >
                         {loadingRoles[role] ? (
@@ -191,8 +196,8 @@ export const UserRoles: React.FC<UserRolesProps> = ({
                 </div>
               )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
