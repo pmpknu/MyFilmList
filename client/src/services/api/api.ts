@@ -8,7 +8,7 @@ import store from '@/store';
 import { addRequest } from '@/store/slices/request-slice';
 import { login } from '@/store/slices/auth-slice';
 
-const browserLang = navigator.language;
+const browserLang = navigator?.language;
 const supportedLocales = ['en', 'ru'];
 // fallback to 'ru-RU' if the browser's language is not supported
 let detectedLocale = 'ru';
