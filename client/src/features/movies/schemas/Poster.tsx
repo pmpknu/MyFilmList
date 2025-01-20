@@ -17,28 +17,34 @@ import { Card } from '@/components/ui/card';
 export interface MoviePosterProps extends React.HTMLAttributes<HTMLDivElement> {
   posterUrl: string | undefined;
   title: string;
+  movieid?: number;
   aspectRatio?: 'portrait' | 'square';
   width?: number;
   height?: number;
   releaseDate?: string;
   showTitle?: boolean;
-  onAddToLibrary?: () => void;
-  onPlayNext?: () => void;
-  onPlayLater?: () => void;
+  renderContextMenu?: boolean;
+  onNewWatchlist?: (movieId: number) => void;
+  onMarkAsWatched?: (movieId: number) => void;
+  onAddToWatchlist?: (movieId : number, watchlistId : number) => void;
+  watchlists?: {id:number, name:string}[];
 }
 
 const Poster: React.FC<MoviePosterProps> = ({
   posterUrl,
   title,
+  movieid,
   aspectRatio,
   width,
   height,
   releaseDate,
   className,
   showTitle = true,
-  onAddToLibrary,
-  onPlayNext,
-  onPlayLater,
+  renderContextMenu = false,
+  onNewWatchlist,
+  onMarkAsWatched,
+  onAddToWatchlist,
+  watchlists = [],
   ...props
 }) => {
   return (
@@ -84,19 +90,19 @@ const Poster: React.FC<MoviePosterProps> = ({
             </div>
           </Card>
         </ContextMenuTrigger>
+        {renderContextMenu && movieid && (
         <ContextMenuContent className='w-40'>
-          <ContextMenuItem onClick={onAddToLibrary}>Add to Library</ContextMenuItem>
+          {onMarkAsWatched && (<ContextMenuItem onClick={() => onMarkAsWatched(movieid)}>Отметить просмотренным</ContextMenuItem>)}
           <ContextMenuSub>
-            <ContextMenuSubTrigger>Add to Playlist</ContextMenuSubTrigger>
+            <ContextMenuSubTrigger>Добавить в коллекцию</ContextMenuSubTrigger>
             <ContextMenuSubContent className='w-48'>
-              <ContextMenuItem>
+            {onNewWatchlist && (<ContextMenuItem onClick={() => onNewWatchlist(movieid)}>
                 <PlusCircle className='mr-2 h-4 w-4' />
-                New Playlist
-              </ContextMenuItem>
+                Новая коллекция
+              </ContextMenuItem>)}
               <ContextMenuSeparator />
-              {/* Example hardcoded playlists, replace with dynamic content if needed */}
-              {['Favorites', 'Watch Later', 'Comedy'].map((playlist) => (
-                <ContextMenuItem key={playlist}>
+              {onAddToWatchlist && watchlists.map((playlist) => (
+                <ContextMenuItem key={playlist.id} onClick={() => onAddToWatchlist(movieid, playlist.id)}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -109,19 +115,13 @@ const Poster: React.FC<MoviePosterProps> = ({
                   >
                     <path d='M21 15V6M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM12 12H3M16 6H3M12 18H3' />
                   </svg>
-                  {playlist}
+                  {playlist.name}
                 </ContextMenuItem>
               ))}
             </ContextMenuSubContent>
           </ContextMenuSub>
-          <ContextMenuSeparator />
-          <ContextMenuItem onClick={onPlayNext}>Play Next</ContextMenuItem>
-          <ContextMenuItem onClick={onPlayLater}>Play Later</ContextMenuItem>
-          <ContextMenuItem>Create Station</ContextMenuItem>
-          <ContextMenuSeparator />
-          <ContextMenuItem>Like</ContextMenuItem>
-          <ContextMenuItem>Share</ContextMenuItem>
         </ContextMenuContent>
+        )}
       </ContextMenu>
       {showTitle && (
         <div className='space-y-1 text-sm'>
