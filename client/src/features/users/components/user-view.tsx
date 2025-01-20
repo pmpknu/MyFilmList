@@ -45,6 +45,8 @@ import AuthService from '@/services/AuthService';
 import { logout } from '@/store/slices/auth-slice';
 import { useDispatch } from '@/hooks/use-redux';
 import { useTheme } from 'next-themes';
+import { Role } from '@/interfaces/role/model/UserRole';
+import { UserRoles } from './user-roles';
 
 export function UserBio({ bio, className }: { bio: string | undefined; className: String }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -79,13 +81,15 @@ export default function UserView({
   currentUser = false,
   canEdit = false,
   canDelete = false,
-  canManageRoles = false
+  canAddRoles = [],
+  canDeleteRoles = []
 }: {
   user: UserDto;
   currentUser?: boolean;
   canEdit?: boolean;
   canDelete?: boolean;
-  canManageRoles?: boolean;
+  canAddRoles?: Role[];
+  canDeleteRoles?: Role[];
 }) {
   const { isMobile } = useSidebar();
   const router = useRouter();
@@ -94,6 +98,7 @@ export default function UserView({
 
   const [copySuccess, setCopySuccess] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [userRoles, setUserRoles] = useState<Role[]>(user.roles);
 
   const userPosts = [
     { id: 1, title: 'My first post', content: 'This is the content of the first post.' },
@@ -102,6 +107,10 @@ export default function UserView({
 
   const isAdmin = isUserAdmin(user);
   const isModerator = isUserModerator(user);
+
+  const handleRolesUpdate = (updatedRoles: Role[]) => {
+    setUserRoles(updatedRoles);
+  };
 
   const handleEdit = () => {
     toast.success('Редактирование пользователя');
@@ -211,7 +220,7 @@ export default function UserView({
                       <DropdownMenuSeparator />
                     </>
                   )}
-                  {!currentUser && canManageRoles && (
+                  {!currentUser && canDeleteRoles.includes(Role.ROLE_USER) && (
                     <>
                       <DropdownMenuItem onClick={handleDeactivateAccount}>
                         <XCircle className='mr-2 h-4 w-4 text-red-400' />
@@ -305,33 +314,12 @@ export default function UserView({
 
               <Separator className='my-4' />
               <div className='mt-4'>
-                <div className='flex items-center gap-2'>
-                  <p className='text-md font-semibold'>Уровни доступа:</p>
-                  <div className='flex flex-wrap gap-2'>
-                    {user.roles.length > 0 ? (
-                      [...user.roles]
-                        .sort((a, b) => {
-                          const rolePriority: Record<string, number> = {
-                            ROLE_USER: 1,
-                            ROLE_MODERATOR: 2,
-                            ROLE_ADMIN: 3
-                          };
-                          return (rolePriority[a] || 99) - (rolePriority[b] || 99);
-                        })
-                        .map((role, index) => (
-                          <Badge
-                            key={index}
-                            variant='secondary'
-                            className={`border text-sm ${roleBadges[role]}`}
-                          >
-                            {role.replace('ROLE_', '').toLowerCase()}
-                          </Badge>
-                        ))
-                    ) : (
-                      <p className='text-muted-foreground'>Нет уровней доступа</p>
-                    )}
-                  </div>
-                </div>
+                <UserRoles
+                  userId={user.id}
+                  roles={userRoles}
+                  canDeleteRoles={canDeleteRoles}
+                  onRolesUpdate={handleRolesUpdate}
+                />
 
                 <UserBio
                   bio={user.bio}

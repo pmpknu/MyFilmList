@@ -9,7 +9,8 @@ import { LoadingSpinner } from '@/components/spinner';
 import UserService from '@/services/UserService';
 import { UserDto } from '@/interfaces/user/dto/UserDto';
 import { useSelector } from '@/hooks/use-redux';
-import { isAdmin, isModerator } from '../rbac';
+import { isAdmin, isModerator, isUser } from '../rbac';
+import { Role } from '@/interfaces/role/model/UserRole';
 
 export default function UserViewPage() {
   const params = useParams<{ id: string }>();
@@ -59,6 +60,52 @@ export default function UserViewPage() {
 
   const isCurrentUser = currentUser?.id === user.id;
   const canEdit = isCurrentUser || (!!currentUser && isAdmin(currentUser) && !isAdmin(user));
+
+  type UserRole = 'admin' | 'moderator' | 'user' | 'guest';
+  const rolePermissions: Record<UserRole, { canAdd: Role[]; canDelete: Role[] }> = {
+    admin: {
+      canAdd: [Role.ROLE_USER, Role.ROLE_MODERATOR, Role.ROLE_ADMIN],
+      canDelete: [Role.ROLE_USER, Role.ROLE_MODERATOR]
+    },
+    moderator: {
+      canAdd: [Role.ROLE_USER],
+      canDelete: [Role.ROLE_USER]
+    },
+    user: {
+      canAdd: [],
+      canDelete: []
+    },
+    guest: {
+      canAdd: [],
+      canDelete: []
+    }
+  };
+
+  const currentUserRole: UserRole = !currentUser
+    ? 'guest'
+    : isAdmin(currentUser)
+      ? 'admin'
+      : isModerator(currentUser)
+        ? 'moderator'
+        : 'user';
+
+  const getRoleActions = (
+    currentUserRole: UserRole,
+    targetUserRoles: Role[]
+  ): { canAdd: Role[]; canDelete: Role[] } => {
+    const permissions = rolePermissions[currentUserRole];
+
+    const canAdd = permissions.canAdd.filter((role) => !targetUserRoles.includes(role));
+    const canDelete = permissions.canDelete.filter((role) => targetUserRoles.includes(role));
+
+    return { canAdd, canDelete };
+  };
+
+  const targetUserRoles: Role[] = user.roles;
+  const { canAdd: canAddRoles, canDelete: canDeleteRoles } = getRoleActions(
+    currentUserRole,
+    targetUserRoles
+  );
   const canDelete =
     isCurrentUser ||
     (!!currentUser &&
@@ -69,6 +116,13 @@ export default function UserViewPage() {
           : false));
 
   return (
-    <UserView user={user} currentUser={isCurrentUser} canEdit={canEdit} canDelete={canDelete} />
+    <UserView
+      user={user}
+      currentUser={isCurrentUser}
+      canEdit={canEdit}
+      canDelete={canDelete}
+      canAddRoles={canAddRoles}
+      canDeleteRoles={canDeleteRoles}
+    />
   );
 }
