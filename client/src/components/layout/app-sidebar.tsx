@@ -28,7 +28,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { adminItems, authenticatedItems, guestItems, navItems } from '@/constants/navigation';
+import { authenticatedItems, guestItems, navItems } from '@/constants/navigation';
 import { ChevronRight, ChevronsUpDown, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -43,7 +43,6 @@ import { cn } from '@/lib/utils';
 import SignOutDialog from '@/features/auth/components/sign-out-dialog';
 import { getAvatarSvg } from '@/features/users/components/avatar/generator';
 import { NavItem } from 'types';
-import { Role } from '@/interfaces/role/model/UserRole';
 
 export const company = {
   name: 'MFL',
@@ -97,7 +96,7 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Обзор</SidebarGroupLabel>
           <SidebarMenu>
-            {(!mounted ? navItems : user ? ( user.roles.includes(Role.ROLE_ADMIN) ? adminItems : authenticatedItems ) : guestItems).map((item) => {
+            {(!mounted ? navItems : user ? authenticatedItems : guestItems).map((item) => {
               const Icon = item.icon ? Icons[item.icon] : Icons.logo;
               const subItems = item?.items;
 
