@@ -44,6 +44,7 @@ import UserService from '@/services/UserService';
 import AuthService from '@/services/AuthService';
 import { logout } from '@/store/slices/auth-slice';
 import { useDispatch } from '@/hooks/use-redux';
+import { useTheme } from 'next-themes';
 
 export function UserBio({ bio, className }: { bio: string | undefined; className: String }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -89,6 +90,8 @@ export default function UserView({
   const { isMobile } = useSidebar();
   const router = useRouter();
   const dispatch = useDispatch();
+  const { theme } = useTheme();
+
   const [copySuccess, setCopySuccess] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -262,7 +265,7 @@ export default function UserView({
               <div className='relative mx-auto flex-shrink-0 md:mx-0 md:w-1/3 md:overflow-hidden md:rounded-l-lg'>
                 <div className='mt-4 flex h-32 w-32 items-center justify-center rounded-full bg-muted md:mt-0 md:aspect-square md:h-auto md:w-full md:rounded-none'>
                   <Image
-                    src={user?.photo ?? getAvatarSvg(user?.username).toDataUri()}
+                    src={user?.photo ?? getAvatarSvg(user?.username, theme).toDataUri()}
                     alt={`${user.username}'s avatar`}
                     fill
                     className='object-cover'
@@ -273,7 +276,7 @@ export default function UserView({
               <div className='flex flex-col items-center justify-center text-center'>
                 <div className='mt-6 flex h-48 w-48 items-center justify-center overflow-hidden rounded-full bg-muted'>
                   <Image
-                    src={user?.photo ?? getAvatarSvg(user?.username).toDataUri()}
+                    src={user?.photo ?? getAvatarSvg(user?.username, theme).toDataUri()}
                     alt={`${user.username}'s avatar`}
                     width={220}
                     height={220}

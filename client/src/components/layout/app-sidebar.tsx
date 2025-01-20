@@ -44,6 +44,7 @@ import SignOutDialog from '@/features/auth/components/sign-out-dialog';
 import { getAvatarSvg } from '@/features/users/components/avatar/generator';
 import { NavItem } from 'types';
 import { isAdmin } from '@/features/users/rbac';
+import { useTheme } from 'next-themes';
 
 export const company = {
   name: 'MFL',
@@ -56,14 +57,17 @@ export default function AppSidebar() {
   const dispatch = useDispatch();
   const pathname = usePathname();
   const { state, isMobile } = useSidebar();
+  const { theme } = useTheme();
 
   const user = useSelector((state: RootState) => state.auth.user);
 
   const [mounted, setMounted] = useState<boolean>(false);
   const [copySuccess, setCopySuccess] = useState<boolean>(false);
+  const [callbackUrl, setCallbackUrl] = useState<string>('');
 
   useEffect(() => {
     setMounted(true);
+    setCallbackUrl(window.location.href);
   }, []);
 
   const getItems = (): NavItem[] => {
@@ -125,7 +129,6 @@ export default function AppSidebar() {
           <SidebarMenu>
             {getItems().map((item) => {
               const Icon = item.icon ? Icons[item.icon] : Icons.logo;
-              const callbackUrl = window.location.href;
               const subItems = item?.items?.map((i) => {
                 if (i.url.endsWith('sign-in') || i.url.endsWith('sign-up')) {
                   return {
@@ -213,7 +216,7 @@ export default function AppSidebar() {
                         <AvatarFallback
                           className='rounded-full'
                           dangerouslySetInnerHTML={{
-                            __html: getAvatarSvg(user.username).toString()
+                            __html: getAvatarSvg(user.username, theme).toString()
                           }}
                         />
                       </Avatar>
@@ -238,7 +241,7 @@ export default function AppSidebar() {
                             <AvatarFallback
                               className='rounded-full'
                               dangerouslySetInnerHTML={{
-                                __html: getAvatarSvg(user.username).toString()
+                                __html: getAvatarSvg(user.username, theme).toString()
                               }}
                             />
                           </Avatar>

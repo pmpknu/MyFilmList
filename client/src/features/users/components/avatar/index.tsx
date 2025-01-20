@@ -7,12 +7,14 @@ import { getAvatarSvg } from './generator';
 export default function UserAvatar({
   user,
   layout,
+  theme,
   className,
   height = 96,
   width = 96
 }: {
   user: UserDto;
   layout?: string;
+  theme?: string;
   className?: string;
   height?: number;
   width?: number;
@@ -31,7 +33,7 @@ export default function UserAvatar({
       width={height}
       height={width}
       className={className}
-      dangerouslySetInnerHTML={{ __html: getAvatarSvg(user?.username, height).toString() }}
+      dangerouslySetInnerHTML={{ __html: getAvatarSvg(user?.username, theme, height).toString() }}
     />
   );
 }
