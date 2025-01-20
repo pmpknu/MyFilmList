@@ -28,7 +28,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { authenticatedItems, guestItems, navItems } from '@/constants/navigation';
+import { adminItems, authenticatedItems, guestItems, navItems } from '@/constants/navigation';
 import { ChevronRight, ChevronsUpDown, ClipboardCopy, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -43,6 +43,7 @@ import { cn } from '@/lib/utils';
 import SignOutDialog from '@/features/auth/components/sign-out-dialog';
 import { getAvatarSvg } from '@/features/users/components/avatar/generator';
 import { NavItem } from 'types';
+import { isAdmin } from '@/features/users/rbac';
 
 export const company = {
   name: 'MFL',
@@ -64,6 +65,16 @@ export default function AppSidebar() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const getItems = (): NavItem[] => {
+    if (mounted) {
+      if (user) {
+        return isAdmin(user) ? adminItems : authenticatedItems;
+      }
+      return guestItems;
+    }
+    return navItems;
+  };
 
   const handleSubmit = async (onAllDevices: boolean) => {
     router.push('/');
@@ -112,10 +123,9 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Обзор</SidebarGroupLabel>
           <SidebarMenu>
-            {(!mounted ? navItems : user ? authenticatedItems : guestItems).map((item) => {
+            {getItems().map((item) => {
               const Icon = item.icon ? Icons[item.icon] : Icons.logo;
               const subItems = item?.items;
-
               return subItems && subItems?.length > 0 ? (
                 <Collapsible
                   key={item.title}
@@ -137,6 +147,9 @@ export default function AppSidebar() {
                           <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton asChild isActive={checkPathname(subItem)}>
                               <Link href={subItem.url}>
+                                {subItem.icon
+                                  ? React.createElement(Icons[subItem.icon])
+                                  : React.createElement(Icons.square)}
                                 <span>{subItem.title}</span>
                               </Link>
                             </SidebarMenuSubButton>

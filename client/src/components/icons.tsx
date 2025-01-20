@@ -9,6 +9,7 @@ import {
   CreditCard,
   File,
   FileText,
+  Film,
   HelpCircle,
   Image,
   Laptop,
@@ -23,6 +24,7 @@ import {
   Pizza,
   Plus,
   Settings,
+  Square,
   SunMedium,
   Trash,
   User,
@@ -31,7 +33,8 @@ import {
   UserPen,
   UserPlus,
   UserX2Icon,
-  X
+  X,
+  Popcorn
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -51,8 +54,11 @@ export const Icons = {
   employee: UserX2Icon,
   post: FileText,
   page: File,
+  film: Film,
+  popcorn: Popcorn,
   media: Image,
   settings: Settings,
+  square: Square,
   billing: CreditCard,
   ellipsis: MoreVertical,
   add: Plus,

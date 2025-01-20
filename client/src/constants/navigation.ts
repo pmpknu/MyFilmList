@@ -1,8 +1,22 @@
 import { NavItem } from 'types';
 
 export function merge(a: NavItem[], b: NavItem[], prop: keyof NavItem) {
-  var reduced = a.filter((aItem) => !b.find((bItem) => aItem[prop] === bItem[prop]));
-  return reduced.concat(b);
+  const merged = [...a];
+
+  b.forEach((bItem) => {
+    const existingIndex = merged.findIndex((aItem) => aItem[prop] === bItem[prop]);
+
+    if (existingIndex !== -1) {
+      merged[existingIndex] = {
+        ...merged[existingIndex],
+        ...bItem
+      };
+    } else {
+      merged.push(bItem);
+    }
+  });
+
+  return merged;
 }
 
 //Info: The following data is used for the sidebar navigation and Cmd K bar.
@@ -16,13 +30,13 @@ export const navItems: NavItem[] = [
     items: []
   },
   {
-    title: 'Пользователи',
-    url: '/users',
-    icon: 'users',
-    shortcut: ['u', 'u'],
-    isActive: false,
+    title: 'Фильмы',
+    url: '/movies',
+    icon: 'popcorn',
+    shortcut: ['m', 'm'],
+    isActive: true,
     items: [],
-    pathPattern: /^\/users\/\d+$/
+    pathPattern: /^\/movies\/\d+$/
   },
   {
     title: 'Учётная запись',
@@ -30,6 +44,15 @@ export const navItems: NavItem[] = [
     icon: 'user',
     isActive: true,
     items: []
+  },
+  {
+    title: 'Пользователи',
+    url: '/users',
+    icon: 'users',
+    shortcut: ['u', 'u'],
+    isActive: false,
+    items: [],
+    pathPattern: /^\/users\/\d+$/
   }
 ];
 
@@ -38,9 +61,37 @@ export const authenticatedOnlyItems: NavItem[] = [
     title: 'Учётная запись',
     url: '/auth/me',
     icon: 'user',
-    shortcut: ['m', 'm'],
+    shortcut: ['a', 'a'],
     isActive: true,
     items: []
+  }
+];
+
+export const adminOnlyItems: NavItem[] = [
+  {
+    title: 'Фильмы',
+    url: '#',
+    icon: 'popcorn',
+    shortcut: ['m', 'm'],
+    isActive: false,
+    pathPattern: /^\/movies\/\d+$/,
+    items: [
+      {
+        title: 'Фильмы',
+        url: '/movies',
+        icon: 'film'
+      },
+      {
+        title: 'Создать фильм',
+        url: '/movies/create',
+        icon: 'add'
+      },
+      {
+        title: 'Обновить фильм',
+        url: '/movies/update',
+        icon: 'post'
+      }
+    ]
   }
 ];
 
@@ -64,32 +115,9 @@ export const guestOnlyItems: NavItem[] = [
         icon: 'register'
       }
     ]
-  },
-  {
-    title: 'Фильмы',
-    url: '#',
-    icon: 'pizza',
-    isActive: true,
-    items: [
-      {
-        title: 'Создать фильм',
-        requiresAuth: true,
-        requiresRole: Role.ROLE_ADMIN,
-        url: '/movies/create',
-        icon: 'add',
-        shortcut: ['c', 'c']
-      },
-      {
-        title: 'Обновить фильм',
-        requiresAuth: true,
-        requiresRole: Role.ROLE_ADMIN,
-        url: '/movies/update',
-        icon: 'post',
-        shortcut: ['u', 'u']
-      }
-    ]
   }
 ];
 
 export const guestItems: NavItem[] = merge(navItems, guestOnlyItems, 'title');
 export const authenticatedItems: NavItem[] = merge(navItems, authenticatedOnlyItems, 'title');
+export const adminItems: NavItem[] = merge(authenticatedItems, adminOnlyItems, 'title');
