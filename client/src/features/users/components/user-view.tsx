@@ -110,7 +110,7 @@ export default function UserView({
 
   useEffect(() => {
     setIsAdmin(() => isUserAdmin({ ...user, roles: userRoles }));
-    setIsModerator(() => isUserAdmin({ ...user, roles: userRoles }));
+    setIsModerator(() => isUserModerator({ ...user, roles: userRoles }));
   }, [userRoles]);
 
   const handleRolesUpdate = (updatedRoles: Role[]) => {
