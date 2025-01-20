@@ -29,7 +29,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { authenticatedItems, guestItems, navItems } from '@/constants/navigation';
-import { ChevronRight, ChevronsUpDown, LogOut } from 'lucide-react';
+import { ChevronRight, ChevronsUpDown, ClipboardCopy, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { usePathname, useRouter } from 'next/navigation';
@@ -58,7 +58,8 @@ export default function AppSidebar() {
 
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState<boolean>(false);
+  const [copySuccess, setCopySuccess] = useState<boolean>(false);
 
   useEffect(() => {
     setMounted(true);
@@ -72,6 +73,21 @@ export default function AppSidebar() {
       AuthService.forgetAuth();
       dispatch(logout());
     }, 500);
+  };
+
+  const handleCopyLink = (e?: React.UIEvent<HTMLDivElement>) => {
+    e?.preventDefault();
+    toast.info('Ссылка скопирована в буфер обмена', {
+      description: 'Теперь вы можете вставить её в любом месте, где это необходимо.',
+      duration: 2000
+    });
+    const usersUrl = `${window.location.origin}/users/${user?.id}`;
+    navigator.clipboard.writeText(usersUrl).then(() => {
+      setCopySuccess(true);
+      if (!copySuccess) {
+        setTimeout(() => setCopySuccess(false), 2000);
+      }
+    });
   };
 
   const checkPathname = (item: NavItem) =>
@@ -210,6 +226,14 @@ export default function AppSidebar() {
                         </div>
                       </a>
                     </DropdownMenuLabel>
+
+                    <DropdownMenuSeparator />
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem onClick={handleCopyLink}>
+                        <ClipboardCopy className='mr-4 h-4 w-4 text-gray-500' />
+                        {copySuccess ? 'Cкопировано!' : 'Скопировать'}
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
 
                     <DropdownMenuSeparator />
                     <AlertDialogTrigger asChild>
