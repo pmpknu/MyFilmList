@@ -8,9 +8,14 @@ interface MovieGridProps {
   loading: boolean;
   movies: MovieDto[];
   onClick: (id: number) => void;
+  renderContextMenu?: boolean;
+  onNewWatchlist?: (movieId: number) => void;
+  onMarkAsWatched?: (movieId: number) => void;
+  onAddToWatchlist?: (movieId: number, watchlistId: number) => void;
+  watchlists?: {id:number, name:string}[];
 }
 
-export function MovieGrid({ loading, movies, onClick }: MovieGridProps) {
+export function MovieGrid({ loading, movies, onClick, renderContextMenu, onMarkAsWatched, onAddToWatchlist, watchlists, onNewWatchlist }: MovieGridProps) {
   return (
     <>
       {loading ? (
@@ -25,11 +30,17 @@ export function MovieGrid({ loading, movies, onClick }: MovieGridProps) {
                 key={movie.id}
                 posterUrl={movie.poster}
                 title={movie.title}
+                movieid={movie.id}
                 releaseDate={movie.releaseDate}
                 onClick={() => onClick(movie.id)}
                 width={225}
                 height={500}
                 aspectRatio='portrait'
+                renderContextMenu={renderContextMenu}
+                onAddToWatchlist={onAddToWatchlist}
+                watchlists={watchlists}
+                onMarkAsWatched={onMarkAsWatched}
+                onNewWatchlist={onNewWatchlist}
               />
             ))}
 
