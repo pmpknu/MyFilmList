@@ -38,7 +38,12 @@ import { Badge } from '@/components/ui/badge';
 import { isAdmin as isUserAdmin, isExactlyModerator as isUserModerator } from '../rbac';
 import { roleBadges, roleClasses } from '../rbac/colors';
 import { useSidebar } from '@/components/ui/sidebar';
-import { AlertDialog } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import DeleteUserDialog from './delete-user-dialog';
+import UserService from '@/services/UserService';
+import AuthService from '@/services/AuthService';
+import { logout } from '@/store/slices/auth-slice';
+import { useDispatch } from '@/hooks/use-redux';
 
 export function UserBio({ bio, className }: { bio: string | undefined; className: String }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -82,7 +87,10 @@ export default function UserView({
   canManageRoles?: boolean;
 }) {
   const { isMobile } = useSidebar();
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [copySuccess, setCopySuccess] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const userPosts = [
     { id: 1, title: 'My first post', content: 'This is the content of the first post.' },
@@ -98,8 +106,28 @@ export default function UserView({
   };
 
   const handleDelete = () => {
-    toast.success('Пользователь удален');
-    // TODO
+    UserService.deleteUser(user.id)
+      .then(() => {
+        router.push('/');
+        if (currentUser) {
+          toast.info('Вы успешно удалили вашу учётную запись!', {
+            description: 'Будем рады увидеть вас снова!',
+            duration: 3500
+          });
+          setTimeout(async () => {
+            AuthService.forgetAuth();
+            dispatch(logout());
+          }, 1000);
+        } else {
+          toast.success('Вы успешно удалили учётную запись!');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error('Во время удаления учётной записи произошла ошибка', {
+          description: 'Извините, что-то пошло не так. Попробуйте повторить позднее'
+        });
+      });
   };
 
   const handleDeactivateAccount = () => {
@@ -164,7 +192,7 @@ export default function UserView({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'ring-destructive/40' : 'ring-ring-blue-300'} ${hoverBg()}`}
+                    className={`rounded-full p-2 focus:outline-none focus:ring-2 ${isAdmin ? 'ring-destructive/40' : 'ring-blue-300'} ${hoverBg()}`}
                   >
                     <MoreVertical className='h-5 w-5' />
                   </button>
@@ -206,16 +234,26 @@ export default function UserView({
                   </DropdownMenuItem>
 
                   {canDelete && (
-                    <>
+                    <div onClick={() => setIsDialogOpen(true)}>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleDelete}>
-                        <Trash className='mr-2 h-4 w-4 text-red-600' />
-                        Удалить
-                      </DropdownMenuItem>
-                    </>
+                      <AlertDialogTrigger asChild>
+                        <DropdownMenuItem>
+                          <Trash className='mr-2 h-4 w-4 text-red-600' />
+                          Удалить
+                        </DropdownMenuItem>
+                      </AlertDialogTrigger>
+                    </div>
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              <DeleteUserDialog
+                isOpen={isDialogOpen}
+                setOpen={setIsDialogOpen}
+                user={user}
+                currentUser={currentUser}
+                handleSubmit={handleDelete}
+              />
             </AlertDialog>
           </div>
 

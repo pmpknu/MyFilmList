@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { HeartCrack } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import {
   AlertDialogAction,
@@ -13,60 +12,150 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 import { UserDto } from '@/interfaces/user/dto/UserDto';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 
-// TODO
-export default function DeleteUserDialog({
+function DeleteCurrentUserDialog({
   user,
+  isOpen,
+  setOpen,
   handleSubmit
 }: {
   user: UserDto;
-  handleSubmit: (onAllDevices: boolean) => void;
+  isOpen: boolean;
+  setOpen: (value: boolean) => void;
+  handleSubmit: () => void;
 }) {
-  const [checked, setChecked] = useState<boolean>(false);
-  const handleClick = () => setChecked(!checked);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      setTimeLeft(null);
+    }
+
+    if (!timeLeft) return;
+
+    const intervalId = setInterval(() => {
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [timeLeft]);
+
+  useEffect(() => {
+    setTimeLeft(10);
+    setOpen(false);
+  }, [isOpen]);
 
   return (
-    <AlertDialogContent aria-labelledby='sign-out-dialog-title'>
+    <AlertDialogContent className='max-w-xl' aria-labelledby='sign-out-dialog-title'>
       <AlertDialogHeader>
         <AlertDialogTitle id='sign-out-dialog-title'>
-          Вы уверены, что хотите выйти из учетной записи?
+          Ты уверен, что хочешь нас покинуть? 😭
         </AlertDialogTitle>
         <AlertDialogDescription>
-          Обязательно возвращайтесь,{' '}
+          <div className='pb-4 pt-2'>
+            Удаление аккаунта означает{' '}
+            <span className='font-bold text-destructive'>потерю всех данных и воспоминаний</span>,
+            связанных с нашим общением и твоим вкладом в{' '}
+            <span className='font-bold'>MyFilmList</span>.
+          </div>
+          <div className='pb-4'>
+            Подумай еще немного, и, если ты всё же решишь уйти, нажми на кнопку ниже.
+          </div>
+          Мы будем скучать и всегда будем рады твоему возвращению,{' '}
           <a
-            className='text-blue-600 hover:underline dark:text-blue-500'
+            className='font-bold text-blue-600 hover:underline dark:text-blue-500'
+            href={`/users/${user.id}`}
+          >
+            @{user.username}
+          </a>{' '}
+          💔!
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <Separator />
+      <AlertDialogFooter className='flex w-full gap-2'>
+        <AlertDialogCancel
+          autoFocus
+          className='w-1/2 border border-secondary-foreground text-center hover:border-primary-foreground'
+        >
+          Отмена
+        </AlertDialogCancel>
+        {timeLeft ? (
+          <AlertDialogAction
+            onClick={(e) => e.preventDefault()}
+            className='w-1/2 cursor-not-allowed border border-muted-foreground bg-muted text-center text-muted-foreground hover:bg-muted hover:text-destructive-foreground'
+          >
+            Удалить через {timeLeft} секунд{timeLeft < 10 ? '\u00A0' : ''}
+          </AlertDialogAction>
+        ) : (
+          <AlertDialogAction
+            onClick={handleSubmit}
+            className='w-1/2 border border-destructive bg-background text-center text-destructive hover:border-destructive-foreground hover:bg-destructive hover:text-destructive-foreground'
+          >
+            Удалить
+          </AlertDialogAction>
+        )}
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  );
+}
+
+export default function DeleteUserDialog({
+  user,
+  isOpen,
+  setOpen,
+  currentUser,
+  handleSubmit
+}: {
+  user: UserDto;
+  isOpen: boolean;
+  setOpen: (value: boolean) => void;
+  currentUser: boolean;
+  handleSubmit: () => void;
+}) {
+  if (currentUser) {
+    return (
+      <DeleteCurrentUserDialog
+        user={user}
+        isOpen={isOpen}
+        setOpen={setOpen}
+        handleSubmit={handleSubmit}
+      />
+    );
+  }
+
+  return (
+    <AlertDialogContent className='max-w-sm' aria-labelledby='sign-out-dialog-title'>
+      <AlertDialogHeader>
+        <AlertDialogTitle id='sign-out-dialog-title'>
+          Вы действительно хотите удалить пользователя{' '}
+          <a
+            className='font-bold text-blue-600 hover:underline dark:text-blue-500'
             href={`/users/${user.id}`}
           >
             @{user.username}
           </a>
-          !
-          <br />
-          Мы будем по вас скучать...{' '}
-          <HeartCrack className='mb-1 inline-flex h-4 w-4 text-destructive' />
+          ?
+        </AlertDialogTitle>
+        <AlertDialogDescription>
+          <div className='py-2'>
+            Учтите, что после подтверждения это действие уже нельзя будет отменить.
+          </div>
         </AlertDialogDescription>
       </AlertDialogHeader>
       <Separator />
-      <div className='items-top flex space-x-2'>
-        <Checkbox onClick={handleClick} checked={checked} />
-        <div className='grid gap-1.5 leading-none'>
-          <label
-            onClick={handleClick}
-            htmlFor='terms1'
-            className='cursor-pointer text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-          >
-            Выйти из аккаунта на всех устройствах
-          </label>
-          <p className='text-sm text-muted-foreground'>
-            Для повторного получения доступа потребуется заново ввести свои учетные данные.
-          </p>
-        </div>
-      </div>
-      <AlertDialogFooter>
-        <AlertDialogCancel>Отмена</AlertDialogCancel>
-        <AlertDialogAction onClick={async () => await handleSubmit(checked)}>
-          Выйти
+      <AlertDialogFooter className='flex w-full gap-2'>
+        <AlertDialogCancel
+          autoFocus
+          className='w-1/2 border border-secondary-foreground text-center hover:border-primary-foreground'
+        >
+          Отмена
+        </AlertDialogCancel>
+        <AlertDialogAction
+          onClick={handleSubmit}
+          className='w-1/2 border border-destructive bg-background text-center text-destructive hover:border-destructive-foreground hover:bg-destructive hover:text-destructive-foreground'
+        >
+          Удалить
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
