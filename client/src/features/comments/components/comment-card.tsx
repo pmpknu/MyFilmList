@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { MoreHorizontal } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface CommentCardProps {
   comment: CommentDto;
@@ -71,10 +72,12 @@ export default function CommentCard({ comment, onCommentDeleted, onCommentUpdate
     }
   };
 
+  const router = useRouter();
+
   return (
     <Card className={`flex gap-4 p-4 border ${cardClass}`}>
       <div className="flex-shrink-0">
-        <Avatar className="w-12 h-12">
+        <Avatar className="w-12 h-12" onClick={()=>{router.push(`/users/${comment.user.id}`)}}>
           <AvatarImage src={comment.user.photo} alt={comment.user.username} />
           <AvatarFallback>{comment.user.username.charAt(0)}</AvatarFallback>
         </Avatar>
