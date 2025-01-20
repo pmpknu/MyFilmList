@@ -5,6 +5,7 @@ import { WatchListDto } from '@/interfaces/watchlist/dto/WatchListDto';
 import { WatchListUpdateDto } from '@/interfaces/watchlist/dto/WatchListUpdateDto';
 import Paged from '@/interfaces/paged/models/Paged';
 import { createCrudUri } from '@/lib/utils/uri';
+import { MovieWithAdditionalInfoDto } from '@/interfaces/movie/dto/MovieWithAdditionalInfoDto';
 
 export default class WatchListService {
   /**
@@ -38,7 +39,7 @@ export default class WatchListService {
     userId: number,
     page: number = 0,
     size: number = 20,
-    sort: string[]
+    sort: string[] = []
   ): Promise<AxiosResponse<Paged<WatchListDto>>> {
     return api.get<Paged<WatchListDto>>(
       `/users/${userId}/watchlists${createCrudUri(page, size, sort)}`
@@ -105,10 +106,20 @@ export default class WatchListService {
   /**
    * Get all movies in a watchlist
    * @param {number} id Watchlist ID
-   * @returns {Promise<AxiosResponse<any[]>>} List of movies
+   * @param {number} page Page number
+   * @param {number} size Page size
+   * @param {string[]} sort Sorting parameters
+   * @returns {Promise<AxiosResponse<Paged<MovieWithAdditionalInfoDto>>>} List of movies
    */
-  static async getMoviesInWatchList(id: number): Promise<AxiosResponse<any[]>> {
-    return api.get<any[]>(`/watchlists/${id}/movies`);
+  static async getMoviesInWatchList(
+    id: number,
+    page: number = 0,
+    size: number = 20,
+    sort: string[] = []
+  ): Promise<AxiosResponse<Paged<MovieWithAdditionalInfoDto>>> {
+    return api.get<Paged<MovieWithAdditionalInfoDto>>(
+      `/watchlists/${id}/movies${createCrudUri(page, size, sort)}`
+    );
   }
 
   /**
@@ -160,7 +171,7 @@ export default class WatchListService {
     searchParams: any,
     page: number = 0,
     size: number = 20,
-    sort: string[]
+    sort: string[] = []
   ): Promise<AxiosResponse<Paged<WatchListDto>>> {
     return api.post<Paged<WatchListDto>>(
       `/watchlists/search${createCrudUri(page, size, sort)}`,
