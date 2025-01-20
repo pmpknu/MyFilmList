@@ -1,0 +1,15 @@
+// import { Metadata } from 'next';
+// import defaultMetadata from '@/constants/metadata';
+// import MovieCommentsView from '@/feautures/comments/components/movies-comments-view';
+
+// export const metadata: Metadata = {
+//   ...defaultMetadata,
+//   title: 'Комментарии к фильму | MyFilmList',
+//   description: 'Просмотр пользовательских комментариев.',
+// };
+
+// export default function Page({ params }: { params: { id: string } }) {
+//   const movieId = parseInt(params.id);
+
+//   return <MovieCommentsView movieId={movieId} />;
+// }
