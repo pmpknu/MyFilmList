@@ -317,6 +317,7 @@ export default function UserView({
                 <UserRoles
                   userId={user.id}
                   roles={userRoles}
+                  canAddRoles={canAddRoles}
                   canDeleteRoles={canDeleteRoles}
                   onRolesUpdate={handleRolesUpdate}
                 />
