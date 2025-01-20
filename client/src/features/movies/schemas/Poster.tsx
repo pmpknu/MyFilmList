@@ -26,8 +26,8 @@ export interface MoviePosterProps extends React.HTMLAttributes<HTMLDivElement> {
   renderContextMenu?: boolean;
   onNewWatchlist?: (movieId: number) => void;
   onMarkAsWatched?: (movieId: number) => void;
-  onAddToWatchlist?: (movieId : number, watchlistId : number) => void;
-  watchlists?: {id:number, name:string}[];
+  onAddToWatchlist?: (movieId: number, watchlistId: number) => void;
+  watchlists?: { id: number; name: string }[];
 }
 
 const Poster: React.FC<MoviePosterProps> = ({
@@ -91,36 +91,46 @@ const Poster: React.FC<MoviePosterProps> = ({
           </Card>
         </ContextMenuTrigger>
         {renderContextMenu && movieid && (
-        <ContextMenuContent className='w-40'>
-          {onMarkAsWatched && (<ContextMenuItem onClick={() => onMarkAsWatched(movieid)}>Отметить просмотренным</ContextMenuItem>)}
-          <ContextMenuSub>
-            <ContextMenuSubTrigger>Добавить в коллекцию</ContextMenuSubTrigger>
-            <ContextMenuSubContent className='w-48'>
-            {onNewWatchlist && (<ContextMenuItem onClick={() => onNewWatchlist(movieid)}>
-                <PlusCircle className='mr-2 h-4 w-4' />
-                Новая коллекция
-              </ContextMenuItem>)}
-              <ContextMenuSeparator />
-              {onAddToWatchlist && watchlists.map((playlist) => (
-                <ContextMenuItem key={playlist.id} onClick={() => onAddToWatchlist(movieid, playlist.id)}>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth='2'
-                    className='mr-2 h-4 w-4'
-                    viewBox='0 0 24 24'
-                  >
-                    <path d='M21 15V6M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM12 12H3M16 6H3M12 18H3' />
-                  </svg>
-                  {playlist.name}
-                </ContextMenuItem>
-              ))}
-            </ContextMenuSubContent>
-          </ContextMenuSub>
-        </ContextMenuContent>
+          <ContextMenuContent className='w-40'>
+            {onMarkAsWatched && (
+              <ContextMenuItem onClick={() => onMarkAsWatched(movieid)}>
+                Отметить просмотренным
+              </ContextMenuItem>
+            )}
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>Добавить в коллекцию</ContextMenuSubTrigger>
+              <ContextMenuSubContent className='w-48'>
+                {onNewWatchlist && (
+                  <ContextMenuItem onClick={() => onNewWatchlist(movieid)}>
+                    <PlusCircle className='mr-2 h-4 w-4' />
+                    Новая коллекция
+                  </ContextMenuItem>
+                )}
+                <ContextMenuSeparator />
+                {onAddToWatchlist &&
+                  watchlists.map((playlist) => (
+                    <ContextMenuItem
+                      key={playlist.id}
+                      onClick={() => onAddToWatchlist(movieid, playlist.id)}
+                    >
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth='2'
+                        className='mr-2 h-4 w-4'
+                        viewBox='0 0 24 24'
+                      >
+                        <path d='M21 15V6M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM12 12H3M16 6H3M12 18H3' />
+                      </svg>
+                      {playlist.name}
+                    </ContextMenuItem>
+                  ))}
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+          </ContextMenuContent>
         )}
       </ContextMenu>
       {showTitle && (

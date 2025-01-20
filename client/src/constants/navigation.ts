@@ -22,8 +22,8 @@ export function merge(a: NavItem[], b: NavItem[], prop: keyof NavItem) {
 //Info: The following data is used for the sidebar navigation and Cmd K bar.
 export const navItems: NavItem[] = [
   {
-    title: 'Feed',
-    url: '/feed',
+    title: 'Лента',
+    url: '/',
     icon: 'dashboard',
     shortcut: ['f', 'f'],
     isActive: false,
@@ -37,6 +37,15 @@ export const navItems: NavItem[] = [
     isActive: true,
     items: [],
     pathPattern: /^\/movies\/\d+$/
+  },
+  {
+    title: 'Коллекции',
+    url: '/watchlists',
+    icon: 'library',
+    shortcut: ['w', 'w'],
+    isActive: true,
+    items: [],
+    pathPattern: /^\/watchlists\/\d+$/
   },
   {
     title: 'Учётная запись',
@@ -79,17 +88,47 @@ export const adminOnlyItems: NavItem[] = [
       {
         title: 'Фильмы',
         url: '/movies',
-        icon: 'film'
+        icon: 'film',
+        shortcut: ['m', 'l']
       },
       {
         title: 'Создать фильм',
         url: '/movies/create',
-        icon: 'add'
+        icon: 'add',
+        shortcut: ['m', 'c']
       },
       {
         title: 'Обновить фильм',
         url: '/movies/update',
-        icon: 'post'
+        icon: 'post',
+        shortcut: ['m', 'u']
+      }
+    ]
+  },
+  {
+    title: 'Коллекции',
+    url: '#',
+    icon: 'library',
+    shortcut: ['w', 'w'],
+    isActive: true,
+    items: [
+      {
+        title: 'Рекомендации',
+        url: '/watchlists/feed',
+        icon: 'dashboard',
+        shortcut: ['w', 'f']
+      },
+      {
+        title: 'Коллекции',
+        url: '/watchlists',
+        icon: 'post',
+        shortcut: ['w', 'l']
+      },
+      {
+        title: 'Создать коллекцию',
+        url: '/watchlists/create',
+        icon: 'add',
+        shortcut: ['w', 'c']
       }
     ]
   }

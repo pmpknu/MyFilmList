@@ -77,10 +77,10 @@ const InputWatchListInfo = <T extends WatchlistFormValue>({
                   <FormLabel>Доступность</FormLabel>
                   <FormControl>
                     <div>
-                    <Switch
-                      checked={field.value === undefined ? true : field.value}
-                      onCheckedChange={(c) => form.setValue('visibility', c)}
-                    />
+                      <Switch
+                        checked={field.value === undefined ? true : field.value}
+                        onCheckedChange={(c) => form.setValue('visibility', c)}
+                      />
                       {field.value === undefined
                         ? 'Публичный'
                         : field.value

@@ -12,10 +12,19 @@ interface MovieGridProps {
   onNewWatchlist?: (movieId: number) => void;
   onMarkAsWatched?: (movieId: number) => void;
   onAddToWatchlist?: (movieId: number, watchlistId: number) => void;
-  watchlists?: {id:number, name:string}[];
+  watchlists?: { id: number; name: string }[];
 }
 
-export function MovieGrid({ loading, movies, onClick, renderContextMenu, onMarkAsWatched, onAddToWatchlist, watchlists, onNewWatchlist }: MovieGridProps) {
+export function MovieGrid({
+  loading,
+  movies,
+  onClick,
+  renderContextMenu,
+  onMarkAsWatched,
+  onAddToWatchlist,
+  watchlists,
+  onNewWatchlist
+}: MovieGridProps) {
   return (
     <>
       {loading ? (

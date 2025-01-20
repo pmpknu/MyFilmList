@@ -73,30 +73,30 @@ const WatchlistForm = () => {
         console.error('Failed to delete watchlist', error);
         toast.error('Не удалось удалить коллекцию');
       });
-  }
+  };
 
   return (
-    <Card className='container mb-6 border relative'>
+    <Card className='container relative mb-6 border'>
       <CardTitle className='ml-4 mt-4'>
         <h2 className='text-2xl font-bold'>{watchlist.name}</h2>
         <div className='absolute right-4 top-4 flex items-center gap-2'>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button>
-              <MoreVertical />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className='bg-background border border-border rounded-md p-2'>
-            <DropdownMenuItem onClick={handleEdit}>
-              <Edit className='mr-2 h-4 w-4 text-blue-600'/>
-              <span>Настройки коллекции</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleDelete}>
-              <Delete className='mr-2 h-4 w-4 text-red-600'/>
-              <span>Удалить коллекцию</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button>
+                <MoreVertical />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className='rounded-md border border-border bg-background p-2'>
+              <DropdownMenuItem onClick={handleEdit}>
+                <Edit className='mr-2 h-4 w-4 text-blue-600' />
+                <span>Настройки коллекции</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDelete}>
+                <Delete className='mr-2 h-4 w-4 text-red-600' />
+                <span>Удалить коллекцию</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </CardTitle>
       <CardHeader className='flex flex-row gap-6'>

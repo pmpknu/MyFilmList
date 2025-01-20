@@ -35,8 +35,7 @@ export const FeedMovieForm: React.FC = () => {
         console.error('Failed to fetch watchlist details', error);
         toast.error('Не удалось загрузить информацию о коллекции');
       })
-      .finally(() => {
-      });
+      .finally(() => {});
   }, [user]);
 
   const loadRecommendedMovies = async () => {
@@ -65,7 +64,7 @@ export const FeedMovieForm: React.FC = () => {
         console.error('Failed to add movie to watchlist', error);
         toast.error('Не удалось добавить фильм в коллекцию');
       });
-  }
+  };
 
   const handleMarkAsWatched = (movieId: number) => {
     MovieViewService.markMovieAsViewed(movieId)
@@ -76,7 +75,7 @@ export const FeedMovieForm: React.FC = () => {
         console.error('Failed to mark movie as watched', error);
         toast.error('Не удалось пометить фильм как просмотренный');
       });
-  }
+  };
 
   return (
     <div className='feed-movie-form'>
@@ -90,7 +89,7 @@ export const FeedMovieForm: React.FC = () => {
           renderContextMenu={true}
           onAddToWatchlist={handleAddToWatchlist}
           onMarkAsWatched={handleMarkAsWatched}
-          watchlists={watchlists.map((watchlist) => ({id: watchlist.id, name: watchlist.name}))}
+          watchlists={watchlists.map((watchlist) => ({ id: watchlist.id, name: watchlist.name }))}
         />
       )}
     </div>
