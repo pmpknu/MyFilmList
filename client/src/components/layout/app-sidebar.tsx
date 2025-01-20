@@ -125,7 +125,17 @@ export default function AppSidebar() {
           <SidebarMenu>
             {getItems().map((item) => {
               const Icon = item.icon ? Icons[item.icon] : Icons.logo;
-              const subItems = item?.items;
+              const callbackUrl = window.location.href;
+              const subItems = item?.items?.map((i) => {
+                if (i.url.endsWith('sign-in') || i.url.endsWith('sign-up')) {
+                  return {
+                    ...i,
+                    url: `${i.url}?callbackUrl=${callbackUrl}`
+                  };
+                }
+                return i;
+              });
+
               return subItems && subItems?.length > 0 ? (
                 <Collapsible
                   key={item.title}
