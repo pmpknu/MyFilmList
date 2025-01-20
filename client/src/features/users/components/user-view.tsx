@@ -42,10 +42,16 @@ import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import DeleteUserDialog from './delete-user-dialog';
 import UserService from '@/services/UserService';
 import AuthService from '@/services/AuthService';
+import MovieViewService from '@/services/MovieViewService';
+import RatingService from '@/services/RatingService';
+import WatchListService from '@/services/WatchListService';
 import { logout } from '@/store/slices/auth-slice';
 import { useDispatch } from '@/hooks/use-redux';
 import { useTheme } from 'next-themes';
 import { Role } from '@/interfaces/role/model/UserRole';
+import { MovieViewWithoutUserDto } from '@/interfaces/movieview/dto/MovieViewWithoutUserDto';
+import { RatingWithoutUserDto } from '@/interfaces/rating/dto/RatingWithoutUserDto';
+import { WatchListDto } from '@/interfaces/watchlist/dto/WatchListDto';
 import { UserRoles } from './user-roles';
 
 export function UserBio({ bio, className }: { bio: string | undefined; className: String }) {
@@ -103,10 +109,19 @@ export default function UserView({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [userRoles, setUserRoles] = useState<Role[]>(user.roles);
 
-  const userPosts = [
-    { id: 1, title: 'My first post', content: 'This is the content of the first post.' },
-    { id: 2, title: 'My second post', content: 'This is the content of the second post.' }
-  ];
+  const [views, setViews] = useState<MovieViewWithoutUserDto[] | null>(null);
+  const [loadingViews, setLoadingViews] = useState(false);
+
+  const [ratings, setRatings] = useState<RatingWithoutUserDto[] | null>(null);
+  const [loadingRatings, setLoadingRatings] = useState(false);
+
+  const [watchLists, setWatchLists] = useState<WatchListDto[] | null>(null);
+  const [loadingWatchLists, setLoadingWatchLists] = useState(false);
+
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
+
+  const pageSize = 10;
 
   useEffect(() => {
     setIsAdmin(() => isUserAdmin({ ...user, roles: userRoles }));
@@ -116,6 +131,65 @@ export default function UserView({
   const handleRolesUpdate = (updatedRoles: Role[]) => {
     setUserRoles(updatedRoles);
   };
+
+  const fetchWatchLists = async () => {
+    if (!hasMore) return;
+
+    setLoadingWatchLists(true);
+    try {
+      const response = await WatchListService.getWatchListsForUser(user.id, page, pageSize, [
+        'name,asc'
+      ]);
+      setWatchLists((prev) =>
+        prev ? [...prev, ...response.data.content] : [...response.data.content]
+      );
+      setHasMore(!response.data.last);
+      setPage((prev) => prev + 1);
+    } catch (error) {
+      console.error(error);
+      toast.error('Ошибка загрузки списков фильмов', {
+        description: 'Не удалось загрузить списки. Попробуйте позднее.'
+      });
+    } finally {
+      setLoadingWatchLists(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchViews = async () => {
+      setLoadingViews(true);
+      try {
+        const response = await MovieViewService.getViewsForUser(user.id, 0, 10, ['watchDate,desc']);
+        setViews(response.data.content);
+      } catch (error) {
+        console.error(error);
+        toast.error('Ошибка загрузки просмотров', {
+          description: 'Не удалось загрузить просмотры. Попробуйте позднее.'
+        });
+      } finally {
+        setLoadingViews(false);
+      }
+    };
+
+    const fetchRatings = async () => {
+      setLoadingRatings(true);
+      try {
+        const response = await RatingService.getRatingsByUser(user.id, 0, 10, ['value,desc']);
+        setRatings(response.data.content);
+      } catch (error) {
+        console.error(error);
+        toast.error('Ошибка загрузки рейтингов', {
+          description: 'Не удалось загрузить рейтинги. Попробуйте позднее.'
+        });
+      } finally {
+        setLoadingRatings(false);
+      }
+    };
+
+    fetchViews();
+    fetchRatings();
+    fetchWatchLists();
+  }, []);
 
   const handleEdit = () => {
     toast.success('Редактирование пользователя');
@@ -327,23 +401,101 @@ export default function UserView({
         <Separator className='my-6' />
 
         <div>
-          <h2 className='mb-4 text-2xl font-semibold'>Последние посты</h2>
-          <div className='space-y-4'>
-            {userPosts.length > 0 ? (
-              userPosts.map((post) => (
-                <Card key={post.id} className='border'>
+          <h2 className='mb-4 text-2xl font-semibold'>Списки фильмов</h2>
+          {watchLists && watchLists.length > 0 ? (
+            <div className='space-y-4'>
+              {watchLists.map((watchList) => (
+                <Card key={watchList.id} className='border'>
+                  <CardHeader className='flex items-center justify-between'>
+                    <div className='flex flex-col'>
+                      <CardTitle className='text-lg font-bold'>
+                        <a href={`/watchlists/${watchList.id}`} className='hover:underline'>
+                          {watchList.name}
+                        </a>
+                      </CardTitle>
+                      <p className='text-sm text-muted-foreground'>
+                        {watchList.visibility ? 'Публичный' : 'Приватный'}
+                      </p>
+                    </div>
+                    {watchList.photo ? (
+                      <Image
+                        src={watchList.photo}
+                        alt={watchList.name}
+                        width={64}
+                        height={64}
+                        className='rounded'
+                      />
+                    ) : (
+                      <div className='flex h-16 w-16 items-center justify-center rounded bg-muted'>
+                        <span className='text-muted-foreground'>Нет фото</span>
+                      </div>
+                    )}
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <p className='text-muted-foreground'>Списки фильмов не найдены</p>
+          )}
+          {hasMore && (
+            <div className='mt-4 flex justify-center'>
+              <button
+                className='hover:bg-primary-dark rounded-md bg-primary px-4 py-2 text-white'
+                onClick={fetchWatchLists}
+                disabled={loadingWatchLists}
+              >
+                {loadingWatchLists ? 'Загрузка...' : 'Загрузить еще'}
+              </button>
+            </div>
+          )}
+        </div>
+
+        <Separator className='my-6' />
+        <div>
+          <h2 className='mb-4 text-2xl font-semibold'>Просмотры</h2>
+          {loadingViews ? (
+            <p>Загрузка просмотров...</p>
+          ) : views && views.length > 0 ? (
+            <div className='grid gap-4'>
+              {views.map((view) => (
+                <Card key={view.id} className='border'>
                   <CardHeader>
-                    <CardTitle className='text-lg font-bold'>{post.title}</CardTitle>
+                    <CardTitle className='text-lg font-bold'>{view.movie.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className='text-sm text-muted-foreground'>{post.content}</p>
+                    <p className='text-sm text-muted-foreground'>
+                      Дата просмотра: {new Date(view.watchDate).toLocaleDateString()}
+                    </p>
                   </CardContent>
                 </Card>
-              ))
-            ) : (
-              <p className='text-muted-foreground'>No posts available</p>
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className='text-muted-foreground'>Просмотры не найдены</p>
+          )}
+        </div>
+
+        <Separator className='my-6' />
+        <div>
+          <h2 className='mb-4 text-2xl font-semibold'>Рейтинги</h2>
+          {loadingRatings ? (
+            <p>Загрузка рейтингов...</p>
+          ) : ratings && ratings.length > 0 ? (
+            <div className='grid gap-4'>
+              {ratings.map((rating) => (
+                <Card key={rating.id} className='border'>
+                  <CardHeader>
+                    <CardTitle className='text-lg font-bold'>{rating.movie.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className='text-sm text-muted-foreground'>Оценка: {rating.value}/10</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <p className='text-muted-foreground'>Рейтинги не найдены</p>
+          )}
         </div>
       </div>
     </PageContainer>
